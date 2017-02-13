@@ -1,0 +1,7 @@
+{
+  "m1m2_maf_workflow.m1m2_maf.M1_vcf_file": "File",
+  "m1m2_maf_workflow.m1m2_maf.tumor_id": "String",
+  "m1m2_maf_workflow.m1m2_maf.M2_vcf_file": "File",
+  "m1m2_maf_workflow.m1m2_maf.output_disk_gb": "String",
+  "m1m2_maf_workflow.m1m2_maf.normal_id": "String"
+}

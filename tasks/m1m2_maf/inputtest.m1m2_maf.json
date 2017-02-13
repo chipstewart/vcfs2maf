@@ -1,0 +1,5 @@
+{
+    "m1m2_maf_workflow.m1m2_maf.salutation_input_string": "hello",
+    "m1m2_maf_workflow.m1m2_maf.name_input_file": "https://personal.broadinstitute.org/gsaksena/world.txt",
+    "m1m2_maf_workflow.m1m2_maf.output_disk_gb": "10"
+}
