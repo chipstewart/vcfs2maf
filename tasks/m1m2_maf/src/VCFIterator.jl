@@ -1,25 +1,26 @@
 export VCFIterator, getVersion, getFilename, getSampleNames, getINFOProperties, getFORMATProperties, getContigs, getFilters, getReference, next1, eof, close, reset
 import Base.eof, Base.close, Base.reset
+import GZip
 
 #Main class for VCFiterator
 type VCFIterator
-    version::String
-    filename::String
-    samples::Array{String, 1}
-    infoTypes::Dict{String, Any}
-    infoFlags::Array{String, 1}
-    formatTypes::Dict{String, Any}
-    contigs::Dict{String, Int64}
-    filters::Dict{String, String}
-    reference::String
+    version::AbstractString
+    filename::AbstractString
+    samples::Array{AbstractString, 1}
+    infoTypes::Dict{AbstractString, Any}
+    infoFlags::Array{AbstractString, 1}
+    formatTypes::Dict{AbstractString, Any}
+    contigs::Dict{AbstractString, Int64}
+    filters::Dict{AbstractString, AbstractString}
+    reference::AbstractString
     file 
 end
 
 #Stores INFO and FORMAT section properties
 type InfoField
-    Number::String 
-    Type::String
-    Description::String
+    Number::AbstractString 
+    Type::AbstractString
+    Description::AbstractString
 end
 
 #Standard get methods
@@ -56,7 +57,12 @@ end
 function reset(vc::VCFIterator)
     close(vc.file)
     vc.file = open(vc.filename)
-    
+    f2=splitext(filename)
+    if (uppercase(f2[2])==".GZ")
+        close(vc.file)
+        f=GZip.open(vc.filename)
+    end
+
     while !eof(vc.file)
         line = chomp(readline(vc.file))
         if line[1:2] != "##"
@@ -66,7 +72,7 @@ function reset(vc::VCFIterator)
 end
 
 #Parses info/format line
-function readInfoLine!(typesdict::Dict{String, Any}, line::String, flaglist)
+function readInfoLine!(typesdict::Dict{AbstractString, Any}, line::AbstractString, flaglist)
     #parse the line
     entries = split(line[2:end-1], ',')
     Id = split(entries[1], '=')[2]
@@ -84,7 +90,7 @@ function readInfoLine!(typesdict::Dict{String, Any}, line::String, flaglist)
 end
 
 #Parses contig line
-function readContigLine!(contigs::Dict{String, Int64}, line::String)
+function readContigLine!(contigs::Dict{AbstractString, Int64}, line::AbstractString)
     entries = split(line[2:end-1], ',')
     Id = split(entries[1], '=')[2]
     #println(entries[2])
@@ -93,7 +99,7 @@ function readContigLine!(contigs::Dict{String, Int64}, line::String)
 end
 
 #Parses filter line
-function readFilterLine!(filters::Dict{String, String}, line::String)
+function readFilterLine!(filters::Dict{AbstractString, AbstractString}, line::AbstractString)
     entries = split(line[2:end-1], ',')
     Id = split(entries[1], '=')[2]
     Description = split(entries[2], '=')[2]
@@ -101,9 +107,14 @@ function readFilterLine!(filters::Dict{String, String}, line::String)
 end
 
 #Constructor for VCFIterator
-function VCFIterator(filename::String)
+function VCFIterator(filename::AbstractString)
     f=open(filename)
-    vc = VCFIterator("VCFv4.1", filename, [], Dict{String, Any}(), [], Dict{String, Any}(), Dict{String, Int64}(), Dict{String, String}(), "", f)
+    f2=splitext(filename)
+    if (uppercase(f2[2])==".GZ")
+        close(f)
+        f=GZip.open(filename)
+    end
+    vc = VCFIterator("VCFv4.1", filename, [], Dict{AbstractString, Any}(), [], Dict{AbstractString, Any}(), Dict{AbstractString, Int64}(), Dict{AbstractString, AbstractString}(), "", f)
     parseHeader(vc)
     
     #return at the end 
@@ -126,7 +137,7 @@ function parseHeader(vc::VCFIterator)
             readInfoLine!(vc.infoTypes, line, vc.infoFlags)
         elseif length(line) >= 8 && line[1:8]=="##FORMAT"
             line = line[10:end]
-            readInfoLine!(vc.formatTypes, line, String[])
+            readInfoLine!(vc.formatTypes, line, AbstractString[])
         elseif length(line) >= 8 && line[1:8]=="##contig"
             line = line[10:end]
             readContigLine!(vc.contigs, line)
@@ -161,15 +172,15 @@ function intField(x)
 end
 
 #Constructor for variant given a line of vcf file
-function generateVariant(vc::VCFIterator, line::String)
+function generateVariant(vc::VCFIterator, line::AbstractString)
     #remove newline and split by tabs. 
     line = split(chomp(line), "\t")
     
     #Assigining variables
-    chr = convert(String, line[1])
+    chr = convert(AbstractString, line[1])
     pos = intField(line[2])
     id_ = split(line[3])
-    ref = convert(String, line[4])
+    ref = convert(AbstractString, line[4])
     alt = split(line[5],",")
     if line[6] == "."
         qual = "."
@@ -179,7 +190,7 @@ function generateVariant(vc::VCFIterator, line::String)
     filter = split(line[7],";")
     
     #creating INFO field
-    information = Dict{String, Any}()
+    information = Dict{AbstractString, Any}()
     tempINFO = split(line[8],";")
     
     #instantiate all flags to be false
@@ -204,7 +215,7 @@ function generateVariant(vc::VCFIterator, line::String)
                 elseif contentType == "Float"
                     contents = map(floatField, contents)
                 elseif contentType != "String" && contentType != "Char"
-                    println("INVALID TYPE")
+                    println("INVALID TYPE",":\t",entry)
                 end
 
                 information[id] = contents
@@ -217,12 +228,12 @@ function generateVariant(vc::VCFIterator, line::String)
     
     #creating FORMAT fields if they exist
     if length(line)>8
-        format = Dict{String, Dict{String, Any}}()
+        format = Dict{AbstractString, Dict{AbstractString, Any}}()
         formatEntries = split(line[9],":")
         for i in 10:length(line)
             tempFORMAT = split(line[i],":")
             sample = vc.samples[i-9]
-            tempFORMATdict = Dict{String, Any}()
+            tempFORMATdict = Dict{AbstractString, Any}()
             
             for j in 1:length(tempFORMAT)
                 id = formatEntries[j]
@@ -234,7 +245,7 @@ function generateVariant(vc::VCFIterator, line::String)
                 elseif contentType == "Float"
                     contents = map(floatField, contents)
                 elseif contentType != "String" && contentType != "Char"
-                    println("INVALID TYPE")
+	            println("INVALID TYPE",":\t",entry)
                 end
             
                 tempFORMATdict[id] = contents
@@ -242,7 +253,7 @@ function generateVariant(vc::VCFIterator, line::String)
             format[sample] = tempFORMATdict
         end
     else
-        format = Dict{String,Dict{String,Any}}()
+        format = Dict{AbstractString,Dict{AbstractString,Any}}()
     end
 
     #construct a variant

@@ -1,5 +1,7 @@
 {
-    "m1m2_maf_workflow.m1m2_maf.salutation_input_string": "hello",
-    "m1m2_maf_workflow.m1m2_maf.name_input_file": "https://personal.broadinstitute.org/gsaksena/world.txt",
-    "m1m2_maf_workflow.m1m2_maf.output_disk_gb": "10"
+  "m1m2_maf_workflow.m1m2_maf.M1_vcf_file": "/opt/test/M1.vcf.gz",
+  "m1m2_maf_workflow.m1m2_maf.tumor_id": "test_T",
+  "m1m2_maf_workflow.m1m2_maf.M2_vcf_file": "/opt/test/M2.vcf.gz",
+  "m1m2_maf_workflow.m1m2_maf.output_disk_gb": "20",
+  "m1m2_maf_workflow.m1m2_maf.normal_id": "test_N"
 }

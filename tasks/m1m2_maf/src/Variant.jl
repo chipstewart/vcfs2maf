@@ -2,16 +2,16 @@ export Variant, getChrom, getPos, getId, getRef, getAlt, getQual, getFilter, get
 
 #Stores data for each variant
 type Variant
-    CHROM::String
+    CHROM::AbstractString
     POS::Int64
-    ID::Array{String,1}
-    REF::String
-    ALT::Array{String,1}
+    ID::Array{AbstractString,1}
+    REF::AbstractString
+    ALT::Array{AbstractString,1}
     #QUAL::Array{Float64, 1}
     QUAL
-    FILTER::Array{String,1} 
-    INFO::Dict{String, Any}
-    FORMAT::Dict{String, Dict{String, Any}}
+    FILTER::Array{AbstractString,1} 
+    INFO::Dict{AbstractString, Any}
+    FORMAT::Dict{AbstractString, Dict{AbstractString, Any}}
 end
 
 #Get methods for variants

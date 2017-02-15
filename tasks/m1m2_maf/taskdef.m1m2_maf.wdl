@@ -22,9 +22,11 @@ run('/opt/src/algutil/monitor_start.py')
 # start task-specific calls
 ##########################
 
-run('/bin/bash /opt/src/M1M2_maf.sh \"${M1_vcf_file}\"  \"${M2_vcf_file}\" \"${tumor_id}\" \"${normal_id}\"')
+run('julia --version')
 
-run('tar cvfz m1m2_maf.tar.gz .')
+run('/bin/bash /opt/src/M1M2_maf.sh \"${tumor_id}\" \"${normal_id}\" \"${M1_vcf_file}\"  \"${M2_vcf_file}\"')
+
+run('tar cvfz m1m2_maf.tar.gz tmp1.tsv tmp2.tsv m1m2_maflite.tsv')
 
 #########################
 # end task-specific calls

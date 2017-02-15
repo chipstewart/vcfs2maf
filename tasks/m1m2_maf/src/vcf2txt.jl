@@ -9,6 +9,21 @@ f=STDOUT
 max_events=2^31
 #vcf_file1="/Volumes/64GB_2015/Work/REBC/sample.broad-mutect.DATECODE.somatic.snv_mnv.vcf"
 vcf_file1=ARGS[1]
+
+# is this a gz file? 
+# f=splitext(vcf_file1)
+# if (uppercase(f[2])==".GZ")
+#    f0=vcf_file1
+#    f1=splitdir(f[1])
+#    f1=f[1]
+#    f2=splitdir(f1)
+#    f2=f2[2]
+#    ;zcat $f0 > $f2
+#    #run(`zcat' $f0  |> $f2')
+#     #run(pipeline(`zcat $f0`, stdout=$f2, stderr="zcat.stderr.log"))
+#    vcf_file1=f2
+# end
+
 narg=length(ARGS)
 #println(narg)
 if (narg>1)
@@ -26,10 +41,10 @@ end
 
 delim="\t"
 c=fill("", 500)
-num=Array{String}(500)
+num=Array{AbstractString}(500)
 if (max_events<1)
 	delim="\n"
-	c=Array{String}(500)
+	c=Array{AbstractString}(500)
 	for i in 1:500
 	  c[i]=dec(i)".\t"
 	end
