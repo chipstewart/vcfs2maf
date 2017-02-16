@@ -1,0 +1,9 @@
+**/test_output
+**/localized_inputs
+*.pyc
+**/.cache
+**/cromwell-workflow-logs
+**/build
+**/cromwell-executions
+**/inputs
+
