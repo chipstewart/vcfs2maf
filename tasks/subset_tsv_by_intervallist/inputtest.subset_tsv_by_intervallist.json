@@ -1,0 +1,5 @@
+{
+    "subset_tsv_by_intervallist_workflow.subset_tsv_by_intervallist.salutation_input_string": "hello",
+    "subset_tsv_by_intervallist_workflow.subset_tsv_by_intervallist.name_input_file": "https://personal.broadinstitute.org/gsaksena/world.txt",
+    "subset_tsv_by_intervallist_workflow.subset_tsv_by_intervallist.output_disk_gb": "10"
+}
