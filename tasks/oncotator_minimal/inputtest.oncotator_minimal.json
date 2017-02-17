@@ -1,7 +1,7 @@
 {
   "oncotator_minimal_workflow.oncotator_minimal.output_disk_gb": "30",
-  "oncotator_minimal_workflow.oncotator_minimal.OTHER_FLAGS": "  ",
-  "oncotator_minimal_workflow.oncotator_minimal.oncoDBTarBall": "/opt/test/oncotator_v1_ds_April052016_light.tar", 
+  "oncotator_minimal_workflow.oncotator_minimal.OTHER_FLAGS": " --infer-onps  --no-multicore  --default_config /opt/test/MAFManualOverrides2.4_WGS.config  ",
+  "oncotator_minimal_workflow.oncotator_minimal.oncoDBTarBall": "/opt/test/oncotator_v1_ds_April052016_lite.tar", 
   "oncotator_minimal_workflow.oncotator_minimal.id": "HCC1143",
   "oncotator_minimal_workflow.oncotator_minimal.IN": "/opt/test/m1m2_maflite.tsv"
 }

@@ -38,7 +38,7 @@ cmd='/root/oncotator_venv/bin/oncotator -i MAFLITE --db-dir ' + pwd + '/' + onco
 print(cmd)
 run(cmd)
 run ('ls -latrh')
-run('cut -f1-42,57,66-67,70-400 \"${id}.annotated.maf\" > \"${id}.maf\"')
+run('cut -f1-43,66-67,104,108-400 \"${id}.annotated.maf\" > \"${id}.maf\"')
 run('tar cvfz \"${id}.annotated.maf.gz\" \"${id}.annotated.maf\"')
 
 #########################
