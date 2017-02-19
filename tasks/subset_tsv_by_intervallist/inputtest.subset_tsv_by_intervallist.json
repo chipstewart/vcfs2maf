@@ -1,5 +1,7 @@
 {
-    "subset_tsv_by_intervallist_workflow.subset_tsv_by_intervallist.salutation_input_string": "hello",
-    "subset_tsv_by_intervallist_workflow.subset_tsv_by_intervallist.name_input_file": "https://personal.broadinstitute.org/gsaksena/world.txt",
-    "subset_tsv_by_intervallist_workflow.subset_tsv_by_intervallist.output_disk_gb": "10"
+    "subset_tsv_by_intervallist_workflow.subset_tsv_by_intervallist.input_tsv_file": "/opt/test/m1m2_maflite.tsv",
+    "subset_tsv_by_intervallist_workflow.subset_tsv_by_intervallist.interval_list": "gs://fc-4520e968-446a-4f9f-85e2-8fcc901269dc/hg19_1_Y.interval_list",
+    "subset_tsv_by_intervallist_workflow.subset_tsv_by_intervallist.ID": "m1m2_test",
+    "subset_tsv_by_intervallist_workflow.subset_tsv_by_intervallist.CHROMOSOME_FIELD": "chr",
+    "subset_tsv_by_intervallist_workflow.subset_tsv_by_intervallist.POSITION_FIELD": "start"
 }

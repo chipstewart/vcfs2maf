@@ -1,6 +1,6 @@
 #1 python
 '''
-Created on 16 Jun 2013
+Created on 18 Feb 2013=7
 
 @author: stewart
 '''
@@ -9,7 +9,7 @@ import argparse
 import sys
 import os
 from quicksect import IntervalNode
-
+verbose=False
 
 if not (sys.version_info[0] == 2  and sys.version_info[1] in [7]):
     raise "Must use Python 2.7.x"
@@ -17,7 +17,7 @@ if not (sys.version_info[0] == 2  and sys.version_info[1] in [7]):
 
 def parseOptions():
     description = '''
-    Given a maf file with headers on the first line, make an IGV screen shot for each mutation.
+    Given a tsv file with headers on the first line, impose a genomic interval list filter.
     '''
 
     epilog= '''
@@ -27,11 +27,7 @@ def parseOptions():
         Required columns in the input file (case sensitive):
              chromsome_field (Chromosome)
              position_field (Start_position)
-             
-        Optional fields:
-             Tumor_Sample_Barcode - select only events with tumor_sample_id = Tumor_Sample_Barcode
-             Hugo_Symbol Variant_Classification Reference_Allele Tumor_Seq_Allele1
-             
+                          
             '''
     parser = argparse.ArgumentParser(description=description, epilog=epilog)
     parser.add_argument('-s','--sample_id', metavar='sample_id', type=str, help ='sample id.')
@@ -95,8 +91,9 @@ class intervalList():
             start, end = p1-1, p2+1
             if not (chrom==a):
                 if not (a==-1):
-                    print('scan %s  line %d chrom %s' % (fileName,self.N, a))
                     self.tree[a]=tree1
+                    if (verbose):
+                        print('scan %s  line %d chrom %s' % (fileName,self.N, a))
                 a=chrom
                 tree1 = IntervalNode( start, end )
             else: # build an interval tree from the rest of the data
@@ -135,7 +132,9 @@ if __name__ == '__main__':
     (p,inputFileName) = os.path.split(inputFile)
     (q,ext) = os.path.splitext(inputFile)
 
+    print "id:\t" + id + "\n"
     print "input file:\t" + inputFile + "\n"
+    print "interval list file:\t" + intervalListFile + "\n"
 
 
     output_Filename = output + "/" + id + filter_stub + ext
