@@ -37,6 +37,9 @@ getReference(vc::VCFIterator) = vc.reference
 function next1(vc::VCFIterator)
     if !eof(vc.file)
         line = readline(vc.file)
+        if length(line)<2
+            return false
+        end
         return generateVariant(vc, line)
     else
         return false

@@ -87,6 +87,9 @@ count = 0
 v = "dmy"
 while !eof(vc)
     v = next1(vc)
+    if sizeof(v)<2
+    	continue
+    end
     count = count + 1
     if count>max_events
 	  break
