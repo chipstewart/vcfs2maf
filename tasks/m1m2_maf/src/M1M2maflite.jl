@@ -21,13 +21,17 @@ df = readtable(file1)
 #describe(df)
 #print(df)
 #head(df)
+
 rename!(df, [:normal_tumor_alt_count, :normal_tumor_ref_count], [:t_alt_count, :t_ref_count])
 delete!(df, [:FILTER, :judgement,:x,:normal_tumor_GT,:QUAL])
 #head(df)
 #a=df[:CHRO]
-a=map(x -> replace(x,r"[X]", "23"), df[:CHRO])
-a=map(x -> replace(x,r"[Y]", "24"), a)
-a=map(x -> parse(Int32,x), a)
+a = df[:CHRO]
+if !isa(a[1],Int)
+    a=map(x -> replace(x,r"[X]", "23"), a)
+    a=map(x -> replace(x,r"[Y]", "24"), a)
+    a=map(x -> parse(Int32,x), a)
+end
 df[:a] = a
 #print(df)
 sort!(df, cols = [:a, :POS])
@@ -58,9 +62,12 @@ for c in names(df)
 end
 #rename!(df, [:normal_tumor_alt_count, :normal_tumor_ref_count], [:t_alt_count, :t_ref_count])
 head(df)
-a=map(x -> replace(x,r"[X]", "23"), df[:CHRO])
-a=map(x -> replace(x,r"[Y]", "24"), a)
-a=map(x -> parse(Int32,x), a)
+a= df[:CHRO]
+if !isa(a[1],Int)
+    a=map(x -> replace(x,r"[X]", "23"), a)
+    a=map(x -> replace(x,r"[Y]", "24"), a)
+    a=map(x -> parse(Int32,x), a)
+end
 df[:a] = a
 # print(df)
 sort!(df, cols = [:a, :POS])
@@ -77,25 +84,29 @@ df= join(df1, df2, on =  [:CHRO, :POS, :REF, :ALT], kind = :outer)
 # label M1 with M1 flag
 df[:M1]=~isna(df[:n_alt_count])
 df[:M2]=~isna(df[:TLOD])
-
-a=map(x -> replace(x,r"[X]", "23"), df[:CHRO])
-a=map(x -> replace(x,r"[Y]", "24"), a)
-a=map(x -> parse(Int32,x), a)
+a= df[:CHRO]
+if !isa(a[1],Int)
+    a=map(x -> replace(x,r"[X]", "23"), a)
+    a=map(x -> replace(x,r"[Y]", "24"), a)
+    a=map(x -> parse(Int32,x), a)
+end
 df[:a] = a
 #print(df)
 sort!(df, cols = [:a, :POS])
 delete!(df, [:a])
 
 isString(x::Number)=false
+isString(x::DataArrays.NAtype)=false
 isString(x::AbstractString)=true
 
 for c in names(df)
-    # println(c)
+     println(c)
     k=isna(df[c])
     if mean(k)==1.0
 		delete!(df, c)
 		continue
 	end
+    println(typeof(df[1,c]))
     if isString(df[1,c])
     	df[k,c] = ""
     end
@@ -163,10 +174,22 @@ df[k2,:tumor_f]=df[k2,:TUMOR_AF]
 df[k2,:init_t_lod]=df[k2,:NORMAL_AD_ALT]
 df[k2,:t_alt_count]=df[k2,:TUMOR_AD_ALT]
 df[k2,:t_ref_count]=df[k2,:TUMOR_AD_REF]
-rename!(df, [:CHRO,:POS, :REF, :ALT], [:chr, :start, :ref_allele,:alt_allele])
-rename!(df, [:ID_1,:DB, :HCNT, :MAX_ED,:RPA,:STR, :RU, :NLOD,:TUMOR_ALT_F1R2], [:M2_ID,:M2_DB, :M2_HCNT, :M2_MAX_ED,:M2_RPA,:M2_STR, :M2_RU, :M2_NLOD,:M2_TUMOR_ALT_F1R2])
-rename!(df, [:MIN_ED,:ECNT, :TLOD, :TUMOR_PID,:TUMOR_AF,:TUMOR_FOXOG, :TUMOR_QSS, :TUMOR_ALT_F2R1], [:M2_MIN_ED,:M2_ECNT, :M2_TLOD, :M2_TUMOR_PID,:M2_TUMOR_AF,:M2_TUMOR_FOXOG, :M2_TUMOR_QSS, :M2_TUMOR_ALT_F2R1])
-rename!(df, [:TUMOR_AD_REF,:TUMOR_AD_ALT, :TUMOR_REF_F2R1, :TUMOR_REF_F1R2,:NORMAL_AF,:NORMAL_AD_REF,:NORMAL_AD_ALT],[:M2_TUMOR_AD_REF,:M2_TUMOR_AD_ALT, :M2_TUMOR_REF_F2R1, :M2_TUMOR_REF_F1R2,:M2_NORMAL_AF,:M2_NORMAL_AD_REF,:M2_NORMAL_AD_ALT])
+#from = [:ID_1,:DB, :HCNT, :MAX_ED,:RPA,:STR, :RU, :NLOD,:TUMOR_ALT_F1R2,:MIN_ED,:ECNT, :TLOD, :TUMOR_PID,:TUMOR_AF,:TUMOR_FOXOG, :TUMOR_QSS, :TUMOR_ALT_F2R1,:TUMOR_AD_REF,:TUMOR_AD_ALT, :TUMOR_REF_F2R1, :TUMOR_REF_F1R2,:NORMAL_AF,:NORMAL_AD_REF,:NORMAL_AD_ALT]
+from = ["ID_1","DB","HCNT","MAX_ED","RPA","STR","RU","NLOD","TUMOR_ALT_F1R2","MIN_ED","ECNT","TLOD","TUMOR_PID","TUMOR_AF","TUMOR_FOXOG","TUMOR_QSS","TUMOR_ALT_F2R1","TUMOR_AD_REF","TUMOR_AD_ALT","TUMOR_REF_F2R1","TUMOR_REF_F1R2","NORMAL_AF","NORMAL_AD_REF","NORMAL_AD_ALT"]
+println(from)
+
+for c in names(df)
+    c1 = string(c)
+    println(c1)
+    if length(find(Bool[contains(c1,i) for i in from]))>0
+        m2c = Symbol(string("M2_",c1))
+        rename!(df,c,m2c)
+    end
+end
+
+#rename!(df, [:ID_1,:DB, :HCNT, :MAX_ED,:RPA,:STR, :RU, :NLOD,:TUMOR_ALT_F1R2], [:M2_ID,:M2_DB, :M2_HCNT, :M2_MAX_ED,:M2_RPA,:M2_STR, :M2_RU, :M2_NLOD,:M2_TUMOR_ALT_F1R2])
+#rename!(df, [:MIN_ED,:ECNT, :TLOD, :TUMOR_PID,:TUMOR_AF,:TUMOR_FOXOG, :TUMOR_QSS, :TUMOR_ALT_F2R1], [:M2_MIN_ED,:M2_ECNT, :M2_TLOD, :M2_TUMOR_PID,:M2_TUMOR_AF,:M2_TUMOR_FOXOG, :M2_TUMOR_QSS, :M2_TUMOR_ALT_F2R1])
+#rename!(df, [:TUMOR_AD_REF,:TUMOR_AD_ALT, :TUMOR_REF_F2R1, :TUMOR_REF_F1R2,:NORMAL_AF,:NORMAL_AD_REF,:NORMAL_AD_ALT],[:M2_TUMOR_AD_REF,:M2_TUMOR_AD_ALT, :M2_TUMOR_REF_F2R1, :M2_TUMOR_REF_F1R2,:M2_NORMAL_AF,:M2_NORMAL_AD_REF,:M2_NORMAL_AD_ALT])
 
 #maf=df(:[])
 
