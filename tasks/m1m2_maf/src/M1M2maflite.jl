@@ -44,6 +44,16 @@ open(file1a, "w") do f
     writedlm(f, convert(Array,df), '\t')
 end
 
+# a=df[:ALT]
+# r=df[:REF]
+# n=length(a)
+# ar=fill("",n)
+# for i in 1:n
+#     #println(i)
+#     ar[i]=string(a[i],":",r[i])
+# end
+# df[:REFALT]=ar
+
 df1=df
 
 df = readtable(file2)
@@ -81,9 +91,43 @@ open(file2a, "w") do f
     writedlm(f, convert(Array,df), '\t')
 end
 
+a=df[:ALT]
+r=df[:REF]
+n=length(a)
+ar=fill("",n)
+for i in 1:n
+    #println(i)
+    ar[i]=string(a[i],":",r[i])
+end
+
+l1=map(x -> length(x), ar)
+df[:INDEL]=map(x -> x>3,l1)
+df[:Variant_Type]=fill("SNV",n)
+df[df[:INDEL],:Variant_Type]="INDEL"
+dfindel=df[df[:INDEL],:]
+dfsnv=df[~df[:INDEL],:]
+#delete!(dfsnv, [:INDEL])
+#delete!(dfindel, [:INDEL])
+#delete!(df, [:INDEL])
 df2=df
 
-df= join(df1, df2, on =  [:CHRO, :POS, :REF, :ALT], kind = :outer)
+# merge SNV
+df= join(df1, df2,  on =  [:CHRO, :POS,:ALT], kind = :outer)
+# indels
+#df= join(df, dfindel,  on =  [:CHRO, :POS ], kind = :outer)
+
+# label M1 with M1 flag
+df[:M1]=~isna(df[:n_alt_count])
+df[:M2]=~isna(df[:TLOD])
+
+k=find(df[:M2] & ~df[:M1])
+df[k,:REF]=df[k,:REF_1]
+#df[k,:ALT]=df[k,:ALT_1]
+#df[k,:ID]=df[k,:ID_1]
+
+delete!(df, [:INDEL, :Variant_Type,:REF_1])
+
+
 
 # label M1 with M1 flag
 df[:M1]=~isna(df[:n_alt_count])
