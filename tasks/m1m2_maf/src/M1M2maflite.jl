@@ -30,6 +30,8 @@ a = df[:CHRO]
 if !isa(a[1],Int)
     a=map(x -> replace(x,r"[X]", "23"), a)
     a=map(x -> replace(x,r"[Y]", "24"), a)
+    a=map(x -> replace(x,r"[MT]", "25"), a)
+    a=map(x -> replace(x,r"[M]", "25"), a)
     a=map(x -> parse(Int32,x), a)
 end
 df[:a] = a
@@ -66,6 +68,8 @@ a= df[:CHRO]
 if !isa(a[1],Int)
     a=map(x -> replace(x,r"[X]", "23"), a)
     a=map(x -> replace(x,r"[Y]", "24"), a)
+    a=map(x -> replace(x,r"[MT]", "25"), a)
+    a=map(x -> replace(x,r"[M]", "25"), a)
     a=map(x -> parse(Int32,x), a)
 end
 df[:a] = a
@@ -88,6 +92,8 @@ a= df[:CHRO]
 if !isa(a[1],Int)
     a=map(x -> replace(x,r"[X]", "23"), a)
     a=map(x -> replace(x,r"[Y]", "24"), a)
+    a=map(x -> replace(x,r"[MT]", "25"), a)
+    a=map(x -> replace(x,r"[M]", "25"), a)
     a=map(x -> parse(Int32,x), a)
 end
 df[:a] = a
