@@ -111,6 +111,20 @@ dfsnv=df[~df[:INDEL],:]
 #delete!(df, [:INDEL])
 df2=df
 
+# set ALT0 to original ALT,shorten ALT to at most 5 bases, then copy back after merge
+
+df2[:ALT0]=df2[:ALT]
+alt0=df2[:ALT0]
+alt=fill("",n)
+n=length(alt0)
+l0=map(x -> length(x), alt0)
+for i in 1:n
+    l1=min(l0[i],5)
+    alt1=string(alt0[i])
+    alt[i]=alt1[1:l1]
+end
+df2[:ALT]=alt
+
 # merge SNV
 df= join(df1, df2,  on =  [:CHRO, :POS,:ALT], kind = :outer)
 # indels
@@ -122,10 +136,11 @@ df[:M2]=~isna(df[:TLOD])
 
 k=find(df[:M2] & ~df[:M1])
 df[k,:REF]=df[k,:REF_1]
-#df[k,:ALT]=df[k,:ALT_1]
+# put ALT0 back
+df[k,:ALT]=df[k,:ALT0]
 #df[k,:ID]=df[k,:ID_1]
 
-delete!(df, [:INDEL, :Variant_Type,:REF_1])
+delete!(df, [:INDEL, :Variant_Type,:REF_1,:ALT0])
 
 
 
