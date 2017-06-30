@@ -30,6 +30,8 @@ a = df[:CHRO]
 if !isa(a[1],Int)
     a=map(x -> replace(x,r"[X]", "23"), a)
     a=map(x -> replace(x,r"[Y]", "24"), a)
+    a=map(x -> replace(x,r"[MT]", "25"), a)
+    a=map(x -> replace(x,r"[M]", "25"), a)
     a=map(x -> parse(Int32,x), a)
 end
 df[:a] = a
@@ -41,6 +43,16 @@ open(file1a, "w") do f
     writedlm(f, reshape(names(df), 1, length(names(df))), '\t')
     writedlm(f, convert(Array,df), '\t')
 end
+
+# a=df[:ALT]
+# r=df[:REF]
+# n=length(a)
+# ar=fill("",n)
+# for i in 1:n
+#     #println(i)
+#     ar[i]=string(a[i],":",r[i])
+# end
+# df[:REFALT]=ar
 
 df1=df
 
@@ -66,6 +78,8 @@ a= df[:CHRO]
 if !isa(a[1],Int)
     a=map(x -> replace(x,r"[X]", "23"), a)
     a=map(x -> replace(x,r"[Y]", "24"), a)
+    a=map(x -> replace(x,r"[MT]", "25"), a)
+    a=map(x -> replace(x,r"[M]", "25"), a)
     a=map(x -> parse(Int32,x), a)
 end
 df[:a] = a
@@ -77,9 +91,58 @@ open(file2a, "w") do f
     writedlm(f, convert(Array,df), '\t')
 end
 
+a=df[:ALT]
+r=df[:REF]
+n=length(a)
+ar=fill("",n)
+for i in 1:n
+    #println(i)
+    ar[i]=string(a[i],":",r[i])
+end
+
+l1=map(x -> length(x), ar)
+df[:INDEL]=map(x -> x>3,l1)
+df[:Variant_Type]=fill("SNV",n)
+df[df[:INDEL],:Variant_Type]="INDEL"
+dfindel=df[df[:INDEL],:]
+dfsnv=df[~df[:INDEL],:]
+#delete!(dfsnv, [:INDEL])
+#delete!(dfindel, [:INDEL])
+#delete!(df, [:INDEL])
 df2=df
 
-df= join(df1, df2, on =  [:CHRO, :POS, :REF, :ALT], kind = :outer)
+# set ALT0 to original ALT,shorten ALT to at most 5 bases, then copy back after merge
+
+df2[:ALT0]=df2[:ALT]
+alt0=df2[:ALT0]
+alt=fill("",n)
+n=length(alt0)
+l0=map(x -> length(x), alt0)
+for i in 1:n
+    l1=min(l0[i],5)
+    alt1=string(alt0[i])
+    alt[i]=alt1[1:l1]
+end
+df2[:ALT]=alt
+
+# merge SNV
+df= join(df1, df2,  on =  [:CHRO, :POS,:ALT], kind = :outer)
+# indels
+#df= join(df, dfindel,  on =  [:CHRO, :POS ], kind = :outer)
+
+# label M1 with M1 flag
+df[:M1]=~isna(df[:n_alt_count])
+df[:M2]=~isna(df[:TLOD])
+
+k=find(df[:M2] & ~df[:M1])
+df[k,:REF]=df[k,:REF_1]
+# put ALT0 back
+df[k,:ALT]=df[k,:ALT0]
+#df[k,:ID]=df[k,:ID_1]
+
+delete!(df, [:INDEL, :Variant_Type,:REF_1,:ALT0])
+
+
 
 # label M1 with M1 flag
 df[:M1]=~isna(df[:n_alt_count])
@@ -88,6 +151,8 @@ a= df[:CHRO]
 if !isa(a[1],Int)
     a=map(x -> replace(x,r"[X]", "23"), a)
     a=map(x -> replace(x,r"[Y]", "24"), a)
+    a=map(x -> replace(x,r"[MT]", "25"), a)
+    a=map(x -> replace(x,r"[M]", "25"), a)
     a=map(x -> parse(Int32,x), a)
 end
 df[:a] = a
