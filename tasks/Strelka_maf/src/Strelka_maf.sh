@@ -1,10 +1,11 @@
-VCF_SNV=$1  # Strelka SNV format
-VCF_INDEL=$2  # Strelka indel format
-TID=$1
-NID=$2
+PID=$1
+TID=$2
+NID=$3
+VCF_SNV=$4  # Strelka SNV format
+VCF_INDEL=$5  # Strelka indel format
 export JULIA_LOAD_PATH="/opt/src"
-julia /opt/src/vcf2txt.jl $VCF_SNV  StrelkaSNV.tsv  
-julia /opt/src/vcf2txt.jl $VCF_INDEL  StrelkaINDEL.tsv
-julia /opt/src/Strelka_maflite.jl $TID $NID  StrelkaSNV.tsv StrelkaINDEL.tsv Strelka_maflite.tsv
+julia /opt/src/vcf2txt.jl $VCF_SNV  $PID.StrelkaSNV.tsv  
+julia /opt/src/vcf2txt.jl $VCF_INDEL  $PID.StrelkaINDEL.tsv
+julia /opt/src/Strelka_maflite.jl $TID $NID  $PID.StrelkaSNV.tsv $PID.StrelkaINDEL.tsv $PID.Strelka_maflite.tsv
 
 
