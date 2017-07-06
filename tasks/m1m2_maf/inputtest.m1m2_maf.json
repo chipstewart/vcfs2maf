@@ -1,7 +1,7 @@
 {
   "m1m2_maf_workflow.m1m2_maf.M1_vcf_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/45c427a4-e3ac-4d6c-8a0e-a46d0457d8fa/pcawg_full_workflow/88b6ae70-fa58-4358-b83b-69ef9729d6d2/call-pcawg_full/output_files/sample.broad-mutect.DATECODE.somatic.snv_mnv.vcf.gz",
   "m1m2_maf_workflow.m1m2_maf.tumor_id": "REBC-ACC1-TP",
-  "m1m2_maf_workflow.m1m2_maf.M2_vcf_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/4872ddf0-0b47-4da4-9381-7d3bc3ed678b/pcawg_full_workflow/651b86ca-d6c7-4471-b41f-8e5a2c6f999d/call-pcawg_full/attempt-2/output_files/sample.broad-mutect2.DATECODE.somatic.vcf.gz",
+  "m1m2_maf_workflow.m1m2_maf.M2_vcf_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/5def848f-83cd-411c-9c33-3171df6971a9/annotatevariants/dca4ef6a-dd9f-4614-bc7f-2faef7f4f086/call-annotatevariants_task/REBC-ACC1-TP-NB.annotated_calls.vcf.gz",
   "m1m2_maf_workflow.m1m2_maf.output_disk_gb": "20",
   "m1m2_maf_workflow.m1m2_maf.normal_id": "REBC-ACC1-NB"
 }
