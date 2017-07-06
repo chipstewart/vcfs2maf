@@ -3,9 +3,9 @@
 using DataFrames
 # tumor_id="T"
 # normal_id="N"
-# file1="/Volumes/64GB_2015/Work/REBC/test1.tsv"
+# file1="cromwell-executions/m1m2_maf_workflow/8032afd8-8498-40b6-9346-b84353cf9d2d/call-m1m2_maf/execution/tmp1.tsv"
 # file1a="/Volumes/64GB_2015/Work/REBC/test1a.tsv"
-# file2="/Volumes/64GB_2015/Work/REBC/test2.tsv"
+# file2="cromwell-executions/m1m2_maf_workflow/8032afd8-8498-40b6-9346-b84353cf9d2d/call-m1m2_maf/execution/tmp2.tsv"
 # file2a="/Volumes/64GB_2015/Work/REBC/test2a.tsv"
 # maflite="/Volumes/64GB_2015/Work/REBC/test_M1_M2.tsv"
 tumor_id=ARGS[1]
@@ -61,16 +61,26 @@ df = readtable(file2)
 # describe(df)
 # print(df)
 delete!(df, [:FILTER,:QUAL, :NORMAL_PID,:x,:TUMOR_GT,:TUMOR_PL,:TUMOR_GQ,:TUMOR_DP,:TUMOR_PGT,:NORMAL_FOXOG,:NORMAL_QSS,:NORMAL_ALT_F2R1,:NORMAL_ALT_F1R2,:NORMAL_REF_F2R1,:NORMAL_REF_F1R2,:NORMAL_GT,:NORMAL_PGT,:NORMAL_GQ,:NORMAL_PL,:NORMAL_DP])
+if ( :TUMOR_FOXOG in names(df) )  # FOXOG messed up by VariantAnnotator
+    delete!(df, [:TUMOR_FOXOG])
+end
 # print(df)
 
 for c in names(df)
-    #println(c)
+    println(c)
     k=isna(df[c])
     if mean(k)==1.0
 		delete!(df, c)
 		continue
 	end
-	df[k,c] = ""
+    # if isa(df[c],DataArray{Float64,1})  & (mean(k)>0)
+    #     v=df[c]
+    #     v=map(x -> replace(x,NA,NaN), v)
+    #     df[c]=v
+    # end
+    if isa(df[c],DataArray{String,1}) 
+        df[k,c] = ""
+    end
 end
 #rename!(df, [:normal_tumor_alt_count, :normal_tumor_ref_count], [:t_alt_count, :t_ref_count])
 head(df)
