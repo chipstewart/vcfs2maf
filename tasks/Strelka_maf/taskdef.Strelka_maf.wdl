@@ -27,7 +27,7 @@ run('julia --version')
 
 run('/bin/bash /opt/src/Strelka_maf.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\"  \"${Strelka_SNV_vcf_file}\" \"${Strelka_INDEL_vcf_file}\"')
 
-run('tar cvfz ${pair_id}.Strelka_maf.tar.gz tmp1.tsv tmp2.tsv tmp3.tsv tmp4.tsv ${pair_id}.Strelka_maflite.tsv')
+run('tar cvfz ${pair_id}.Strelka_maf.tar.gz ${pair_id}.StrelkaSNV.tsv  ${pair_id}.StrelkaINDEL.tsv ${pair_id}.Strelka_maflite.tsv')
 
 #########################
 # end task-specific calls
