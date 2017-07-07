@@ -1,24 +1,21 @@
  #!/usr/local/bin/julia
 #ARGS
 # tumor_id="T"; normal_id="N"; file1="tmp1.tsv"; file2="tmp2.tsv"; maflite="maflite.tsv"
+# ARGS=["THCA-BJ-A28T-TP","THCA-BJ-A28T-NB","THCA-BJ-A28T-TP-NB.StrelkaSNV.tsv","THCA-BJ-A28T-TP-NB.StrelkaINDEL.tsv","THCA-BJ-A28T-TP-NB.Strelka.maflite.tsv"]
 using DataFrames
 
 file1a="vcf_1.tsv"
 file2a="vcf_2.tsv"
-file3a="vcf_3.tsv"
-file4a="vcf_4.tsv"
 
 tumor_id=ARGS[1]
 normal_id=ARGS[2]
 file1=ARGS[3]
 file2=ARGS[4]
-file3=ARGS[5]
-file4=ARGS[6]
-maflite=ARGS[7]
+maflite=ARGS[5]
 
 
 #Strelka SNV vcf
-df = readtable(file3)
+df = readtable(file1)
 # size(df)
 # describe(df)
 # print(df)
@@ -38,6 +35,10 @@ for c in names(df)
 end
 #rename!(df, [:normal_tumor_alt_count, :normal_tumor_ref_count], [:t_alt_count, :t_ref_count])
 head(df)
+# if CHRO is numberical -> convert to string
+if (typeof(df[:CHRO])==typeof(DataArray(fill(34,2))))
+	 df[:CHRO]=map(x -> string(x),df[:CHRO])
+end
 # keep only CHRO = [1-Y]
 df=df[find(in.(df[:CHRO], [["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"]])),:]
 
@@ -165,7 +166,7 @@ end
 df1=df
 
 #Strelka INDEL vcf
-df = readtable(file4)
+df = readtable(file2)
 # size(df)
 # describe(df)
 # print(df)
@@ -185,6 +186,9 @@ for c in names(df)
 end
 #rename!(df, [:normal_tumor_alt_count, :normal_tumor_ref_count], [:t_alt_count, :t_ref_count])
 head(df)
+if (typeof(df[:CHRO])==typeof(DataArray(fill(34,2))))
+	 df[:CHRO]=map(x -> string(x),df[:CHRO])
+end
 # keep only CHRO = [1-Y]
 df=df[find(in.(df[:CHRO], [["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"]])),:]
 
