@@ -1,4 +1,4 @@
-task Strelka_maf {
+task SvABA_maf {
 
     #Inputs and constants defined here
     String pair_id
@@ -25,9 +25,9 @@ run('/opt/src/algutil/monitor_start.py')
 
 run('julia --version')
 
-run('/bin/bash /opt/src/Strelka_maf.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\"  \"${Strelka_SNV_vcf_file}\" \"${Strelka_INDEL_vcf_file}\"')
+run('/bin/bash /opt/src/SvABA_maf.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\"  \"${SvABA_INDEL_vcf_file}\"')
 
-run('tar cvfz ${pair_id}.Strelka_maf.tar.gz ${pair_id}.StrelkaSNV.tsv  ${pair_id}.StrelkaINDEL.tsv ${pair_id}.Strelka_maflite.tsv')
+run('tar cvfz ${pair_id}.SvABA_maf.tar.gz ${pair_id}.SvABA.INDEL.tsv ${pair_id}.SvABA_maflite.tsv')
 
 #########################
 # end task-specific calls
@@ -39,12 +39,12 @@ run('/opt/src/algutil/monitor_stop.py')
     }
 
     output {
-        File Strelka_maf="${pair_id}.Strelka_maflite.tsv"
-        File M1M2strelka_tarball="${pair_id}.Strelka_maf.tar.gz"
+        File SvABA_maf="${pair_id}.SvABA_maflite.tsv"
+        File SvABA_tarball="${pair_id}.SvABA_maf.tar.gz"
     }
 
     runtime {
-        docker : "docker.io/chipstewart/m1m2_maf:1"
+        docker : "docker.io/chipstewart/SvABA_maf:1"
         memory: "${ram_gb}GB"
         cpu: "${cpu_cores}"
         disks: "local-disk ${output_disk_gb} HDD"
@@ -60,6 +60,6 @@ run('/opt/src/algutil/monitor_stop.py')
 
 }
 
-workflow Strelka_maf_workflow {
-    call Strelka_maf
+workflow SvABA_maf_workflow {
+    call SvABA_maf
 }
