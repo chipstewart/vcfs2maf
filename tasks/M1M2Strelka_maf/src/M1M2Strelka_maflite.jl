@@ -641,6 +641,7 @@ for c in names(maf)
         delete!(maf, c)
         continue
     end
+    maf[k,c]=""
     k=find(map(x->x=="NA",maf[c]))
     maf[k,c] = ""
     k=find(map(x->uppercase(x)=="TRUE",maf[c]))
@@ -648,6 +649,16 @@ for c in names(maf)
     k=find(map(x->uppercase(x)=="FALSE",maf[c]))
     maf[k,c] = "0"
 end
+
+a= maf[:chr]
+if !isa(a[1],Int)
+    a=map(x -> replace(x,r"[X]", "23"), a)
+    a=map(x -> replace(x,r"[Y]", "24"), a)
+    a=map(x -> parse(Int32,x), a)
+end
+maf[:a] = a
+sort!(maf, cols = [:a, :start])
+delete!(maf, [:a])
 
 
 open(maflite, "w") do f
