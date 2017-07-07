@@ -44,7 +44,7 @@ run('/opt/src/algutil/monitor_stop.py')
     }
 
     runtime {
-        docker : "docker.io/chipstewart/m1m2_maf:1"
+        docker : "docker.io/chipstewart/strelka_maf:1"
         memory: "${ram_gb}GB"
         cpu: "${cpu_cores}"
         disks: "local-disk ${output_disk_gb} HDD"
