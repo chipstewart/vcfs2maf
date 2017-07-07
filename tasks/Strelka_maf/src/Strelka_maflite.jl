@@ -2,6 +2,7 @@
 #ARGS
 # tumor_id="T"; normal_id="N"; file1="tmp1.tsv"; file2="tmp2.tsv"; maflite="maflite.tsv"
 # ARGS=["THCA-BJ-A28T-TP","THCA-BJ-A28T-NB","THCA-BJ-A28T-TP-NB.StrelkaSNV.tsv","THCA-BJ-A28T-TP-NB.StrelkaINDEL.tsv","THCA-BJ-A28T-TP-NB.Strelka.maflite.tsv"]
+# ARGS=["THCA-EM-A2CN-TP","THCA-EM-A2CN-NB","THCA-EM-A2CN-TP-NB.StrelkaSNV.tsv","THCA-EM-A2CN-TP-NB.StrelkaINDEL.tsv","THCA-EM-A2CN-TP-NB.Strelka_maflite.tsv"]
 using DataFrames
 
 file1a="vcf_1.tsv"
@@ -21,6 +22,12 @@ df = readtable(file1)
 # print(df)
 delete!(df, [:FILTER,:QUAL,:ID,:NT,:SOMATIC,:QSS_NT,:TQSS_NT,:SGT])
 # print(df)
+
+# trim ALT allele when longer than 1 character
+klong = find(map(x-> length(x)>1, df[:ALT]))
+alt=df[klong,:ALT]
+alt=(map(x->string(x[1]),alt))
+df[klong,:ALT]=alt
 
 for c in names(df)
     #println(c)
