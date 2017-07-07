@@ -204,7 +204,9 @@ function generateVariant(vc::VCFIterator, line::AbstractString)
         for i in 1:length(tempINFO)
             entry = tempINFO[i]
             id = split(entry,'=')[1]
-
+            if ! haskey(vc.infoTypes, id) 
+                continue
+            end
             #check if it is flag or not
             contentType = (vc.infoTypes[id]).Type
 
@@ -241,6 +243,10 @@ function generateVariant(vc::VCFIterator, line::AbstractString)
             for j in 1:length(tempFORMAT)
                 id = formatEntries[j]
                 contents = split(tempFORMAT[j], ",")
+                if ! haskey(vc.formatTypes, id) 
+                    continue
+                end
+        
                 contentType = vc.formatTypes[id].Type
 
                 if contentType == "Integer"
@@ -248,7 +254,7 @@ function generateVariant(vc::VCFIterator, line::AbstractString)
                 elseif contentType == "Float"
                     contents = map(floatField, contents)
                 elseif contentType != "String" && contentType != "Char"
-	            println("INVALID TYPE",":\t",entry)
+                    println("INVALID TYPE",":\t",entry)
                 end
             
                 tempFORMATdict[id] = contents
@@ -262,3 +268,4 @@ function generateVariant(vc::VCFIterator, line::AbstractString)
     #construct a variant
     Variant(chr, pos, id_, ref, alt, qual, filter, information, format)
 end
+
