@@ -1,7 +1,7 @@
 {
-  "Strelka_maf_workflow.m1m2_maf.tumor_id": "test_T",
-  "Strelka_maf_workflow.m1m2_maf.Strelka_SNV_vcf_file": "/opt/test/Strelka_SNV.vcf.gz",
-  "Strelka_maf_workflow.m1m2_maf.Strelka_INDEL_vcf_file": "/opt/test/Strelka_INDEL.vcf.gz",
-  "Strelka_maf_workflow.m1m2_maf.output_disk_gb": "20",
-  "Strelka_maf_workflow.m1m2_maf.normal_id": "test_N"
+  "SvABA_maf_workflow.SvABA_maf.pair_id": "THCA-EM-A3FL-TP-NB",
+  "SvABA_maf_workflow.SvABA_maf.tumor_id": "THCA-EM-A3FL-TP",
+  "SvABA_maf_workflow.SvABA_maf.Strelka_INDEL_vcf_file": "/opt/test/THCA-EM-A3FL-TP-NB.passed.somatic.indels.vcf.gz",
+  "SvABA_maf_workflow.SvABA_maf.output_disk_gb": "20",
+  "SvABA_maf_workflow.SvABA_maf.normal_id": "THCA-EM-A3FL-NB"
 }
