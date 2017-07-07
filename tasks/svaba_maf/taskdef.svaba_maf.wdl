@@ -4,8 +4,7 @@ task svaba_maf {
     String pair_id
     String tumor_id
     String normal_id
-    File Strelka_SNV_vcf_file
-    File Strelka_INDEL_vcf_file
+    File svaba_INDEL_vcf_file
     String output_disk_gb
     String boot_disk_gb = "10"
     String ram_gb = "8"
@@ -27,7 +26,7 @@ run('julia --version')
 
 run('/bin/bash /opt/src/svaba_maf.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\"  \"${svaba_INDEL_vcf_file}\"')
 
-run('tar cvfz ${pair_id}.svaba_maf.tar.gz ${pair_id}.svaba.INDEL.tsv ${pair_id}.svaba_maflite.tsv')
+run('tar cvfz ${pair_id}.SvABA_maf.tar.gz ${pair_id}.SvABA.INDEL.tsv ${pair_id}.SvABA_maflite.tsv')
 
 #########################
 # end task-specific calls
@@ -39,8 +38,8 @@ run('/opt/src/algutil/monitor_stop.py')
     }
 
     output {
-        File svaba_maf="${pair_id}.svaba_maflite.tsv"
-        File svaba_tarball="${pair_id}.svaba_maf.tar.gz"
+        File svaba_maf="${pair_id}.SvABA_maflite.tsv"
+        File svaba_tarball="${pair_id}.SvABA_maf.tar.gz"
     }
 
     runtime {
