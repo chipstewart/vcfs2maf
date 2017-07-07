@@ -1,4 +1,4 @@
-task SvABA_maf {
+task svaba_maf {
 
     #Inputs and constants defined here
     String pair_id
@@ -25,9 +25,9 @@ run('/opt/src/algutil/monitor_start.py')
 
 run('julia --version')
 
-run('/bin/bash /opt/src/SvABA_maf.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\"  \"${SvABA_INDEL_vcf_file}\"')
+run('/bin/bash /opt/src/svaba_maf.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\"  \"${svaba_INDEL_vcf_file}\"')
 
-run('tar cvfz ${pair_id}.SvABA_maf.tar.gz ${pair_id}.SvABA.INDEL.tsv ${pair_id}.SvABA_maflite.tsv')
+run('tar cvfz ${pair_id}.svaba_maf.tar.gz ${pair_id}.svaba.INDEL.tsv ${pair_id}.svaba_maflite.tsv')
 
 #########################
 # end task-specific calls
@@ -39,8 +39,8 @@ run('/opt/src/algutil/monitor_stop.py')
     }
 
     output {
-        File SvABA_maf="${pair_id}.SvABA_maflite.tsv"
-        File SvABA_tarball="${pair_id}.SvABA_maf.tar.gz"
+        File svaba_maf="${pair_id}.svaba_maflite.tsv"
+        File svaba_tarball="${pair_id}.svaba_maf.tar.gz"
     }
 
     runtime {
@@ -60,6 +60,6 @@ run('/opt/src/algutil/monitor_stop.py')
 
 }
 
-workflow SvABA_maf_workflow {
-    call SvABA_maf
+workflow svaba_maf_workflow {
+    call svaba_maf
 }

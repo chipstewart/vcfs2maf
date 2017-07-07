@@ -1,0 +1,7 @@
+{
+  "SvABA_maf_workflow.SvABA_maf.Strelka_INDEL_vcf_file": "/opt/vcfs2maf/tasks/SvABA_maf/localized_inputs/SvABA_maf_workflow.SvABA_maf.Strelka_INDEL_vcf_file/sample.broad-snowman.DATECODE.somatic.indel.vcf.gz", 
+  "SvABA_maf_workflow.SvABA_maf.normal_id": "THCA-EM-A2CN-NB", 
+  "SvABA_maf_workflow.SvABA_maf.output_disk_gb": "20", 
+  "SvABA_maf_workflow.SvABA_maf.pair_id": "THCA-EM-A2CN-TP-NB", 
+  "SvABA_maf_workflow.SvABA_maf.tumor_id": "THCA-EM-A2CN-TP"
+}
