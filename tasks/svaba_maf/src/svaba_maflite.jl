@@ -1,6 +1,9 @@
  #!/usr/local/bin/julia
 #ARGS
 # ARGS=["THCA-EM-A2CN-TP","THCA-EM-A2CN-NB","THCA-EM-A2CN-TP-NB.SvABA.INDEL.tsv","THCA-EM-A2CN-TP-NB.maflite.tsv"]
+# ARGS=["THCA-EM-THCA-BJ-A191-TP","THCA-BJ-A191-NB","THCA-BJ-A191-TP-NB.SvABA.INDEL.tsv","THCA-BJ-A191-TP-NB.maflite.tsv"]
+# ARGS=["THCA-DJ-A13W-TP","THCA-DJ-A13W-NB","THCA-DJ-A13W-TP-NB.SvABA.INDEL.tsv","THCA-DJ-A13W-TP-NB.SvABA_maflite.tsv"]
+
 using DataFrames
 
 file1a="vcf_1.tsv"
@@ -71,10 +74,13 @@ df[:t_ref_count]=tref
 rename!(df, [:CHRO,:POS, :REF, :ALT], [:chr, :start, :ref_allele,:alt_allele])
 rename!(df, [:TFRAC,:NSPLIT, :TSPLIT, :TCIGAR,:MAPQ,:BLACKLIST,:SPAN,:TCOV,:NCOV,:NCIGAR,:NFRAC],  [:SvABA_TFRAC, :SvABA_NSPLIT,:SvABA_TSPLIT,:SvABA_TCIGAR,:SvABA_MAPQ,:SvABA_BLACKLIST,:SvABA_SPAN,:SvABA_TCOV,:SvABA_NCOV,:SvABA_NCIGAR,:SvABA_NFRAC])
 
+df[:SvABA_NFRAC]=df[:SvABA_NFRAC]/1.0
 k=find(map(x->x<0,df[:SvABA_NFRAC]))
-df[k,:SvABA_NFRAC]=0/0
+df[k,:SvABA_NFRAC]=NaN
+
+df[:SvABA_TFRAC]=df[:SvABA_TFRAC]/1.0
 k=find(map(x->x<0,df[:SvABA_TFRAC]))
-df[k,:SvABA_TFRAC]=0/0
+df[k,:SvABA_TFRAC]=NaN
 
 isString(x::Number)=false
 isString(x::DataArrays.NAtype)=false
