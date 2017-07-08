@@ -40,7 +40,7 @@ run('/opt/src/algutil/monitor_stop.py')
 
     output {
         File Strelka_maf="${pair_id}.Strelka_maflite.tsv"
-        File M1M2strelka_tarball="${pair_id}.Strelka_maf.tar.gz"
+        File Strelka_maf_tarball="${pair_id}.Strelka_maf.tar.gz"
     }
 
     runtime {
