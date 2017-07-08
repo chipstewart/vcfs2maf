@@ -411,8 +411,11 @@ rename!(df, [:NORMAL_DP,:NORMAL_FDP,:TUMOR_DP, :TUMOR_FDP], [:STRELKA_NORMAL_DP,
 rename!(df, [:QS,:RU,:RC, :TQS], [:STRELKA_QS, :STRELKA_RU, :STRELKA_RC, :STRELKA_TQS])
 rename!(df, [:NORMAL_ACGT_TIR_TOR,:TUMOR_ACGT_TIR_TOR], [:STRELKA_NORMAL_ACGT_TIR_TOR, :STRELKA_TUMOR_ACGT_TIR_TOR])
 
-
-
+# add build column
+maf[:build]=fill("37",size(maf,1))
+maf[:tumor_barcode]=fill(tumor_id,size(maf,1))
+maf[:normal_barcode]=fill(normal_id,size(maf,1))
+maf[:judgement]=fill("KEEP",size(maf,1))
 
 open(maflite, "w") do f
     writedlm(f, reshape(names(maf), 1, length(names(maf))), '\t')
