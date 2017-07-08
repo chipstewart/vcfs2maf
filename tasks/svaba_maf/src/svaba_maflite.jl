@@ -114,6 +114,12 @@ end
 
 n=length(maf[:chr])
 
+# add build column
+maf[:build]=fill("37",size(maf,1))
+maf[:tumor_barcode]=fill(tumor_id,size(maf,1))
+maf[:normal_barcode]=fill(normal_id,size(maf,1))
+maf[:judgement]=fill("KEEP",size(maf,1))
+
 open(maflite, "w") do f
     writedlm(f, reshape(names(maf), 1, length(names(maf))), '\t')
     writedlm(f, convert(Array,maf), '\t')
