@@ -1,0 +1,7 @@
+{
+  "m2_maflite_workflow.m2_maflite.M2_vcf_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/5def848f-83cd-411c-9c33-3171df6971a9/annotatevariants/dca4ef6a-dd9f-4614-bc7f-2faef7f4f086/call-annotatevariants_task/REBC-ACC1-TP-NB.annotated_calls.vcf.gz",
+  "m2_maflite_workflow.m2_maflite.output_disk_gb": "20",
+  "m2_maflite_workflow.m2_maflite.tumor_id": "REBC-ACC1-TP",
+  "m2_maflite_workflow.m2_maflite.pair_id": "REBC-ACC1-TP-NB",
+  "m2_maflite_workflow.m2_maflite.normal_id": "REBC-ACC1-NB"
+}
