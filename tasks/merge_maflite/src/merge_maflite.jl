@@ -70,14 +70,6 @@ if isfile(file2)
 	if isdefined(:df)
 	   df[Symbol(lab2)]=fill("0",size(df[:chr]))
 	   df=[df; df2]
-	   ##df= join(df, df2, on =  [:chr, :start, :ref_allele, :alt_allele], kind = :outer)
-#	   for c in names(df)
-#	  		if ~isString(df[1,c])
-#    	    	df[c] = map(x -> string(x),df[c])
-#	    	end
-#    	end
-    	
-
 	else
 	   df=df2
 	end
@@ -89,12 +81,29 @@ if isfile(file3)
     	    df3[c] = map(x -> string(x),df3[c])
     	end
     end
+	if Symbol("_end") in names(df3)
+		rename!(df3, [:_end], [:end])
+	end
+	if ! (Symbol("tum_allele1") in names(df3))
+		df3[:tum_allele1]=df3[:ref_allele]
+		df3[:tum_allele2]=df3[:alt_allele]
+	end
+
+	for c in names(df3)
+    	c1 = string(c)
+    	if length(find(Bool[contains(c1,i) for i in maflite_fields]))<1
+        	m2c = Symbol(string(lab3,"_",c1))
+        	rename!(df3,c,m2c)
+		end
+	end
+	
+    df3[Symbol(lab3)]=fill("1",size(df3[:chr]))
 	if isdefined(:df)
-	   df= join(df, df3, on =  [:CHRO, :POS, :REF, :ALT], kind = :outer)
+	   df[Symbol(lab3)]=fill("0",size(df[:chr]))
+	   df=[df; df3]
 	else
 	   df=df3
 	end
-    
 end
 if isfile(file4)
 	df4 = readtable(file4)
@@ -102,13 +111,98 @@ if isfile(file4)
 	    if ~isString(df4[1,c])
     	    df4[c] = map(x -> string(x),df4[c])
     	end
-    end	
+    end
+	if Symbol("_end") in names(df4)
+		rename!(df4, [:_end], [:end])
+	end
+	if ! (Symbol("tum_allele1") in names(df4))
+		df4[:tum_allele1]=df4[:ref_allele]
+		df4[:tum_allele2]=df4[:alt_allele]
+	end
+
+	for c in names(df4)
+    	c1 = string(c)
+    	if length(find(Bool[contains(c1,i) for i in maflite_fields]))<1
+        	m2c = Symbol(string(lab4,"_",c1))
+        	rename!(df4,c,m2c)
+		end
+	end
+	
+    df4[Symbol(lab4)]=fill("1",size(df4[:chr]))
 	if isdefined(:df)
-	   df= join(df, df4, on =  [:CHRO, :POS, :REF, :ALT], kind = :outer)
+	   df[Symbol(lab4)]=fill("0",size(df[:chr]))
+	   df=[df; df4]
 	else
-	   df=df2
-	end    
+	   df=df4
+	end
 end
+
+# fix fields 
+
+df[:build]=fill("37",size(df,1))
+df[:tumor_barcode]=fill(tumor_id,size(df,1))
+df[:normal_barcode]=fill(normal_id,size(df,1))
+df[:judgement]=fill("KEEP",size(df,1))
+
+t_alt_count = map(x -> parse(Float64,x),df[:t_alt_count])
+t_ref_count = map(x -> parse(Float64,x),df[:t_ref_count])
+df[:tumor_f]= map(x->@sprintf("%.4f",x),t_alt_count./(t_alt_count+t_ref_count))
+
+# sort 
+a = df[:chr]
+p1 = map(x -> parse(Int64,x), df[:start])
+p2 = map(x -> parse(Int64,x), df[:end])
+if !isa(a[1],Int)
+    a=map(x -> replace(x,r"[X]", "23"), a)
+    a=map(x -> replace(x,r"[Y]", "24"), a)
+    a=map(x -> parse(Int64,x), a)
+end
+df[:a] = a
+df[:p1] = p1
+df[:p2] = p2
+#print(df)
+sort!(df, cols = [:a, :p1])
+
+# convert NA's to ""
+for c in names(df)
+    k=find(map(x -> isna(x),df[c]))
+    df[k,c] = ""
+    if c in [Symbol(lab1), Symbol(lab2), Symbol(lab3), Symbol(lab4)]
+	   k=find(map(x -> x=="",df[c]))
+ 	   df[k,c] = "0"
+    end    
+end	
+
+# cluster
+x1=df[:a]*1000000000+df[:p1]
+x2=df[:a]*1000000000+df[:p2]
+kdel = find(map(x-> x=="-", df[:ref_allele]))
+x1[kdel]=x1[kdel]-1
+x2[kdel]=x2[kdel]+1
+kins = find(map(x-> x=="-", df[:tum_allele2]))
+x1[kins]=x1[kins]-1
+x2[kins]=x2[kins]+1
+
+n=length(df[:a])
+g=1
+df[:cluster]=fill(g,size(df[:chr]))
+for i = 2:n
+	if (x1[i]>x2[i-1])
+	  g=g+1
+	end
+    df[i,:cluster]=g
+end
+# q=countmap(df[:cluster]) ; q1=map(x->Int32(x),values(q)); countmap(q1)
+
+for i = 1:g
+	println(i)
+    k=find(map(x-> x==i,df[:cluster]))
+    #println(k)
+    if length(k)>1
+      print(df[k,:])
+    end
+end
+
 
 #size(df)
 #describe(df)
@@ -215,124 +309,6 @@ df[:a] = a
 # print(df)
 sort!(df, cols = [:a, :POS])
 delete!(df, [:a])
-
-
-# Strelka 'tier' for QSS -
-# hypothesis: TQSS must be strelka's favorite tier for each particular call 
-nt=df[:TQSS]
-n=length(nt)
-AA=df[:ALT]
-RA=df[:REF]
-
-q=df[:NORMAL_AU]
-N1= fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-NA=map(x -> parse(Int32,x), N1)
-
-q=df[:NORMAL_CU]
-N1 = fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-NC=map(x -> parse(Int32,x), N1)
-
-q=df[:NORMAL_GU]
-N1 = fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-NG=map(x -> parse(Int32,x), N1)
-
-q=df[:NORMAL_TU]
-N1 = fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-NT=map(x -> parse(Int32,x), N1)
-
-q=df[:TUMOR_AU]
-N1= fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-TA=map(x -> parse(Int32,x), N1)
-
-q=df[:TUMOR_CU]
-N1 = fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-TC=map(x -> parse(Int32,x), N1)
-
-q=df[TUMOR_GU]
-N1 = fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-TG=map(x -> parse(Int32,x), N1)
-
-q=df[:TUMOR_TU]
-N1 = fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-TT=map(x -> parse(Int32,x), N1)
-
-df[:n_ref_count] = fill(0,n)
-df[:n_alt_count] = fill(0,n)
-df[:t_ref_count] = fill(0,n)
-df[:t_alt_count] = fill(0,n)
-
-NB=[NA NC NG NT]
-TB=[TA TC TG TT]
-b1 = ["A" "C" "G" "T"]
-kr=find( in.(df[:REF],[b1]) )
-mr=findfirst.([b1],df[:REF])
-ka=find( in.(df[:ALT],[b1]) )
-ma=findfirst.([b1],df[:ALT])
-
-for i = 1:n
-   df[i,:n_ref_count] = NB[i,mr[i]]
-   df[i,:n_alt_count] = NB[i,ma[i]]
-   df[i,:t_ref_count] = TB[i,mr[i]]
-   df[i,:t_alt_count] = TB[i,ma[i]]
-end
-   
-df[:QS] = df[:QSS]
-
-
-open(file3a, "w") do f
-    writedlm(f, reshape(names(df), 1, length(names(df))), '\t')
-    writedlm(f, convert(Array,df), '\t')
-end
-
-df3=df
-
-#Strelka INDEL vcf
-df = readtable(file4)
-# size(df)
-# describe(df)
-# print(df)
-delete!(df, [:FILTER,:QUAL, :SOMATIC,:QSI_NT,:TQSI_NT,:SGT])
-# head(df)
 
 for c in names(df)
     #println(c)
