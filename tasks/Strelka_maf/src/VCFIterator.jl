@@ -204,7 +204,7 @@ function generateVariant(vc::VCFIterator, line::AbstractString)
         for i in 1:length(tempINFO)
             entry = tempINFO[i]
             id = split(entry,'=')[1]
-   			if ! haskey(vc.infoTypes, id) 
+            if ! haskey(vc.infoTypes, id) 
                 continue
             end
             #check if it is flag or not
@@ -246,6 +246,7 @@ function generateVariant(vc::VCFIterator, line::AbstractString)
                 if ! haskey(vc.formatTypes, id) 
                     continue
                 end
+        
                 contentType = vc.formatTypes[id].Type
 
                 if contentType == "Integer"
