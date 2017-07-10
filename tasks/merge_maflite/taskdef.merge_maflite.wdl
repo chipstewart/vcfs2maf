@@ -1,13 +1,16 @@
 task merge_maflite {
-
     #Inputs and constants defined here
     String pair_id
     String tumor_id
     String normal_id
-    File M1_maflite_file
-    File M2_maflite_file
-    File Strelka_maflite_file
-    File SvABA_maflite_file
+    File algorithm1_maflite_file
+    File algorithm2_maflite_file
+    File algorithm3_maflite_file
+    File algorithm4_maflite_file
+    String algorithm1
+    String algorithm2
+    String algorithm3
+    String algorithm4
     String output_disk_gb
     String boot_disk_gb = "10"
     String ram_gb = "8"
@@ -27,7 +30,7 @@ run('/opt/src/algutil/monitor_start.py')
 
 run('julia --version')
 
-run('/bin/bash /opt/src/merge_maflite.sh \"${tumor_id}\" \"${normal_id}\" \"${M1_maflite_file}\"  \"${M2_maflite_file}\" \"${Strelka_maflite_file}\" \"${SvABA_maflite_file}\"' \"M1"\ \"M2"\ \"Strelka"\ \"SvABA"\ ) 
+run('/bin/bash /opt/src/merge_maflite.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\" \"${algorithm1_maflite_file}\"  \"${algorithm2_maflite_file}\" \"${algorithm3_maflite_file}\" \"${algorithm4_maflite_file}\"  \"${algorithm1}\" \"${algorithm2}\" \"${algorithm3}\" \"${algorithm4}\" ')
 
 run('tar cvfz ${pair_id}_merged.maflite.tar.gz ${pair_id}.merged.maflite.tsv')
 
@@ -65,3 +68,4 @@ run('/opt/src/algutil/monitor_stop.py')
 workflow merge_maflite_workflow {
     call merge_maflite
 }
+
