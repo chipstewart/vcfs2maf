@@ -1,12 +1,13 @@
-task M1M2strelka_maf {
+task merge_maflite {
 
     #Inputs and constants defined here
+    String pair_id
     String tumor_id
     String normal_id
-    File M1_vcf_file
-    File M2_vcf_file
-    File Strelka_SNV_vcf_file
-    File Strelka_INDEL_vcf_file
+    File M1_maflite_file
+    File M2_maflite_file
+    File Strelka_maflite_file
+    File SvABA_maflite_file
     String output_disk_gb
     String boot_disk_gb = "10"
     String ram_gb = "8"
@@ -26,9 +27,9 @@ run('/opt/src/algutil/monitor_start.py')
 
 run('julia --version')
 
-run('/bin/bash /opt/src/M1M2_maf.sh \"${tumor_id}\" \"${normal_id}\" \"${M1_vcf_file}\"  \"${M2_vcf_file}\" \"${Strelka_SNV_vcf_file}\" \"${Strelka_INDEL_vcf_file}\"')
+run('/bin/bash /opt/src/merge_maflite.sh \"${tumor_id}\" \"${normal_id}\" \"${M1_maflite_file}\"  \"${M2_maflite_file}\" \"${Strelka_maflite_file}\" \"${SvABA_maflite_file}\"' \"M1"\ \"M2"\ \"Strelka"\ \"SvABA"\ ) 
 
-run('tar cvfz m1m2strelka_maf.tar.gz tmp1.tsv tmp2.tsv tmp3.tsv tmp4.tsv m1m2strelka_maflite.tsv')
+run('tar cvfz ${pair_id}_merged.maflite.tar.gz ${pair_id}.merged.maflite.tsv')
 
 #########################
 # end task-specific calls
@@ -40,8 +41,8 @@ run('/opt/src/algutil/monitor_stop.py')
     }
 
     output {
-        File M1M2strelka_maf="M1M2strelka_maflite.tsv"
-        File M1M2strelka_tarball="m1m2strelka_maf.tar.gz"
+        File merged_maflite="${pair_id}_merged.maflite.tsv"
+        File merged_maflite_tarball="${pair_id}_merged.maflite.tar.gz"
     }
 
     runtime {
@@ -61,6 +62,6 @@ run('/opt/src/algutil/monitor_stop.py')
 
 }
 
-workflow M1M2strelka_maf_workflow {
-    call M1M2strelka_maf
+workflow merge_maflite_workflow {
+    call merge_maflite
 }
