@@ -1,0 +1,8 @@
+{
+  "strelka_maflite_workflow.strelka_maflite.pair_id": "THCA-EM-A3FL-TP-NB",
+  "strelka_maflite_workflow.strelka_maflite.tumor_id": "THCA-EM-A3FL-TP",
+  "strelka_maflite_workflow.strelka_maflite.Strelka_SNV_vcf_file": "/opt/test/THCA-EM-A3FL-TP-NB.passed.somatic.snvs.vcf.gz",
+  "strelka_maflite_workflow.strelka_maflite.Strelka_INDEL_vcf_file": "/opt/test/THCA-EM-A3FL-TP-NB.passed.somatic.indels.vcf.gz",
+  "strelka_maflite_workflow.strelka_maflite.output_disk_gb": "20",
+  "strelka_maflite_workflow.strelka_maflite.normal_id": "THCA-EM-A3FL-NB"
+}

@@ -1,5 +1,5 @@
 {
-  "m2_maflite_workflow.m2_maflite.M2_vcf_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/4872ddf0-0b47-4da4-9381-7d3bc3ed678b/pcawg_full_workflow/366e0bbb-c396-4965-8c8a-3dce128f294a/call-pcawg_full/attempt-2/output_files/sample.broad-mutect2.DATECODE.somatic.vcf.gzz",
+  "m2_maflite_workflow.m2_maflite.M2_vcf_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/4872ddf0-0b47-4da4-9381-7d3bc3ed678b/pcawg_full_workflow/366e0bbb-c396-4965-8c8a-3dce128f294a/call-pcawg_full/attempt-2/output_files/sample.broad-mutect2.DATECODE.somatic.vcf.gz",
   "m2_maflite_workflow.m2_maflite.output_disk_gb": "20",
   "m2_maflite_workflow.m2_maflite.tumor_id": "REBC-AC8L-TP",
   "m2_maflite_workflow.m2_maflite.pair_id": "REBC-AC8L-TP-NT",
