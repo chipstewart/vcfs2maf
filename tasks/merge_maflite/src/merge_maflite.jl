@@ -209,10 +209,10 @@ for i = 1:g
     k=find(map(x-> x==i,df[:cluster]))
     #println(k)
     if length(k)>1
-    	if (any(map(x->x=="-",df[k,:ref_allele])) | any(map(x->x=="-",df[k,:tum_allele2]) ) )
-	  		println(i)
-      		println(df[k,[:chr,:start,:ref_allele,:tum_allele2,:t_alt_count,:tumor_f,:M1,:M2,:STRELKA,:SVABA]])
-    	end
+    	# if (any(map(x->x=="-",df[k,:ref_allele])) | any(map(x->x=="-",df[k,:tum_allele2]) ) )
+	  		# println(i)
+            # println(df[k,[:chr,:start,:ref_allele,:tum_allele2,:t_alt_count,:tumor_f,:M1,:M2,:STRELKA,:SVABA]])
+    	# end
     	
     	# algorithm pecking order as input lab1-lab4 
     	# highest t_alt_count wins 
@@ -226,8 +226,8 @@ for i = 1:g
     	for a=1:4
     	   if (sum(map(x -> x=="1",df[k,slabs[a]])))>1
     	   	 
-    	   	 println(i)
-        	 println(df[k,[:chr,:start,:ref_allele,:tum_allele2,:t_alt_count,:tumor_f,:M1,:M2,:STRELKA,:SVABA]])
+    	   	 #println(i)
+        	 #println(df[k,[:chr,:start,:ref_allele,:tum_allele2,:t_alt_count,:tumor_f,:M1,:M2,:STRELKA,:SVABA]])
 
     	     ka=kx[find(map(x -> x=="1",df[kx,slabs[a]]))][1]
     	     df[ka,:judgement]="ALG_REDUNDANT" 
@@ -263,23 +263,24 @@ for i = 1:g
     end
 end
 
-k=find(map(x -> x=="KEEP",df[:judgement]))
 
-delete!(df, [:a,:p1,:p2,:cluster])
-
-maf=df[k,:]
-for c in names(maf)
-    #println(c)
-    if ~isString(maf[1,c])
-        maf[c] = map(x -> string(x),maf[c])
+for c in names(df)
+    if ~isString(df[1,c])
+        df[c] = map(x -> string(x),df[c])
     end
 end
 
+k=find(map(x -> x=="KEEP",df[:judgement]))
+maf=df[k,:]
+delete!(maf, [:a,:p1,:p2,:cluster])
 
-
-
+open("premerged_maflite.tsv", "w") do f
+    writedlm(f, reshape(names(df), 1, length(names(df))), '\t')
+    writedlm(f, convert(Array,df), '\t')
+end
 
 open(merged_maflite, "w") do f
     writedlm(f, reshape(names(maf), 1, length(names(maf))), '\t')
     writedlm(f, convert(Array,maf), '\t')
 end
+
