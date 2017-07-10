@@ -72,15 +72,23 @@ df[:t_alt_count]=talt
 df[:n_ref_count]=nref
 df[:t_ref_count]=tref
 rename!(df, [:CHRO,:POS, :REF, :ALT], [:chr, :start, :ref_allele,:alt_allele])
-rename!(df, [:TFRAC,:NSPLIT, :TSPLIT, :TCIGAR,:MAPQ,:BLACKLIST,:SPAN,:TCOV,:NCOV,:NCIGAR,:NFRAC],  [:SvABA_TFRAC, :SvABA_NSPLIT,:SvABA_TSPLIT,:SvABA_TCIGAR,:SvABA_MAPQ,:SvABA_BLACKLIST,:SvABA_SPAN,:SvABA_TCOV,:SvABA_NCOV,:SvABA_NCIGAR,:SvABA_NFRAC])
+#rename!(df, [:TFRAC,:NSPLIT, :TSPLIT, :TCIGAR,:MAPQ,:BLACKLIST,:SPAN,:TCOV,:NCOV,:NCIGAR,:NFRAC],  [:SvABA_TFRAC, :SvABA_NSPLIT,:SvABA_TSPLIT,:SvABA_TCIGAR,:SvABA_MAPQ,:SvABA_BLACKLIST,:SvABA_SPAN,:SvABA_TCOV,:SvABA_NCOV,:SvABA_NCIGAR,:SvABA_NFRAC])
 
-df[:SvABA_NFRAC]=df[:SvABA_NFRAC]/1.0
-k=find(map(x->x<0,df[:SvABA_NFRAC]))
-df[k,:SvABA_NFRAC]=NaN
+# df[:SvABA_NFRAC]=df[:SvABA_NFRAC]/1.0
+# k=find(map(x->x<0,df[:SvABA_NFRAC]))
+# df[k,:SvABA_NFRAC]=NaN
 
-df[:SvABA_TFRAC]=df[:SvABA_TFRAC]/1.0
-k=find(map(x->x<0,df[:SvABA_TFRAC]))
-df[k,:SvABA_TFRAC]=NaN
+# df[:SvABA_TFRAC]=df[:SvABA_TFRAC]/1.0
+# k=find(map(x->x<0,df[:SvABA_TFRAC]))
+# df[k,:SvABA_TFRAC]=NaN
+
+df[:NFRAC]=df[:NFRAC]/1.0
+k=find(map(x->x<0,df[:NFRAC]))
+df[k,:NFRAC]=NaN
+
+df[:TFRAC]=df[:TFRAC]/1.0
+k=find(map(x->x<0,df[:TFRAC]))
+df[k,:TFRAC]=NaN
 
 isString(x::Number)=false
 isString(x::DataArrays.NAtype)=false
