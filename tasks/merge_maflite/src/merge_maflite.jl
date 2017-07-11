@@ -139,6 +139,10 @@ if isfile(file4)
 end
 
 # fix fields 
+k=find(!map(x -> x=="MT",df[:chr]))
+df=df[k,:]
+k=find(!map(x -> x=="M",df[:chr]))
+df=df[k,:]
 
 df[:build]=fill("37",size(df,1))
 df[:tumor_barcode]=fill(tumor_id,size(df,1))
