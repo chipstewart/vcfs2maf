@@ -1,3 +1,0 @@
-src	dest
-src/*	build/src/
-../../algutil	build/src/

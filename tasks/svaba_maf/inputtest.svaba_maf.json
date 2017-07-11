@@ -1,7 +1,0 @@
-{
-  "svaba_maf_workflow.svaba_maf.pair_id": "THCA-EM-A2CN-TP-NB",
-  "svaba_maf_workflow.svaba_maf.tumor_id": "THCA-EM-A2CN-TP",
-  "svaba_maf_workflow.svaba_maf.svaba_INDEL_vcf_file": "/opt/test/sample.broad-snowman.DATECODE.somatic.indel.vcf.gz",
-  "svaba_maf_workflow.svaba_maf.output_disk_gb": "20",
-  "svaba_maf_workflow.svaba_maf.normal_id": "THCA-EM-A2CN-NB"
-}
