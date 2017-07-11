@@ -1,9 +1,15 @@
 {
-  "M1M2strelka_maf_workflow.m1m2_maf.M1_vcf_file": "/opt/test/M1.vcf.gz",
-  "M1M2strelka_maf_workflow.m1m2_maf.tumor_id": "test_T",
-  "M1M2strelka_maf_workflow.m1m2_maf.M2_vcf_file": "/opt/test/M2.vcf.gz",
-  "M1M2strelka_maf_workflow.m1m2_maf.Strelka_SNV_vcf_file": "/opt/test/Strelka_SNV.vcf.gz",
-  "M1M2strelka_maf_workflow.m1m2_maf.Strelka_INDEL_vcf_file": "/opt/test/Strelka_INDEL.vcf.gz",
-  "M1M2strelka_maf_workflow.m1m2_maf.output_disk_gb": "20",
-  "M1M2strelka_maf_workflow.m1m2_maf.normal_id": "test_N"
+  "merge_maflite_workflow.merge_maflite.pair_id": "REBC-AC8L-TP-NT",
+  "merge_maflite_workflow.merge_maflite.tumor_id": "REBC-AC8L-TTP1-A-1-1-D-A49U-36",
+  "merge_maflite_workflow.merge_maflite.normal_id": "REBC-AC8L-NT1-A-1-1-D-A49U-36",
+  "merge_maflite_workflow.merge_maflite.algorithm1_maflite_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/45c427a4-e3ac-4d6c-8a0e-a46d0457d8fa/pcawg_full_workflow/687aef40-0f31-4456-bec7-5494a808d393/call-pcawg_full/attempt-2/output_files/sample.mutect.maflite.txt",
+  "merge_maflite_workflow.merge_maflite.algorithm2_maflite_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/7b6b7090-1290-4b45-927f-f434417bbf68/m2_maflite_workflow/1bfa6b8f-6e86-4cb5-afaf-c54c2e3efccc/call-m2_maflite/REBC-AC8L-TP-NT.m2_maflite.tsv",
+  "merge_maflite_workflow.merge_maflite.algorithm3_maflite_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/a8c34806-70f9-427c-aaa8-fb37198fa7c2/strelka_maflite_workflow/cd3ed3e8-59f7-4b3f-a4d7-ef6967dfb07a/call-strelka_maflite/REBC-AC8L-TP-NT.Strelka_maflite.tsv",
+  "merge_maflite_workflow.merge_maflite.algorithm4_maflite_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/6bc2f4a0-c03f-4c12-9cc9-178aeb70f05e/svaba_maflite_workflow/a1b6b5e9-f733-408b-ac2f-8d7d432caebc/call-svaba_maflite/REBC-AC8L-TP-NT.SvABA_maflite.tsv",
+  "merge_maflite_workflow.merge_maflite.algorithm1": "M1",
+  "merge_maflite_workflow.merge_maflite.algorithm2": "M2",
+  "merge_maflite_workflow.merge_maflite.algorithm3": "Strelka",
+  "merge_maflite_workflow.merge_maflite.algorithm4": "SvABA",
+  "merge_maflite_workflow.merge_maflite.output_disk_gb": "20"
 }
+
