@@ -32,7 +32,7 @@ run('julia --version')
 
 run('/bin/bash /opt/src/merge_maflite.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\" \"${algorithm1_maflite_file}\"  \"${algorithm2_maflite_file}\" \"${algorithm3_maflite_file}\" \"${algorithm4_maflite_file}\"  \"${algorithm1}\" \"${algorithm2}\" \"${algorithm3}\" \"${algorithm4}\" ')
 
-run('tar cvfz ${pair_id}_merged.maflite.tar.gz ${pair_id}.merged.maflite.tsv')
+run('tar cvfz ${pair_id}.merged.maflite.tar.gz *.tsv')
 
 #########################
 # end task-specific calls
@@ -44,8 +44,8 @@ run('/opt/src/algutil/monitor_stop.py')
     }
 
     output {
-        File merged_maflite="${pair_id}_merged.maflite.tsv"
-        File merged_maflite_tarball="${pair_id}_merged.maflite.tar.gz"
+        File merged_maflite="${pair_id}.merged.maflite.tsv"
+        File merged_maflite_tarball="${pair_id}.merged.maflite.tar.gz"
     }
 
     runtime {
