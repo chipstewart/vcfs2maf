@@ -1,3 +1,5 @@
+#!/bin/bash 
+echo $@
 PID=$1
 TID=$2
 NID=$3
@@ -7,9 +9,10 @@ MAF3=$6  # Strelka
 MAF4=$7  # SvABA 
 LAB1=$8  # M1
 LAB2=$9  # M2
-LAB3=$10  # STRELKA
-LAB4=$11  # SVABA
+LAB3=${10}  # STRELKA
+LAB4=${11}  # SVABA
 export JULIA_LOAD_PATH="/opt/src"
+echo "julia /opt/src/merge_maflite.jl $TID $NID $MAF1 $MAF2 $MAF3 $MAF4 $LAB1 $LAB2  $LAB3  $LAB4 $PID.merged.maflite.tsv"
 julia /opt/src/merge_maflite.jl $TID $NID $MAF1 $MAF2 $MAF3 $MAF4 $LAB1 $LAB2  $LAB3  $LAB4 $PID.merged.maflite.tsv
 
 
