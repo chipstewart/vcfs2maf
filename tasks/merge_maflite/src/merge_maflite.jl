@@ -13,6 +13,8 @@ lab3=ARGS[9]
 lab4=ARGS[10]
 merged_maflite=ARGS[11]
 
+print(ARGS)
+
 isString(x::Number)=false
 isString(x::DataArrays.NAtype)=false
 isString(x::AbstractString)=true
