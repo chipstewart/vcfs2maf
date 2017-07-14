@@ -3,6 +3,7 @@
 # tumor_id="T"; normal_id="N"; file1="tmp1.tsv"; file2="tmp2.tsv"; maflite="maflite.tsv"
 # ARGS=["THCA-BJ-A28T-TP","THCA-BJ-A28T-NB","THCA-BJ-A28T-TP-NB.StrelkaSNV.tsv","THCA-BJ-A28T-TP-NB.StrelkaINDEL.tsv","THCA-BJ-A28T-TP-NB.Strelka.maflite.tsv"]
 # ARGS=["THCA-EM-A2CN-TP","THCA-EM-A2CN-NB","THCA-EM-A2CN-TP-NB.StrelkaSNV.tsv","THCA-EM-A2CN-TP-NB.StrelkaINDEL.tsv","THCA-EM-A2CN-TP-NB.Strelka_maflite.tsv"]
+# ARGS=["RP-1066_SU2C-DFCI-LUAD-1008-TM", "RP-1066_SU2C-DFCI-LUAD-1008-NB",  "tmps.tsv", "tmpi.tsv", "SU2C-DFCI-LUAD-1008_1.strelka.maflite.tsv"]
 using DataFrames
 
 file1a="vcf_1.tsv"
@@ -22,6 +23,15 @@ df = readtable(file1)
 # print(df)
 delete!(df, [:FILTER,:QUAL,:ID,:NT,:SOMATIC,:QSS_NT,:TQSS_NT,:SGT])
 # print(df)
+
+if (typeof(df[:REF])==typeof(DataArray(fill(true,2))))
+    df[:REF]=fill("T",size(df[:REF]))
+end
+if (typeof(df[:ALT])==typeof(DataArray(fill(true,2))))
+    df[:ALT]=fill("T",size(df[:ALT]))
+end
+
+
 
 # trim ALT allele when longer than 1 character
 klong = find(map(x-> length(x)>1, df[:ALT]))
@@ -179,7 +189,16 @@ df = readtable(file2)
 # print(df)
 delete!(df, [:FILTER,:QUAL,:ID,:NT,:SOMATIC,:QSI_NT,:TQSI_NT,:SGT,:SVTYPE,:OVERLAP])
 # head(df)
+# ALT and REF should be strings
 
+if (typeof(df[:REF])==typeof(DataArray(fill(true,2))))
+    df[:REF]=fill("T",size(df[:REF]))
+end
+if (typeof(df[:ALT])==typeof(DataArray(fill(true,2))))
+    df[:ALT]=fill("T",size(df[:ALT]))
+end
+
+    
 for c in names(df)
     #println(c)
     k=isna(df[c])
@@ -276,7 +295,8 @@ df2=df
 
 
 
-df= join(df1, df2, on =  [:CHRO, :POS, :REF, :ALT], kind = :outer)
+#df= join(df1, df2, on =  [:CHRO, :POS, :REF, :ALT], kind = :outer)
+df=[df1;df2]
 
 a= df[:CHRO]
 if !isa(a[1],Int)
@@ -334,12 +354,7 @@ ddel = dref
 df[k,:end]=df[k,:POS]+ddel
 df[k,:QS]=df[k,:QSI]
 df[k,:TQS]=df[k,:TQSI]
-df[k,:n_alt_count]=df[k,:n_alt_count_1]
-df[k,:n_ref_count]=df[k,:n_ref_count_1]
-df[k,:t_alt_count]=df[k,:t_alt_count_1]
-df[k,:t_ref_count]=df[k,:t_ref_count_1]
-df[k,:NORMAL_DP]=df[k,:NORMAL_DP_1]
-df[k,:TUMOR_DP]=df[k,:TUMOR_DP_1]
+
 
 kins = map(x-> length(x)>1, df[:ALT])
 # p=df[:POS]
@@ -358,12 +373,6 @@ df[k,:ALT]=alt
 df[k,:end]=df[k,:POS]+1
 df[k,:QS]=df[k,:QSI]
 df[k,:TQS]=df[k,:TQSI]
-df[k,:n_alt_count]=df[k,:n_alt_count_1]
-df[k,:n_ref_count]=df[k,:n_ref_count_1]
-df[k,:t_alt_count]=df[k,:t_alt_count_1]
-df[k,:t_ref_count]=df[k,:t_ref_count_1]
-df[k,:NORMAL_DP]=df[k,:NORMAL_DP_1]
-df[k,:TUMOR_DP]=df[k,:TUMOR_DP_1]
 
 rename!(df, [:CHRO,:POS, :REF, :ALT], [:chr, :start, :ref_allele,:alt_allele])
 
@@ -405,7 +414,7 @@ delete!(maf, [:TUMOR_AU,:TUMOR_SDP,:TUMOR_SUBDP,:TUMOR_TU,:TUMOR_GU,:TUMOR_CU,:T
 delete!(maf, [:TQSS,:QSS,:TQSI,:QSI,:IC,:IHP])
 delete!(maf, [:NORMAL_DP50,:NORMAL_FDP50,:NORMAL_SUBDP50,:NORMAL_TOR,:NORMAL_TIR,:NORMAL_DP2,:NORMAL_TAR])
 delete!(maf, [:TUMOR_DP50,:TUMOR_FDP50,:TUMOR_SUBDP50,:TUMOR_TOR,:TUMOR_TIR,:TUMOR_DP2,:TUMOR_TAR])
-delete!(maf, [:n_ref_count_1,:n_alt_count_1,:t_ref_count_1,:t_alt_count_1,:QS_1])
+#delete!(maf, [:n_ref_count_1,:n_alt_count_1,:t_ref_count_1,:t_alt_count_1,:QS_1])
 
 #rename!(df, [:NORMAL_DP,:NORMAL_FDP,:TUMOR_DP, :TUMOR_FDP], [:STRELKA_NORMAL_DP, :STRELKA_NORMAL_FDP, :STRELKA_TUMOR_DP, :STRELKA_TUMOR_FDP])
 #rename!(df, [:QS,:RU,:RC, :TQS], [:STRELKA_QS, :STRELKA_RU, :STRELKA_RC, :STRELKA_TQS])
