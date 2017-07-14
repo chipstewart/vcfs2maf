@@ -1,12 +1,16 @@
-task M1M2strelka_maf {
-
+task merge_maflite {
     #Inputs and constants defined here
+    String pair_id
     String tumor_id
     String normal_id
-    File M1_vcf_file
-    File M2_vcf_file
-    File Strelka_SNV_vcf_file
-    File Strelka_INDEL_vcf_file
+    File algorithm1_maflite_file
+    File algorithm2_maflite_file
+    File algorithm3_maflite_file
+    File algorithm4_maflite_file
+    String algorithm1
+    String algorithm2
+    String algorithm3
+    String algorithm4
     String output_disk_gb
     String boot_disk_gb = "10"
     String ram_gb = "8"
@@ -26,9 +30,9 @@ run('/opt/src/algutil/monitor_start.py')
 
 run('julia --version')
 
-run('/bin/bash /opt/src/M1M2_maf.sh \"${tumor_id}\" \"${normal_id}\" \"${M1_vcf_file}\"  \"${M2_vcf_file}\" \"${Strelka_SNV_vcf_file}\" \"${Strelka_INDEL_vcf_file}\"')
+run('/bin/bash /opt/src/merge_maflite.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\" \"${algorithm1_maflite_file}\"  \"${algorithm2_maflite_file}\" \"${algorithm3_maflite_file}\" \"${algorithm4_maflite_file}\"  \"${algorithm1}\" \"${algorithm2}\" \"${algorithm3}\" \"${algorithm4}\" ')
 
-run('tar cvfz m1m2strelka_maf.tar.gz tmp1.tsv tmp2.tsv tmp3.tsv tmp4.tsv m1m2strelka_maflite.tsv')
+run('tar cvfz ${pair_id}.merged.maflite.tar.gz *.tsv')
 
 #########################
 # end task-specific calls
@@ -40,12 +44,12 @@ run('/opt/src/algutil/monitor_stop.py')
     }
 
     output {
-        File M1M2strelka_maf="M1M2strelka_maflite.tsv"
-        File M1M2strelka_tarball="m1m2strelka_maf.tar.gz"
+        File merged_maflite="${pair_id}.merged.maflite.tsv"
+        File merged_maflite_tarball="${pair_id}.merged.maflite.tar.gz"
     }
 
     runtime {
-        docker : "docker.io/chipstewart/m1m2_maf:1"
+        docker : "docker.io/chipstewart/merge_maflite:1"
         memory: "${ram_gb}GB"
         cpu: "${cpu_cores}"
         disks: "local-disk ${output_disk_gb} HDD"
@@ -61,6 +65,7 @@ run('/opt/src/algutil/monitor_stop.py')
 
 }
 
-workflow M1M2strelka_maf_workflow {
-    call M1M2strelka_maf
+workflow merge_maflite_workflow {
+    call merge_maflite
 }
+
