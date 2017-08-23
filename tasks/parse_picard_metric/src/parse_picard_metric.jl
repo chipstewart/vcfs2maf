@@ -24,11 +24,9 @@ while !eof(f)
       data1=data[k]
       break
     end
-  end
-  close(f)
-        
+close(f)
 end
-         
+                 
 
 open(out_file, "w") do fo
     writedlm(fo,data1)
