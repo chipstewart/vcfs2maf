@@ -1,5 +1,6 @@
 {
   "parse_picard_metric_workflow.parse_picard_metric.picard_metrics_file": "gs://fc-099b74a5-b2e1-4f8c-8720-2ab7123fe631/RP-1066_GR0134-2/GR0134-2.hybrid_selection_metrics",
-  "parse_picard_metric_workflow.parse_picard_metric.metric_field": "MEAN_TARGET_COVERAGE"
+  "parse_picard_metric_workflow.parse_picard_metric.metric_field": "MEAN_TARGET_COVERAGE",
+  "parse_picard_metric_workflow.parse_picard_metric.output_disk_gb": "20"
 }
 
