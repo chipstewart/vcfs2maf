@@ -21,7 +21,7 @@ run('/opt/src/algutil/monitor_start.py')
 
 run('julia --version')
 
-run('/bin/bash /opt/src/parse_picard_metric.sh  \"${picard_metric_file}\"  \"${metric_field}\"  ')
+run('/bin/bash /opt/src/parse_picard_metric.sh  \"${picard_metrics_file}\"  \"${metric_field}\"  ')
 
 run('/bin/bash cat   ${metric_field}.txt  ')
 
