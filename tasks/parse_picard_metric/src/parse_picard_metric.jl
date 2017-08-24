@@ -7,7 +7,7 @@ out_file="out.txt"
 print(ARGS)
 
 if !isfile(in_file)
-    println("missing input maf ", in_file, " .")
+    println("missing input file ", in_file, " .")
 end
 
 f=open(in_file)
@@ -16,6 +16,7 @@ line=""
 data=[]
 while !eof(f)
     line = chomp(readline(f))
+    println(line)
     if isempty(line)
       continue
     end
@@ -24,6 +25,7 @@ while !eof(f)
       data = split(chomp(readline(f)),"\t")
       k=find([contains(FIELD,i) for i in fields])
       data1=data[k]
+      println(data1)
       break
     end
 close(f)
