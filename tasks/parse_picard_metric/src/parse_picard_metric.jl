@@ -12,6 +12,8 @@ end
 
 f=open(in_file)
 data1=""
+line=""
+data=[]
 while !eof(f)
     line = chomp(readline(f))
     if isempty(line)
