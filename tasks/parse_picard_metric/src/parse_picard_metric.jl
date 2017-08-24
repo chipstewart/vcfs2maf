@@ -28,8 +28,8 @@ while !eof(f)
       println(data1)
       break
     end
-close(f)
 end
+close(f)
           
 println(line)
 println(data)
