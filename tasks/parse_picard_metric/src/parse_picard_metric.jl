@@ -2,7 +2,7 @@
 # ARGS=["/Users/stewart/GoogleDrive/SU2C/FC/DF0051-N.hybrid_selection_metrics","MEAN_TARGET_COVERAGE"]
 in_file=ARGS[1]
 FIELD=ARGS[2]
-out_file="out.txt")
+out_file="out.txt"
 
 print(ARGS)
 
