@@ -2,7 +2,7 @@
 # ARGS=["/Users/stewart/GoogleDrive/SU2C/FC/DF0051-N.hybrid_selection_metrics","MEAN_TARGET_COVERAGE"]
 in_file=ARGS[1]
 FIELD=ARGS[2]
-out_file=string(FIELD , ".txt")
+out_file="out.txt")
 
 print(ARGS)
 
@@ -26,7 +26,11 @@ while !eof(f)
     end
 close(f)
 end
-                 
+          
+printlm(line)
+println(data)
+println(data1)
+
 
 open(out_file, "w") do fo
     writedlm(fo,data1)
