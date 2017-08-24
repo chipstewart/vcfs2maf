@@ -23,7 +23,7 @@ run('julia --version')
 
 run('/bin/bash /opt/src/parse_picard_metric.sh  \"${picard_metrics_file}\"  \"${metric_field}\"  ')
 
-run('/bin/bash cat   ${metric_field}.txt  ')
+run('cat   out.txt  ')
 
 #########################
 # end task-specific calls
@@ -35,7 +35,7 @@ run('/opt/src/algutil/monitor_stop.py')
     }
 
     output {
-        String value = read_string(stdout())
+        String value = read_string('out.txt')
     }
 
     runtime {
