@@ -27,7 +27,7 @@ while !eof(f)
 close(f)
 end
           
-printlm(line)
+println(line)
 println(data)
 println(data1)
 
