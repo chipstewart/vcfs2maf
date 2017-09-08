@@ -1,4 +1,4 @@
-task merge_maflite {
+task consensus_maf {
     #Inputs and constants defined here
     String pair_id
     File maf_file
@@ -23,9 +23,9 @@ run('/opt/src/algutil/monitor_start.py')
 
 run('julia --version')
 
-run('/bin/bash /opt/src/merge_maflite.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\" \"${algorithm1_maflite_file}\"  \"${algorithm2_maflite_file}\" \"${algorithm3_maflite_file}\" \"${algorithm4_maflite_file}\"  \"${algorithm1}\" \"${algorithm2}\" \"${algorithm3}\" \"${algorithm4}\" ')
+run('/bin/bash /opt/src/consensus_maf.sh \"${pair_id}\"  \"${maf_file}\"  \"${NALGORITHM}\" \"${LONGINDEL}\" ')
 
-run('tar cvfz ${pair_id}.merged.maflite.tar.gz *.tsv')
+run('tar cvfz ${pair_id}.consensus.maf.tar.gz *.maf')
 
 #########################
 # end task-specific calls
@@ -37,12 +37,12 @@ run('/opt/src/algutil/monitor_stop.py')
     }
 
     output {
-        File merged_maflite="${pair_id}.merged.maflite.tsv"
-        File merged_maflite_tarball="${pair_id}.merged.maflite.tar.gz"
+        File consensus_maf="${pair_id}.consensus.maf"
+        File consensus_maf_tarball="${pair_id}.consensus.maf.tar.gz"
     }
 
     runtime {
-        docker : "docker.io/chipstewart/merge_maflite:1"
+        docker : "docker.io/chipstewart/consensus_maf:1"
         memory: "${ram_gb}GB"
         cpu: "${cpu_cores}"
         disks: "local-disk ${output_disk_gb} HDD"
@@ -58,7 +58,7 @@ run('/opt/src/algutil/monitor_stop.py')
 
 }
 
-workflow merge_maflite_workflow {
-    call merge_maflite
+workflow consensus_maf_workflow {
+    call consensus_maf
 }
 
