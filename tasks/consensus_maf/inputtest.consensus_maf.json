@@ -1,6 +1,6 @@
 {
-  "consensus_maf_workflow.consensus_maf.pair_id": "REBC-AC8L-TP-NT",
-  "consensus_maf_workflow.consensus_maf.maf_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/b21a2a19-5f4f-4cbd-9922-7d5f2882f3a1/FilterWorkflow/dc49d20a-963a-43e1-8fb1-5ea9aabb8bb1/call-maf_merge_task/REBC-AC8L-TP-NT.filter.intersection.maf",
+  "consensus_maf_workflow.consensus_maf.pair_id": "REBC-A90K-TP-NT-BI",
+  "consensus_maf_workflow.consensus_maf.maf_file": "/opt/test/REBC-A90K-TP-NB-BI.filter.intersection.maf",
   "consensus_maf_workflow.consensus_maf.NALGORITHM": "2",
   "consensus_maf_workflow.consensus_maf.LONGINDEL": "50",
   "consensus_maf_workflow.consensus_maf.output_disk_gb": "20"
