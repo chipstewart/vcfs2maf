@@ -5,6 +5,7 @@
 # ARGS=["THCA-EM-A2CN-TP","THCA-EM-A2CN-NB","THCA-EM-A2CN-TP-NB.StrelkaSNV.tsv","THCA-EM-A2CN-TP-NB.StrelkaINDEL.tsv","THCA-EM-A2CN-TP-NB.Strelka_maflite.tsv"]
 # ARGS=["RP-1066_SU2C-DFCI-LUAD-1008-TM", "RP-1066_SU2C-DFCI-LUAD-1008-NB",  "tmps.tsv", "tmpi.tsv", "SU2C-DFCI-LUAD-1008_1.strelka.maflite.tsv"]
 # ARGS=["SU2LC-MSK-1117_1-TP", "SU2LC-MSK-1117_1-NB",  "/opt/test/SU2LC-MSK-1117_1.StrelkaSNV.tsv", "/opt/test/SU2LC-MSK-1117_1.StrelkaINDEL.tsv", "SU2LC-MSK-1117_1.strelka.maflite.tsv"]
+# ARGS=["SU2LC-MSK-1028_1-TP", "SU2LC-MSK-1028_1-NB",  "/opt/test/SU2LC-MSK-1028_1.StrelkaSNV.tsv", "/opt/test/SU2LC-MSK-1028_1.StrelkaINDEL.tsv", "/opt/test/SU2LC-MSK-1028_1.strelka.maflite.tsv"]
 
 using DataFrames
 
@@ -186,118 +187,116 @@ df1=df
 
 #Strelka INDEL vcf
 df = readtable(file2)
-# size(df)
-# describe(df)
-# print(df)
-delete!(df, [:FILTER,:QUAL,:ID,:NT,:SOMATIC,:QSI_NT,:TQSI_NT,:SGT,:SVTYPE,:OVERLAP])
-# head(df)
-# ALT and REF should be strings
+if size(df)[1]>0
+    # size(df)
+    # describe(df)
+    # print(df)
+    delete!(df, [:FILTER,:QUAL,:ID,:NT,:SOMATIC,:QSI_NT,:TQSI_NT,:SGT,:SVTYPE,:OVERLAP])
+    # head(df)
+    # ALT and REF should be strings
 
-if (typeof(df[:REF])==typeof(DataArray(fill(true,2))))
-    df[:REF]=fill("T",size(df[:REF]))
-end
-if (typeof(df[:ALT])==typeof(DataArray(fill(true,2))))
-    df[:ALT]=fill("T",size(df[:ALT]))
-end
+    if (typeof(df[:REF])==typeof(DataArray(fill(true,2))))
+        df[:REF]=fill("T",size(df[:REF]))
+    end
+    if (typeof(df[:ALT])==typeof(DataArray(fill(true,2))))
+        df[:ALT]=fill("T",size(df[:ALT]))
+    end
 
-    
-for c in names(df)
-    #println(c)
-    k=isna(df[c])
-    if mean(k)==1.0
-		delete!(df, c)
-		continue
-	end
-	if isa(df[c],DataArray{String,1})
-      df[k,c] = ""
-	end	
-end
-#rename!(df, [:normal_tumor_alt_count, :normal_tumor_ref_count], [:t_alt_count, :t_ref_count])
-head(df)
-if (typeof(df[:CHRO])==typeof(DataArray(fill(34,2))))
-	 df[:CHRO]=map(x -> string(x),df[:CHRO])
-end
-# keep only CHRO = [1-Y]
-df=df[find(in.(df[:CHRO], [["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"]])),:]
+        
+    for c in names(df)
+        #println(c)
+        k=isna(df[c])
+        if mean(k)==1.0
+    		delete!(df, c)
+    		continue
+    	end
+    	if isa(df[c],DataArray{String,1})
+          df[k,c] = ""
+    	end	
+    end
+    #rename!(df, [:normal_tumor_alt_count, :normal_tumor_ref_count], [:t_alt_count, :t_ref_count])
+    head(df)
+    if (typeof(df[:CHRO])==typeof(DataArray(fill(34,2))))
+    	 df[:CHRO]=map(x -> string(x),df[:CHRO])
+    end
+    # keep only CHRO = [1-Y]
+    df=df[find(in.(df[:CHRO], [["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"]])),:]
 
-# sort by CHRO and position
-a= df[:CHRO]
-if !isa(a[1],Int)
-    a=map(x -> replace(x,r"[X]", "23"), a)
-    a=map(x -> replace(x,r"[Y]", "24"), a)
-    #a=map(x -> replace(x,r"[MT]", "25"), a)
-    a=map(x -> parse(Int32,x), a)
-end
-df[:a] = a
-# print(df)
-sort!(df, cols = [:a, :POS])
-delete!(df, [:a])
-
-
-# Strelka 'tier' for QSS -
-# hypothesis: TQSS must be strelka's favorite tier for each particular call 
-nt=df[:TQSI]
-n=length(nt)
-
-q=df[:NORMAL_TIR]
-qo=df[:NORMAL_TOR]
-NDP=[df[:NORMAL_DP] df[:NORMAL_DP2]]
-NI1= fill("0",n)
-NO1= fill("0",n)
-ND1= fill(0,n)
-q = map(x -> split(x,":"), q)
-qo = map(x -> split(x,":"), qo)
-for i = 1:n
-	print(i,"\n")
-	NI1[i]=q[i][nt[i]]
-	ND1[i]=NDP[i,nt[i]]
-	NO1[i]=qo[i][nt[i]]
-end
-NI1=map(x -> parse(Int32,x), NI1)
-NO1=map(x -> parse(Int32,x), NO1)
-
-NR1=ND1-NI1  # NORMAL_TOR can sometimes exceed depth so don't subtract NO1
+    # sort by CHRO and position
+    a= df[:CHRO]
+    if !isa(a[1],Int)
+        a=map(x -> replace(x,r"[X]", "23"), a)
+        a=map(x -> replace(x,r"[Y]", "24"), a)
+        #a=map(x -> replace(x,r"[MT]", "25"), a)
+        a=map(x -> parse(Int32,x), a)
+    end
+    df[:a] = a
+    # print(df)
+    sort!(df, cols = [:a, :POS])
+    delete!(df, [:a])
 
 
-q=df[:TUMOR_TIR]
-qo=df[:TUMOR_TOR]
-TDP=[df[:TUMOR_DP] df[:TUMOR_DP2]]
-TI1= fill("0",n)
-TO1= fill("0",n)
-TD1= fill(0,n)
-q = map(x -> split(x,":"), q)
-qo = map(x -> split(x,":"), qo)
-for i = 1:n
-	print(i,"\n")
-	TI1[i]=q[i][nt[i]]
-	TD1[i]=TDP[i,nt[i]]
-	TO1[i]=qo[i][nt[i]]
-end
-TI1=map(x -> parse(Int32,x), TI1)
-TO1=map(x -> parse(Int32,x), TO1)
+    # Strelka 'tier' for QSS -
+    # hypothesis: TQSS must be strelka's favorite tier for each particular call 
+    nt=df[:TQSI]
+    n=length(nt)
 
-TR1=TD1-TI1  # TUMOR_TOR can sometimes exceed depth so don't subtract NO1
+    q=df[:NORMAL_TIR]
+    qo=df[:NORMAL_TOR]
+    NDP=[df[:NORMAL_DP] df[:NORMAL_DP2]]
+    NI1= fill("0",n)
+    NO1= fill("0",n)
+    ND1= fill(0,n)
+    q = map(x -> split(x,":"), q)
+    qo = map(x -> split(x,":"), qo)
+    for i = 1:n
+    	print(i,"\n")
+    	NI1[i]=q[i][nt[i]]
+    	ND1[i]=NDP[i,nt[i]]
+    	NO1[i]=qo[i][nt[i]]
+    end
+    NI1=map(x -> parse(Int32,x), NI1)
+    NO1=map(x -> parse(Int32,x), NO1)
 
-
-df[:n_ref_count] = NR1
-df[:n_alt_count] = NI1
-df[:t_ref_count] = TR1
-df[:t_alt_count] = TI1
-df[:QS] = df[:QSI]
+    NR1=ND1-NI1  # NORMAL_TOR can sometimes exceed depth so don't subtract NO1
 
 
-open(file2a, "w") do f
-    writedlm(f, reshape(names(df), 1, length(names(df))), '\t')
-    writedlm(f, convert(Array,df), '\t')
+    q=df[:TUMOR_TIR]
+    qo=df[:TUMOR_TOR]
+    TDP=[df[:TUMOR_DP] df[:TUMOR_DP2]]
+    TI1= fill("0",n)
+    TO1= fill("0",n)
+    TD1= fill(0,n)
+    q = map(x -> split(x,":"), q)
+    qo = map(x -> split(x,":"), qo)
+    for i = 1:n
+    	print(i,"\n")
+    	TI1[i]=q[i][nt[i]]
+    	TD1[i]=TDP[i,nt[i]]
+    	TO1[i]=qo[i][nt[i]]
+    end
+    TI1=map(x -> parse(Int32,x), TI1)
+    TO1=map(x -> parse(Int32,x), TO1)
+
+    TR1=TD1-TI1  # TUMOR_TOR can sometimes exceed depth so don't subtract NO1
+
+
+    df[:n_ref_count] = NR1
+    df[:n_alt_count] = NI1
+    df[:t_ref_count] = TR1
+    df[:t_alt_count] = TI1
+    df[:QS] = df[:QSI]
+
+
+    open(file2a, "w") do f
+        writedlm(f, reshape(names(df), 1, length(names(df))), '\t')
+        writedlm(f, convert(Array,df), '\t')
+    end
+
 end
 
 df2=df
 
-
-
-
-
-#df= join(df1, df2, on =  [:CHRO, :POS, :REF, :ALT], kind = :outer)
 df=[df1;df2]
 
 a= df[:CHRO]
@@ -342,21 +341,22 @@ p=df[:POS]
 p=p+kdel
 df[:POS]=p
 k = find(kdel)
-ref=df[k,:REF]
-ref=map(x->x[2:end],ref)
-alt=df[k,:ALT]
-alt=map(x->x[2:end],alt)
-k1 = find(map(x-> length(x)<1, alt))
-alt[k1]=map(x-> "-", alt[k1])
-df[k,:REF]=ref
-df[k,:ALT]=alt
-dref = map(x-> length(x), ref)
-dalt = map(x-> length(x), alt)
-ddel = dref
-df[k,:end]=df[k,:POS]+ddel
-df[k,:QS]=df[k,:QSI]
-df[k,:TQS]=df[k,:TQSI]
-
+if length(k)>0
+    ref=df[k,:REF]
+    ref=map(x->x[2:end],ref)
+    alt=df[k,:ALT]
+    alt=map(x->x[2:end],alt)
+    k1 = find(map(x-> length(x)<1, alt))
+    alt[k1]=map(x-> "-", alt[k1])
+    df[k,:REF]=ref
+    df[k,:ALT]=alt
+    dref = map(x-> length(x), ref)
+    dalt = map(x-> length(x), alt)
+    ddel = dref
+    df[k,:end]=df[k,:POS]+ddel
+    df[k,:QS]=df[k,:QSI]
+    df[k,:TQS]=df[k,:TQSI]
+end
 
 kins = map(x-> length(x)>1, df[:ALT])
 # p=df[:POS]
@@ -364,19 +364,35 @@ kins = map(x-> length(x)>1, df[:ALT])
 # df[:POS]=p
 # df[find(kins),:POS]
 k = find(kins)
-ref=df[k,:REF]
-ref=map(x->x[2:end],ref)
-k1 = find(map(x-> length(x)<1, ref))
-ref[k1]=map(x-> "-", ref[k1])
-alt=df[k,:ALT]
-alt=map(x->x[2:end],alt)
-df[k,:REF]=ref
-df[k,:ALT]=alt
-df[k,:end]=df[k,:POS]+1
-df[k,:QS]=df[k,:QSI]
-df[k,:TQS]=df[k,:TQSI]
+if length(k)>0
+    ref=df[k,:REF]
+    ref=map(x->x[2:end],ref)
+    k1 = find(map(x-> length(x)<1, ref))
+    ref[k1]=map(x-> "-", ref[k1])
+    alt=df[k,:ALT]
+    alt=map(x->x[2:end],alt)
+    df[k,:REF]=ref
+    df[k,:ALT]=alt
+    df[k,:end]=df[k,:POS]+1
+    df[k,:QS]=df[k,:QSI]
+    df[k,:TQS]=df[k,:TQSI]
+end
 
 rename!(df, [:CHRO,:POS, :REF, :ALT], [:chr, :start, :ref_allele,:alt_allele])
+
+n=length(df[:chr])
+if !([:NORMAL_TIR] in names(df))
+    df[:NORMAL_TIR]=fill("",n)
+end
+if !([:TUMOR_TIR] in names(df))
+    df[:TUMOR_TIR]=fill("",n)
+end
+if !([:NORMAL_TOR] in names(df))
+    df[:NORMAL_TOR]=fill("",n)
+end
+if !([:TUMOR_TOR] in names(df))
+    df[:TUMOR_TOR]=fill("",n)
+end
 
 maf=df
 for c in names(maf)
