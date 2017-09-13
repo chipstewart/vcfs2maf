@@ -1,0 +1,7 @@
+{
+  "gatk4_m2_maflite_workflow.gatk4_m2_maflite.M2_vcf_file": "gs://fc-099b74a5-b2e1-4f8c-8720-2ab7123fe631/b97e2364-4051-46a4-9fe6-3889839e1017/Mutect2/8e8a94b8-4e3c-4f8a-a7db-01f84694dcc2/call-Filter/RP-1066_SU2CLC-MGH-1047-TM-01-vs-RP-1066_SU2CLC-MGH-1047-BL-01-filtered.vcf",
+  "gatk4_m2_maflite_workflow.gatk4_m2_maflite.output_disk_gb": "20",
+  "gatk4_m2_maflite_workflow.gatk4_m2_maflite.tumor_id": "SU2CLC-MGH-1047-TM-01",
+  "gatk4_m2_maflite_workflow.gatk4_m2_maflite.pair_id": "RP-1066_SU2CLC-MGH-1047",
+  "gatk4_m2_maflite_workflow.gatk4_m2_maflite.normal_id": "SU2CLC-MGH-1047-BL-01"
+}
