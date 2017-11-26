@@ -1,7 +1,10 @@
 {
-  "svaba_maflite_workflow.svaba_maflite.pair_id": "THCA-EM-A2CN-TP-NB",
-  "svaba_maflite_workflow.svaba_maflite.tumor_id": "THCA-EM-A2CN-TP",
-  "svaba_maflite_workflow.svaba_maflite.svaba_INDEL_vcf_file": "/opt/test/sample.broad-snowman.DATECODE.somatic.indel.vcf.gz",
+  "svaba_maflite_workflow.svaba_maflite.pair_id": "SU2CLC-MGH-1048_1",
+  "svaba_maflite_workflow.svaba_maflite.tumor_id": "RP-1066_SU2CLC-MGH-1048-TM-01",
+  "svaba_maflite_workflow.svaba_maflite.tumor_bam": "gs://fc-afedd3b7-35d5-40da-acb0-fbdeff8d33af/RP-1066.SU2CLC-MGH-1048-TM-01.bam",
+  "svaba_maflite_workflow.svaba_maflite.normal_bam": "gs://fc-afedd3b7-35d5-40da-acb0-fbdeff8d33af/RP-1066.SU2CLC-MGH-1048-BL-01.bam",
+  "svaba_maflite_workflow.svaba_maflite.MAX_NORMAL_ALT_COUNT": "2",
+  "svaba_maflite_workflow.svaba_maflite.svaba_INDEL_vcf_file": "gs://fc-099b74a5-b2e1-4f8c-8720-2ab7123fe631/55e743eb-67d8-405b-a7ae-28faea5fae0b/SomaticRearrangement/4c1fe050-0d92-4dd2-b2be-18324f43cf71/call-Svaba/SU2CLC-MGH-1048_1.svaba.somatic.indel.vcf",
   "svaba_maflite_workflow.svaba_maflite.output_disk_gb": "20",
-  "svaba_maflite_workflow.svaba_maflite.normal_id": "THCA-EM-A2CN-NB"
+  "svaba_maflite_workflow.svaba_maflite.normal_id": "RP-1066_SU2CLC-MGH-1048-BL-01"
 }

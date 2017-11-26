@@ -254,7 +254,7 @@ function generateVariant(vc::VCFIterator, line::AbstractString)
                 elseif contentType == "Float"
                     contents = map(floatField, contents)
                 elseif contentType != "String" && contentType != "Char"
-	            println("INVALID TYPE",":\t",entry)
+                    println("INVALID TYPE",":\t",entry)
                 end
             
                 tempFORMATdict[id] = contents
@@ -268,3 +268,4 @@ function generateVariant(vc::VCFIterator, line::AbstractString)
     #construct a variant
     Variant(chr, pos, id_, ref, alt, qual, filter, information, format)
 end
+
