@@ -1,0 +1,7 @@
+{
+  "m1_maflite_workflow.m1_maflite.M1_maflite_inputfile": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/45c427a4-e3ac-4d6c-8a0e-a46d0457d8fa/pcawg_full_workflow/7c61cf31-96c6-4188-b5dc-960ec5f1a016/call-pcawg_full/attempt-2/output_files/sample.mutect.maflite.txt",
+  "m1_maflite_workflow.m1_maflite.output_disk_gb": "20",
+  "m1_maflite_workflow.m1_maflite.tumor_id": "REBC-AC97-TP",
+  "m1_maflite_workflow.m1_maflite.pair_id": "REBC-AC97-TP-NB",
+  "m1_maflite_workflow.m1_maflite.normal_id": "REBC-AC97-NB"
+}
