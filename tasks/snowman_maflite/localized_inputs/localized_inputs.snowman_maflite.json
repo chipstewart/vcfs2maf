@@ -1,7 +1,0 @@
-{
-  "snowman_maflite_workflow.snowman_maflite.normal_id": "REBC-ACDG-NT1-A-1-1-D-A49X-36", 
-  "snowman_maflite_workflow.snowman_maflite.output_disk_gb": "20", 
-  "snowman_maflite_workflow.snowman_maflite.pair_id": "REBC-ACDG-TP-NT", 
-  "snowman_maflite_workflow.snowman_maflite.snowman_INDEL_vcf_file": "/opt/vcfs2maf/tasks/snowman_maflite/localized_inputs/snowman_maflite_workflow.snowman_maflite.snowman_INDEL_vcf_file/sample.broad-snowman.DATECODE.somatic.indel.vcf.gz", 
-  "snowman_maflite_workflow.snowman_maflite.tumor_id": "REBC-ACDG-TTP1-A-1-1-D-A49X-36"
-}
