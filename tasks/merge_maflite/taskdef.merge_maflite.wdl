@@ -54,7 +54,7 @@ run('/opt/src/algutil/monitor_stop.py')
         cpu: "${cpu_cores}"
         disks: "local-disk ${output_disk_gb} HDD"
         bootDiskSizeGb: "${boot_disk_gb}"
-        preemptible: 0
+        preemptible: 3
     }
 
 
