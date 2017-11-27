@@ -19,7 +19,8 @@ isString(x::Number)=false
 isString(x::DataArrays.NAtype)=false
 isString(x::AbstractString)=true
 
-maflite_fields=["build","chr","start","end","ref_allele","tum_allele1","tum_allele2","tumor_barcode","normal_barcode","t_alt_count","t_ref_count","judgement","n_alt_count","n_ref_count","tumor_f"]
+#maflite_fields=["build","chr","start","end","ref_allele","tum_allele1","tum_allele2","tumor_barcode","normal_barcode","t_alt_count","t_ref_count","judgement","n_alt_count","n_ref_count","tumor_f"]
+maflite_fields=["build","chr","start","end","ref_allele","alt_allele","tumor_barcode","normal_barcode","t_alt_count","t_ref_count","judgement","n_alt_count","n_ref_count","tumor_f"]
 maflite_symbols=map(x->Symbol(x),maflite_fields)
 
 
@@ -56,10 +57,10 @@ if isfile(file2)
     if Symbol("_end") in names(df2)
 		rename!(df2, [:_end], [:end])
 	end
-	if ! (Symbol("tum_allele1") in names(df2))
-		df2[:tum_allele1]=df2[:ref_allele]
-		df2[:tum_allele2]=df2[:alt_allele]
-	end
+#   if ! (Symbol("tum_allele1") in names(df2))
+#		df2[:tum_allele1]=df2[:ref_allele]
+#		df2[:tum_allele2]=df2[:alt_allele]
+#	end
 
 	for c in names(df2)
     	c1 = string(c)
@@ -87,10 +88,10 @@ if isfile(file3)
 	if Symbol("_end") in names(df3)
 		rename!(df3, [:_end], [:end])
 	end
-	if ! (Symbol("tum_allele1") in names(df3))
-		df3[:tum_allele1]=df3[:ref_allele]
-		df3[:tum_allele2]=df3[:alt_allele]
-	end
+#	if ! (Symbol("tum_allele1") in names(df3))
+#		df3[:tum_allele1]=df3[:ref_allele]
+#		df3[:tum_allele2]=df3[:alt_allele]
+#	end
 
 	for c in names(df3)
     	c1 = string(c)
@@ -118,10 +119,10 @@ if isfile(file4)
 	if Symbol("_end") in names(df4)
 		rename!(df4, [:_end], [:end])
 	end
-	if ! (Symbol("tum_allele1") in names(df4))
-		df4[:tum_allele1]=df4[:ref_allele]
-		df4[:tum_allele2]=df4[:alt_allele]
-	end
+#	if ! (Symbol("tum_allele1") in names(df4))
+#		df4[:tum_allele1]=df4[:ref_allele]
+#		df4[:tum_allele2]=df4[:alt_allele]
+#	end
 
 	for c in names(df4)
     	c1 = string(c)
@@ -186,7 +187,7 @@ x2=df[:a]*1000000000+df[:p2]
 kdel = find(map(x-> x=="-", df[:ref_allele]))
 x1[kdel]=x1[kdel]-1
 x2[kdel]=x2[kdel]+1
-kins = find(map(x-> x=="-", df[:tum_allele2]))
+kins = find(map(x-> x=="-", df[:alt_allele]))
 x1[kins]=x1[kins]-1
 x2[kins]=x2[kins]+1
 
