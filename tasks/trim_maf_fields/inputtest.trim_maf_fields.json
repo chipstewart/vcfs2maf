@@ -1,0 +1,6 @@
+{
+  "trim_maf_fields_workflow.trim_maf_fields.output_disk_gb": "10",
+  "trim_maf_fields_workflow.trim_maf_fields.RemoveFieldsList": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/parameters/fields_to_remove.txt",
+  "trim_maf_fields_workflow.trim_maf_fields.pair_id": "REBC-A90L-TP-NB",
+  "trim_maf_fields_workflow.trim_maf_fields.InputMAF": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/e7419b05-aa62-435a-920a-af209a053d92/maflite_oncotate_workflow/f2cf7d8d-0e8b-490f-95f4-4d7cf6366653/call-oncotator_minimal/attempt-3/REBC-A90L-TP-NB.annotated.maf"
+}
