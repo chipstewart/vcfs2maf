@@ -353,7 +353,7 @@ if length(k)>0
     dref = map(x-> length(x), ref)
     dalt = map(x-> length(x), alt)
     ddel = dref
-    df[k,:end]=df[k,:POS]+ddel
+    df[k,:end]=df[k,:POS]+ddel-1
     df[k,:QS]=df[k,:QSI]
     df[k,:TQS]=df[k,:TQSI]
 end
