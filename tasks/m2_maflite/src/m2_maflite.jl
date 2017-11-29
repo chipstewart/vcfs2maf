@@ -146,7 +146,7 @@ df[k,:REF]=ref
 df[k,:ALT]=alt
 dref = map(x-> length(x), ref)
 dalt = map(x-> length(x), alt)
-ddel = dref
+ddel = dref-1
 df[k,:end]=df[k,:POS]+ddel
 
 
