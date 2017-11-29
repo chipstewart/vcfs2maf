@@ -1,5 +1,6 @@
 #!/usr/local/bin/julia
-# ARGS=["REBC-AC8L-TP","REBC-AC8L-NT","sample.mutect.maflite.txt","REBC-AC8L-TP-NT.m2_maflite.tsv","REBC-AC8L-TP-NT.Strelka_maflite.tsv","REBC-AC8L-TP-NT.SvABA_maflite.tsv","M1","M2","STRELKA","SVABA","REBC-AC8L-TP-NT.merged_maflite.tsv"]
+# ARGS=["REBC-AC8L-TP","REBC-AC8L-NT","sample.mutect.maflite.txt","REBC-AC8L-TP-NT.m2_maflite.tsv","REBC-AC8L-TP-NT.Strelka_maflite.tsv","REBC-AC8L-TP-NT.SvABA_maflite.tsv","REBC-AC8L-TP-NT.snowman_maflite.tsv","M1","M2","STRELKA","SVABA","Snowman",REBC-AC8L-TP-NT.merged_maflite.tsv"]
+# ARGS=["REBC-AC8R-TP","REBC-AC8R-NB","REBC-AC8R-TP-NB.m1_maflite.tsv","REBC-AC8R-TP-NB.m2_maflite.tsv","REBC-AC8R-TP-NB.Strelka_maflite.tsv","REBC-AC8R-TP-NB.SvABA_maflite.tsv","REBC-AC8R-TP-NB.snowman_maflite.tsv","M1","M2","STRELKA","SVABA","Snowman","REBC-AC8R-TP-NB.merged_maflite.tsv"]
 using DataFrames
 tumor_id=ARGS[1]
 normal_id=ARGS[2]
@@ -7,11 +8,13 @@ file1=ARGS[3]
 file2=ARGS[4]
 file3=ARGS[5]
 file4=ARGS[6]
-lab1=ARGS[7]
-lab2=ARGS[8]
-lab3=ARGS[9]
-lab4=ARGS[10]
-merged_maflite=ARGS[11]
+file5=ARGS[7]
+lab1=ARGS[8]
+lab2=ARGS[9]
+lab3=ARGS[10]
+lab4=ARGS[11]
+lab5=ARGS[12]
+merged_maflite=ARGS[13]
 
 print(ARGS)
 
@@ -24,7 +27,7 @@ maflite_fields=["build","chr","start","end","ref_allele","alt_allele","tumor_bar
 maflite_symbols=map(x->Symbol(x),maflite_fields)
 
 
-if isfile(file1)
+if isfile(file1)&&(lab1!="-")
 	df1 = readtable(file1,separator ='\t')
 	if Symbol("_end") in names(df1)
 		rename!(df1, [:_end], [:end])
@@ -47,7 +50,7 @@ if isfile(file1)
     df=df1
 end
 
-if isfile(file2)
+if isfile(file2)&&(lab2!="-")
 	df2 = readtable(file2)
 	for c in names(df2)
 	    if ~isString(df2[1,c])
@@ -78,7 +81,8 @@ if isfile(file2)
 	   df=df2
 	end
 end
-if isfile(file3)
+
+if isfile(file3)&&(lab3!="-")
 	df3 = readtable(file3)
 	for c in names(df3)
 	    if ~isString(df3[1,c])
@@ -109,7 +113,8 @@ if isfile(file3)
 	   df=df3
 	end
 end
-if isfile(file4)
+
+if isfile(file4)&&(lab4!="-")
 	df4 = readtable(file4)
 	for c in names(df4)
 	    if ~isString(df4[1,c])
@@ -119,10 +124,6 @@ if isfile(file4)
 	if Symbol("_end") in names(df4)
 		rename!(df4, [:_end], [:end])
 	end
-#	if ! (Symbol("tum_allele1") in names(df4))
-#		df4[:tum_allele1]=df4[:ref_allele]
-#		df4[:tum_allele2]=df4[:alt_allele]
-#	end
 
 	for c in names(df4)
     	c1 = string(c)
@@ -139,6 +140,35 @@ if isfile(file4)
 	else
 	   df=df4
 	end
+end
+
+
+if isfile(file5)&&(lab5!="-")
+    df5 = readtable(file5)
+    for c in names(df5)
+        if ~isString(df5[1,c])
+            df5[c] = map(x -> string(x),df5[c])
+        end
+    end
+    if Symbol("_end") in names(df5)
+        rename!(df5, [:_end], [:end])
+    end
+
+    for c in names(df5)
+        c1 = string(c)
+        if length(find(Bool[contains(c1,i) for i in maflite_fields]))<1
+            m2c = Symbol(string(lab5,"_",c1))
+            rename!(df5,c,m2c)
+        end
+    end
+    
+    df5[Symbol(lab5)]=fill("1",size(df5[:chr]))
+    if isdefined(:df)
+       df[Symbol(lab5)]=fill("0",size(df[:chr]))
+       df=[df; df5]
+    else
+       df=df5
+    end
 end
 
 # fix fields 
@@ -175,7 +205,7 @@ sort!(df, cols = [:a, :p1])
 for c in names(df)
     k=find(map(x -> isna(x),df[c]))
     df[k,c] = ""
-    if c in [Symbol(lab1), Symbol(lab2), Symbol(lab3), Symbol(lab4)]
+    if c in [Symbol(lab1), Symbol(lab2), Symbol(lab3), Symbol(lab4),Symbol(lab5)]
 	   k=find(map(x -> x=="",df[c]))
  	   df[k,c] = "0"
     end    
@@ -206,7 +236,7 @@ end
 fields=names(df)
 sfields=map(x -> string(x),names(df))
 
-labs=[lab1,lab2,lab3,lab4]
+labs=[lab1,lab2,lab3,lab4,lab5]
 slabs=map(x -> Symbol(x),labs)
 			
 df[:NALG]=fill(1,size(df[:chr]))
@@ -230,7 +260,7 @@ for i = 1:g
     	
     	# each algorithm can appear only once
     	#df[k,slabs]
-    	for a=1:4
+    	for a=1:5
     	   if (sum(map(x -> x=="1",df[k,slabs[a]])))>1
     	   	 
     	   	 #println(i)
