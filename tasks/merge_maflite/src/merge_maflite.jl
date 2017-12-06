@@ -1,6 +1,7 @@
 #!/usr/local/bin/julia
 # ARGS=["REBC-AC8L-TP","REBC-AC8L-NT","sample.mutect.maflite.txt","REBC-AC8L-TP-NT.m2_maflite.tsv","REBC-AC8L-TP-NT.Strelka_maflite.tsv","REBC-AC8L-TP-NT.SvABA_maflite.tsv","REBC-AC8L-TP-NT.snowman_maflite.tsv","M1","M2","STRELKA","SVABA","Snowman",REBC-AC8L-TP-NT.merged_maflite.tsv"]
 # ARGS=["REBC-AC8R-TP","REBC-AC8R-NB","REBC-AC8R-TP-NB.m1_maflite.tsv","REBC-AC8R-TP-NB.m2_maflite.tsv","REBC-AC8R-TP-NB.Strelka_maflite.tsv","REBC-AC8R-TP-NB.SvABA_maflite.tsv","REBC-AC8R-TP-NB.snowman_maflite.tsv","M1","M2","STRELKA","SVABA","Snowman","REBC-AC8R-TP-NB.merged_maflite.tsv"]
+# ARGS=["REBC-AC8R-TP","REBC-AC8R-NB","REBC-AC8R-TP-NB.m1_maflite.tsv","REBC-AC8R-TP-NB.m2_maflite.tsv","REBC-AC8R-TP-NB.Strelka_maflite.tsv","REBC-AC8R-TP-NB.SvABA_maflite.tsv","REBC-AC8R-TP-NB.snowman_maflite.tsv","REBC-AC8R-TP-NB.Strelka_maflite.tsv","M1","M2","STRELKA","SVABA","Snowman","Strelka2","REBC-AC8R-TP-NB.merged_maflite.tsv"]
 using DataFrames
 tumor_id=ARGS[1]
 normal_id=ARGS[2]
@@ -9,12 +10,14 @@ file2=ARGS[4]
 file3=ARGS[5]
 file4=ARGS[6]
 file5=ARGS[7]
-lab1=ARGS[8]
-lab2=ARGS[9]
-lab3=ARGS[10]
-lab4=ARGS[11]
-lab5=ARGS[12]
-merged_maflite=ARGS[13]
+file5=ARGS[8]
+lab1=ARGS[9]
+lab2=ARGS[10]
+lab3=ARGS[11]
+lab4=ARGS[12]
+lab5=ARGS[13]
+lab6=ARGS[14]
+merged_maflite=ARGS[15]
 
 print(ARGS)
 
@@ -168,6 +171,34 @@ if isfile(file5)&&(lab5!="-")
        df=[df; df5]
     else
        df=df5
+    end
+end
+
+if isfile(file6)&&(lab6!="-")
+    df6 = readtable(file6)
+    for c in names(df6)
+        if ~isString(df6[1,c])
+            df6[c] = map(x -> string(x),df6[c])
+        end
+    end
+    if Symbol("_end") in names(df6)
+        rename!(df6, [:_end], [:end])
+    end
+
+    for c in names(df6)
+        c1 = string(c)
+        if length(find(Bool[contains(c1,i) for i in maflite_fields]))<1
+            m2c = Symbol(string(lab6,"_",c1))
+            rename!(df6,c,m2c)
+        end
+    end
+    
+    df6[Symbol(lab6)]=fill("1",size(df6[:chr]))
+    if isdefined(:df)
+       df[Symbol(lab6)]=fill("0",size(df[:chr]))
+       df=[df; df6]
+    else
+       df=df6
     end
 end
 
