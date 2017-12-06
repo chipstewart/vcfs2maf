@@ -8,11 +8,17 @@ task merge_maflite {
     File algorithm3_maflite_file
     File algorithm4_maflite_file
     File algorithm5_maflite_file
+    File? algorithm6a_maflite_file
+    String algorithm6_maflite_file =  select_first([algorithm6a_maflite_file, "-"])
+    
     String algorithm1
     String algorithm2
     String algorithm3
     String algorithm4
     String algorithm5
+    String? algorithm6a
+    String algorithm6 =  select_first([algorithm6a, "-"])
+
     String output_disk_gb
     String boot_disk_gb = "10"
     String ram_gb = "8"
@@ -32,7 +38,7 @@ run('/opt/src/algutil/monitor_start.py')
 
 run('julia --version')
 
-run('/bin/bash /opt/src/merge_maflite.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\" \"${algorithm1_maflite_file}\"  \"${algorithm2_maflite_file}\" \"${algorithm3_maflite_file}\" \"${algorithm4_maflite_file}\" \"${algorithm5_maflite_file}\"  \"${algorithm1}\" \"${algorithm2}\" \"${algorithm3}\" \"${algorithm4}\" \"${algorithm5}\" ')
+run('/bin/bash /opt/src/merge_maflite.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\" \"${algorithm1_maflite_file}\"  \"${algorithm2_maflite_file}\" \"${algorithm3_maflite_file}\" \"${algorithm4_maflite_file}\" \"${algorithm5_maflite_file}\"  \"${algorithm6_maflite_file}\" \"${algorithm1}\" \"${algorithm2}\" \"${algorithm3}\" \"${algorithm4}\" \"${algorithm5}\" \"${algorithm6}\" ')
 
 run('tar cvfz ${pair_id}.merged.maflite.tar.gz *.tsv')
 
