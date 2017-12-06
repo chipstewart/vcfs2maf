@@ -7,11 +7,13 @@
   "merge_maflite_workflow.merge_maflite.algorithm3_maflite_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/a8c34806-70f9-427c-aaa8-fb37198fa7c2/strelka_maflite_workflow/31f9fa21-1787-4fe0-a9d0-2a55745c37d4/call-strelka_maflite/REBC-AC8R-TP-NB.Strelka_maflite.tsv",
   "merge_maflite_workflow.merge_maflite.algorithm4_maflite_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/d7ece8ba-d699-45ca-bf7b-3c05ab705352/svaba_maflite_workflow/ac904c7e-a555-4486-aeff-e4924b02c380/call-svaba_maflite/REBC-AC8R-TP-NB.SvABA_maflite.tsv",
   "merge_maflite_workflow.merge_maflite.algorithm5_maflite_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/bd4be1fe-632a-4925-ac60-b9e8600be5d4/snowman_maflite_workflow/072e0fa0-5677-4562-9be6-29b88b622b97/call-snowman_maflite/REBC-AC8R-TP-NB.snowman_maflite.tsv",
+  "merge_maflite_workflow.merge_maflite.algorithm6_maflite_file": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/6a081eac-24f3-45ca-8cae-ded3fae568dc/strelka2_maflite_workflow/d80f9ea5-4cd3-4904-a217-e4c0753b1c2a/call-strelka2_maflite/REBC-AC8R-TP-NB.Strelka2_maflite.tsv",
   "merge_maflite_workflow.merge_maflite.algorithm1": "M1",
   "merge_maflite_workflow.merge_maflite.algorithm2": "M2",
   "merge_maflite_workflow.merge_maflite.algorithm3": "Strelka",
   "merge_maflite_workflow.merge_maflite.algorithm4": "SvABA",
   "merge_maflite_workflow.merge_maflite.algorithm5": "Snowman",
+  "merge_maflite_workflow.merge_maflite.algorithm6": "Strelka2",
   "merge_maflite_workflow.merge_maflite.output_disk_gb": "20"
 }
 
