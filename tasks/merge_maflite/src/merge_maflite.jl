@@ -10,7 +10,7 @@ file2=ARGS[4]
 file3=ARGS[5]
 file4=ARGS[6]
 file5=ARGS[7]
-file5=ARGS[8]
+file6=ARGS[8]
 lab1=ARGS[9]
 lab2=ARGS[10]
 lab3=ARGS[11]
@@ -236,7 +236,7 @@ sort!(df, cols = [:a, :p1])
 for c in names(df)
     k=find(map(x -> isna(x),df[c]))
     df[k,c] = ""
-    if c in [Symbol(lab1), Symbol(lab2), Symbol(lab3), Symbol(lab4),Symbol(lab5)]
+    if c in [Symbol(lab1), Symbol(lab2), Symbol(lab3), Symbol(lab4),Symbol(lab5),Symbol(lab6)]
 	   k=find(map(x -> x=="",df[c]))
  	   df[k,c] = "0"
     end    
@@ -266,8 +266,11 @@ end
 
 fields=names(df)
 sfields=map(x -> string(x),names(df))
+print(sfields)
 
-labs=[lab1,lab2,lab3,lab4,lab5]
+labs=[lab1,lab2,lab3,lab4,lab5,lab6]
+deleteat!(labs, findin(labs, ["-"]))
+NA=length(labs)
 slabs=map(x -> Symbol(x),labs)
 			
 df[:NALG]=fill(1,size(df[:chr]))
@@ -291,7 +294,7 @@ for i = 1:g
     	
     	# each algorithm can appear only once
     	#df[k,slabs]
-    	for a=1:5
+    	for a=1:NA
     	   if (sum(map(x -> x=="1",df[k,slabs[a]])))>1
     	   	 
     	   	 #println(i)
