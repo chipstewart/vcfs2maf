@@ -6,6 +6,7 @@
 # ARGS=["RP-1066_SU2C-DFCI-LUAD-1008-TM", "RP-1066_SU2C-DFCI-LUAD-1008-NB",  "tmps.tsv", "tmpi.tsv", "SU2C-DFCI-LUAD-1008_1.strelka.maflite.tsv"]
 # ARGS=["SU2LC-MSK-1117_1-TP", "SU2LC-MSK-1117_1-NB",  "/opt/test/SU2LC-MSK-1117_1.StrelkaSNV.tsv", "/opt/test/SU2LC-MSK-1117_1.StrelkaINDEL.tsv", "SU2LC-MSK-1117_1.strelka.maflite.tsv"]
 # ARGS=["SU2LC-MSK-1028_1-TP", "SU2LC-MSK-1028_1-NB",  "/opt/test/SU2LC-MSK-1028_1.StrelkaSNV.tsv", "/opt/test/SU2LC-MSK-1028_1.StrelkaINDEL.tsv", "/opt/test/SU2LC-MSK-1028_1.strelka.maflite.tsv"]
+# ARGS=["REBC-AF50-TP", "REBC-AF50-NT",  "/opt/test/REBC-AF50-TP-NT.StrelkaSNV.tsv", "/opt/test/REBC-AF50-TP-NT.StrelkaINDEL.tsv", "/opt/test/REBC-AF50-TP-NT.strelka.maflite.tsv"]
 
 using DataFrames
 
@@ -60,123 +61,131 @@ if (typeof(df[:CHRO])==typeof(DataArray(fill(34,2))))
 	 df[:CHRO]=map(x -> string(x),df[:CHRO])
 end
 # keep only CHRO = [1-Y]
-df=df[find(in.(df[:CHRO], [["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"]])),:]
+df=df[find(in.(df[:CHRO], [["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y","MT"]])),:]
 
-# sort by CHRO and position
-a= df[:CHRO]
-if !isa(a[1],Int)
-    a=map(x -> replace(x,r"[X]", "23"), a)
-    a=map(x -> replace(x,r"[Y]", "24"), a)
-    #a=map(x -> replace(x,r"[MT]", "25"), a)
-    a=map(x -> parse(Int32,x), a)
-end
-df[:a] = a
-# print(df)
-sort!(df, cols = [:a, :POS])
-delete!(df, [:a])
+if size(df)[1]>0
+
+    # sort by CHRO and position
+    a= df[:CHRO]
+    if !isa(a[1],Int)
+        a=map(x -> replace(x,r"[X]", "23"), a)
+        a=map(x -> replace(x,r"[Y]", "24"), a)
+        #a=map(x -> replace(x,r"[MT]", "25"), a)
+        a=map(x -> parse(Int32,x), a)
+    end
+    df[:a] = a
+    # print(df)
+    sort!(df, cols = [:a, :POS])
+    delete!(df, [:a])
 
 
-# Strelka 'tier' for QSS -
-# hypothesis: TQSS must be strelka's favorite tier for each particular call 
-nt=df[:TQSS]
-n=length(nt)
-AA=df[:ALT]
-RA=df[:REF]
+    # Strelka 'tier' for QSS -
+    # hypothesis: TQSS must be strelka's favorite tier for each particular call 
+    nt=df[:TQSS]
+    n=length(nt)
+    AA=df[:ALT]
+    RA=df[:REF]
 
-q=df[:NORMAL_AU]
-N1= fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-NA=map(x -> parse(Int32,x), N1)
+    q=df[:NORMAL_AU]
+    N1= fill("0",n)
+    q = map(x -> split(x,":"), q)
+    for i = 1:n
+    	print(i,"\n")
+    	N1[i]=q[i][nt[i]]
+    end
+    NA=map(x -> parse(Int32,x), N1)
 
-q=df[:NORMAL_CU]
-N1 = fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-NC=map(x -> parse(Int32,x), N1)
+    q=df[:NORMAL_CU]
+    N1 = fill("0",n)
+    q = map(x -> split(x,":"), q)
+    for i = 1:n
+    	print(i,"\n")
+    	N1[i]=q[i][nt[i]]
+    end
+    NC=map(x -> parse(Int32,x), N1)
 
-q=df[:NORMAL_GU]
-N1 = fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-NG=map(x -> parse(Int32,x), N1)
+    q=df[:NORMAL_GU]
+    N1 = fill("0",n)
+    q = map(x -> split(x,":"), q)
+    for i = 1:n
+    	print(i,"\n")
+    	N1[i]=q[i][nt[i]]
+    end
+    NG=map(x -> parse(Int32,x), N1)
 
-q=df[:NORMAL_TU]
-N1 = fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-NT=map(x -> parse(Int32,x), N1)
+    q=df[:NORMAL_TU]
+    N1 = fill("0",n)
+    q = map(x -> split(x,":"), q)
+    for i = 1:n
+    	print(i,"\n")
+    	N1[i]=q[i][nt[i]]
+    end
+    NT=map(x -> parse(Int32,x), N1)
 
-q=df[:TUMOR_AU]
-N1= fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-TA=map(x -> parse(Int32,x), N1)
+    q=df[:TUMOR_AU]
+    N1= fill("0",n)
+    q = map(x -> split(x,":"), q)
+    for i = 1:n
+    	print(i,"\n")
+    	N1[i]=q[i][nt[i]]
+    end
+    TA=map(x -> parse(Int32,x), N1)
 
-q=df[:TUMOR_CU]
-N1 = fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-TC=map(x -> parse(Int32,x), N1)
+    q=df[:TUMOR_CU]
+    N1 = fill("0",n)
+    q = map(x -> split(x,":"), q)
+    for i = 1:n
+    	print(i,"\n")
+    	N1[i]=q[i][nt[i]]
+    end
+    TC=map(x -> parse(Int32,x), N1)
 
-q=df[:TUMOR_GU]
-N1 = fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-TG=map(x -> parse(Int32,x), N1)
+    q=df[:TUMOR_GU]
+    N1 = fill("0",n)
+    q = map(x -> split(x,":"), q)
+    for i = 1:n
+    	print(i,"\n")
+    	N1[i]=q[i][nt[i]]
+    end
+    TG=map(x -> parse(Int32,x), N1)
 
-q=df[:TUMOR_TU]
-N1 = fill("0",n)
-q = map(x -> split(x,":"), q)
-for i = 1:n
-	print(i,"\n")
-	N1[i]=q[i][nt[i]]
-end
-TT=map(x -> parse(Int32,x), N1)
+    q=df[:TUMOR_TU]
+    N1 = fill("0",n)
+    q = map(x -> split(x,":"), q)
+    for i = 1:n
+    	print(i,"\n")
+    	N1[i]=q[i][nt[i]]
+    end
+    TT=map(x -> parse(Int32,x), N1)
 
-df[:n_ref_count] = fill(0,n)
-df[:n_alt_count] = fill(0,n)
-df[:t_ref_count] = fill(0,n)
-df[:t_alt_count] = fill(0,n)
+    df[:n_ref_count] = fill(0,n)
+    df[:n_alt_count] = fill(0,n)
+    df[:t_ref_count] = fill(0,n)
+    df[:t_alt_count] = fill(0,n)
 
-NB=[NA NC NG NT]
-TB=[TA TC TG TT]
-b1 = ["A" "C" "G" "T"]
-kr=find( in.(df[:REF],[b1]) )
-mr=findfirst.([b1],df[:REF])
-ka=find( in.(df[:ALT],[b1]) )
-ma=findfirst.([b1],df[:ALT])
+    NB=[NA NC NG NT]
+    TB=[TA TC TG TT]
+    b1 = ["A" "C" "G" "T"]
+    kr=find( in.(df[:REF],[b1]) )
+    mr=findfirst.([b1],df[:REF])
+    ka=find( in.(df[:ALT],[b1]) )
+    ma=findfirst.([b1],df[:ALT])
 
-for i = 1:n
-   df[i,:n_ref_count] = NB[i,mr[i]]
-   df[i,:n_alt_count] = NB[i,ma[i]]
-   df[i,:t_ref_count] = TB[i,mr[i]]
-   df[i,:t_alt_count] = TB[i,ma[i]]
+    for i = 1:n
+       df[i,:n_ref_count] = NB[i,mr[i]]
+       df[i,:n_alt_count] = NB[i,ma[i]]
+       df[i,:t_ref_count] = TB[i,mr[i]]
+       df[i,:t_alt_count] = TB[i,ma[i]]
+    end
+
+else
+    df[:n_ref_count] = df[:POS]
+    df[:n_alt_count] = df[:POS]
+    df[:t_ref_count] = df[:POS]
+    df[:t_alt_count] = df[:POS]
 end
    
 df[:QS] = df[:QSS]
-
 
 open(file1a, "w") do f
     writedlm(f, reshape(names(df), 1, length(names(df))), '\t')
@@ -220,7 +229,7 @@ if size(df)[1]>0
     	 df[:CHRO]=map(x -> string(x),df[:CHRO])
     end
     # keep only CHRO = [1-Y]
-    df=df[find(in.(df[:CHRO], [["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"]])),:]
+    df=df[find(in.(df[:CHRO], [["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y","MT"]])),:]
 
     # sort by CHRO and position
     a= df[:CHRO]
