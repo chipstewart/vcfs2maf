@@ -1,9 +1,0 @@
-{
-  "merge_su2c_maflites_workflow.merge_su2c_maflites.ID": "SU2CLC-MGH-1048_1", 
-  "merge_su2c_maflites_workflow.merge_su2c_maflites.M2_MAFLITE": "/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.M2_MAFLITE/SU2CLC-MGH-1048_1.m2.pass.maflite.tsv", 
-  "merge_su2c_maflites_workflow.merge_su2c_maflites.NORMAL_BARCODE": "RP-1066_SU2CLC-MGH-1048-BL-01", 
-  "merge_su2c_maflites_workflow.merge_su2c_maflites.PRODUCTION_MAF": "/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.PRODUCTION_MAF/SU2CLC-MGH-1048_1.intersection.maf", 
-  "merge_su2c_maflites_workflow.merge_su2c_maflites.STRELKA_MAFLITE": "/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.STRELKA_MAFLITE/SU2CLC-MGH-1048_1.Strelka_maflite.tsv", 
-  "merge_su2c_maflites_workflow.merge_su2c_maflites.SVABA_MAFLITE": "/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.SVABA_MAFLITE/SU2CLC-MGH-1048_1.SvABA_maflite.tsv", 
-  "merge_su2c_maflites_workflow.merge_su2c_maflites.TUMOR_BARCODE": "RP-1066_SU2CLC-MGH-1048-TM-01"
-}
