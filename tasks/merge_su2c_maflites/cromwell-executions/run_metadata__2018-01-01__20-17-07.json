@@ -1,0 +1,90 @@
+{
+  "workflowName": "merge_su2c_maflites_workflow",
+  "submittedFiles": {
+    "inputs": "{\n  \"merge_su2c_maflites_workflow.merge_su2c_maflites.ID\": \"SU2CLC-MGH-1048_1\", \n  \"merge_su2c_maflites_workflow.merge_su2c_maflites.M2_MAFLITE\": \"/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.M2_MAFLITE/SU2CLC-MGH-1048_1.m2.pass.maflite.tsv\", \n  \"merge_su2c_maflites_workflow.merge_su2c_maflites.NORMAL_BARCODE\": \"RP-1066_SU2CLC-MGH-1048-BL-01\", \n  \"merge_su2c_maflites_workflow.merge_su2c_maflites.PRODUCTION_MAF\": \"/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.PRODUCTION_MAF/SU2CLC-MGH-1048_1.intersection.maf\", \n  \"merge_su2c_maflites_workflow.merge_su2c_maflites.STRELKA_MAFLITE\": \"/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.STRELKA_MAFLITE/SU2CLC-MGH-1048_1.Strelka_maflite.tsv\", \n  \"merge_su2c_maflites_workflow.merge_su2c_maflites.SVABA_MAFLITE\": \"/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.SVABA_MAFLITE/SU2CLC-MGH-1048_1.SvABA_maflite.tsv\", \n  \"merge_su2c_maflites_workflow.merge_su2c_maflites.TUMOR_BARCODE\": \"RP-1066_SU2CLC-MGH-1048-TM-01\"\n}",
+    "workflow": "task merge_su2c_maflites { \n\n    #Inputs and constants defined here\n\n    String ID\n    String TUMOR_BARCODE \n    String NORMAL_BARCODE \n    File PRODUCTION_MAF\n    File M2_MAFLITE\n    File STRELKA_MAFLITE\n    File SVABA_MAFLITE\n\n    String output_disk_gb=\"20\"\n    String boot_disk_gb = \"10\"\n    String ram_gb = \"3\"\n    String cpu_cores = \"1\"\n\n    command {\npython_cmd=\"\nimport subprocess\ndef run(cmd):\n    subprocess.check_call(cmd,shell=True)\n\nrun('ln -sT `pwd` /opt/execution')\nrun('ln -sT `pwd`/../inputs /opt/inputs')\nrun('/opt/src/algutil/monitor_start.py')\n\n# start task-specific calls\n##########################\n\nrun('echo python /opt/src/merge_su2c_maflites.py  -i ${ID}  -t ${TUMOR_BARCODE} -n ${NORMAL_BARCODE} -P ${PRODUCTION_MAF}   -2 ${M2_MAFLITE} -s ${STRELKA_MAFLITE} -S ${SVABA_MAFLITE} ')\n\nrun('python /opt/src/merge_su2c_maflites.py  -i ${ID}  -t ${TUMOR_BARCODE} -n ${NORMAL_BARCODE} -P ${PRODUCTION_MAF}   -2 ${M2_MAFLITE} -s ${STRELKA_MAFLITE} -S ${SVABA_MAFLITE} ')\n\n\nrun('tar cvfz ${ID}.merge.maflite.tar.gz stderr stdout *.tsv')\n\n#########################\n# end task-specific calls\nrun('/opt/src/algutil/monitor_stop.py')\n\"\n        echo \"$python_cmd\"\n        python -c \"$python_cmd\"\n\n    }\n\n    output {\n        File merge_tsv=\"${ID}.merge.maflite.tsv\"\n        File subset_tarball=\"${ID}.merge.maflite.tar.gz\"\n    }\n\n    runtime {\n        docker : \"docker.io/chipstewart/merge_su2c_maflites:1\"\n        memory: \"${ram_gb}GB\"\n        cpu: \"${cpu_cores}\"\n        disks: \"local-disk ${output_disk_gb} HDD\"\n        bootDiskSizeGb: \"${boot_disk_gb}\"\n        preemptible: 4\n    }\n\n\n    meta {\n        author : \"Chip Stewart\"\n        email : \"stewart@broadinstitute.org\"\n    }\n\n}\n\nworkflow merge_su2c_maflites_workflow {\n    call merge_su2c_maflites\n}\n",
+    "options": "{\n\n}"
+  },
+  "calls": {
+    "merge_su2c_maflites_workflow.merge_su2c_maflites": [{
+      "executionStatus": "Done",
+      "stdout": "/opt/vcfs2maf/tasks/merge_su2c_maflites/cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/stdout",
+      "backendStatus": "Done",
+      "shardIndex": -1,
+      "outputs": {
+        "subset_tarball": "/opt/vcfs2maf/tasks/merge_su2c_maflites/cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/SU2CLC-MGH-1048_1.merge.maflite.tar.gz",
+        "merge_tsv": "/opt/vcfs2maf/tasks/merge_su2c_maflites/cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/SU2CLC-MGH-1048_1.merge.maflite.tsv"
+      },
+      "runtimeAttributes": {
+        "docker": "docker.io/chipstewart/merge_su2c_maflites:1",
+        "failOnStderr": "false",
+        "continueOnReturnCode": "0"
+      },
+      "callCaching": {
+        "allowResultReuse": false,
+        "effectiveCallCachingMode": "CallCachingOff"
+      },
+      "inputs": {
+        "ID": "SU2CLC-MGH-1048_1",
+        "cpu_cores": "1",
+        "NORMAL_BARCODE": "RP-1066_SU2CLC-MGH-1048-BL-01",
+        "PRODUCTION_MAF": "/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.PRODUCTION_MAF/SU2CLC-MGH-1048_1.intersection.maf",
+        "boot_disk_gb": "10",
+        "M2_MAFLITE": "/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.M2_MAFLITE/SU2CLC-MGH-1048_1.m2.pass.maflite.tsv",
+        "SVABA_MAFLITE": "/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.SVABA_MAFLITE/SU2CLC-MGH-1048_1.SvABA_maflite.tsv",
+        "output_disk_gb": "20",
+        "TUMOR_BARCODE": "RP-1066_SU2CLC-MGH-1048-TM-01",
+        "STRELKA_MAFLITE": "/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.STRELKA_MAFLITE/SU2CLC-MGH-1048_1.Strelka_maflite.tsv",
+        "ram_gb": "3"
+      },
+      "returnCode": 0,
+      "jobId": "9601",
+      "backend": "Local",
+      "end": "2018-01-01T20:17:32.172Z",
+      "stderr": "/opt/vcfs2maf/tasks/merge_su2c_maflites/cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/stderr",
+      "callRoot": "/opt/vcfs2maf/tasks/merge_su2c_maflites/cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites",
+      "attempt": 1,
+      "executionEvents": [{
+        "startTime": "2018-01-01T20:17:32.170Z",
+        "description": "UpdatingJobStore",
+        "endTime": "2018-01-01T20:17:32.172Z"
+      }, {
+        "startTime": "2018-01-01T20:17:26.881Z",
+        "description": "RunningJob",
+        "endTime": "2018-01-01T20:17:32.170Z"
+      }, {
+        "startTime": "2018-01-01T20:17:26.767Z",
+        "description": "RequestingExecutionToken",
+        "endTime": "2018-01-01T20:17:26.783Z"
+      }, {
+        "startTime": "2018-01-01T20:17:26.742Z",
+        "description": "Pending",
+        "endTime": "2018-01-01T20:17:26.767Z"
+      }, {
+        "startTime": "2018-01-01T20:17:26.783Z",
+        "description": "PreparingJob",
+        "endTime": "2018-01-01T20:17:26.881Z"
+      }],
+      "start": "2018-01-01T20:17:26.721Z"
+    }]
+  },
+  "outputs": {
+    "merge_su2c_maflites_workflow.merge_su2c_maflites.subset_tarball": "/opt/vcfs2maf/tasks/merge_su2c_maflites/cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/SU2CLC-MGH-1048_1.merge.maflite.tar.gz",
+    "merge_su2c_maflites_workflow.merge_su2c_maflites.merge_tsv": "/opt/vcfs2maf/tasks/merge_su2c_maflites/cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/SU2CLC-MGH-1048_1.merge.maflite.tsv"
+  },
+  "workflowRoot": "/opt/vcfs2maf/tasks/merge_su2c_maflites/cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf",
+  "id": "c5807495-f111-41ba-84ff-4c80f582fabf",
+  "inputs": {
+    "merge_su2c_maflites_workflow.merge_su2c_maflites.STRELKA_MAFLITE": "/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.STRELKA_MAFLITE/SU2CLC-MGH-1048_1.Strelka_maflite.tsv",
+    "merge_su2c_maflites_workflow.merge_su2c_maflites.PRODUCTION_MAF": "/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.PRODUCTION_MAF/SU2CLC-MGH-1048_1.intersection.maf",
+    "merge_su2c_maflites_workflow.merge_su2c_maflites.M2_MAFLITE": "/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.M2_MAFLITE/SU2CLC-MGH-1048_1.m2.pass.maflite.tsv",
+    "merge_su2c_maflites_workflow.merge_su2c_maflites.ID": "SU2CLC-MGH-1048_1",
+    "merge_su2c_maflites_workflow.merge_su2c_maflites.SVABA_MAFLITE": "/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.SVABA_MAFLITE/SU2CLC-MGH-1048_1.SvABA_maflite.tsv",
+    "merge_su2c_maflites_workflow.merge_su2c_maflites.NORMAL_BARCODE": "RP-1066_SU2CLC-MGH-1048-BL-01",
+    "merge_su2c_maflites_workflow.merge_su2c_maflites.TUMOR_BARCODE": "RP-1066_SU2CLC-MGH-1048-TM-01"
+  },
+  "submission": "2018-01-01T20:17:13.150Z",
+  "status": "Succeeded",
+  "end": "2018-01-01T20:17:32.860Z",
+  "start": "2018-01-01T20:17:24.973Z"
+}

@@ -1,0 +1,34 @@
+#!/bin/bash
+tmpDir=$(mktemp -d /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/tmp.XXXXXX)
+chmod 777 $tmpDir
+export _JAVA_OPTIONS=-Djava.io.tmpdir=$tmpDir
+export TMPDIR=$tmpDir
+
+(
+cd /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution
+python_cmd="
+import subprocess
+def run(cmd):
+    subprocess.check_call(cmd,shell=True)
+run('ln -sT `pwd` /opt/execution')
+run('ln -sT `pwd`/../inputs /opt/inputs')
+run('/opt/src/algutil/monitor_start.py')
+# start task-specific calls
+##########################
+run('echo python /opt/src/merge_su2c_maflites.py  -i SU2CLC-MGH-1048_1  -t RP-1066_SU2CLC-MGH-1048-TM-01 -n RP-1066_SU2CLC-MGH-1048-BL-01 -P /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/inputs/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.PRODUCTION_MAF/SU2CLC-MGH-1048_1.intersection.maf   -2 /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/inputs/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.M2_MAFLITE/SU2CLC-MGH-1048_1.m2.pass.maflite.tsv -s /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/inputs/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.STRELKA_MAFLITE/SU2CLC-MGH-1048_1.Strelka_maflite.tsv -S /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/inputs/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.SVABA_MAFLITE/SU2CLC-MGH-1048_1.SvABA_maflite.tsv ')
+run('python /opt/src/merge_su2c_maflites.py  -i SU2CLC-MGH-1048_1  -t RP-1066_SU2CLC-MGH-1048-TM-01 -n RP-1066_SU2CLC-MGH-1048-BL-01 -P /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/inputs/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.PRODUCTION_MAF/SU2CLC-MGH-1048_1.intersection.maf   -2 /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/inputs/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.M2_MAFLITE/SU2CLC-MGH-1048_1.m2.pass.maflite.tsv -s /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/inputs/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.STRELKA_MAFLITE/SU2CLC-MGH-1048_1.Strelka_maflite.tsv -S /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/inputs/opt/vcfs2maf/tasks/merge_su2c_maflites/localized_inputs/merge_su2c_maflites_workflow.merge_su2c_maflites.SVABA_MAFLITE/SU2CLC-MGH-1048_1.SvABA_maflite.tsv ')
+run('tar cvfz SU2CLC-MGH-1048_1.merge.maflite.tar.gz stderr stdout *.tsv')
+#########################
+# end task-specific calls
+run('/opt/src/algutil/monitor_stop.py')
+"
+        echo "$python_cmd"
+        python -c "$python_cmd"
+)
+echo $? > /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/rc.tmp
+(
+cd /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution
+
+)
+sync
+mv /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/rc.tmp /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/rc

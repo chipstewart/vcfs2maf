@@ -1,0 +1,9 @@
+{
+  "merge_su2c_maflites_workflow.merge_su2c_maflites.STRELKA_MAFLITE": "File",
+  "merge_su2c_maflites_workflow.merge_su2c_maflites.PRODUCTION_MAF": "File",
+  "merge_su2c_maflites_workflow.merge_su2c_maflites.M2_MAFLITE": "File",
+  "merge_su2c_maflites_workflow.merge_su2c_maflites.ID": "String",
+  "merge_su2c_maflites_workflow.merge_su2c_maflites.SVABA_MAFLITE": "File",
+  "merge_su2c_maflites_workflow.merge_su2c_maflites.NORMAL_BARCODE": "String",
+  "merge_su2c_maflites_workflow.merge_su2c_maflites.TUMOR_BARCODE": "String"
+}

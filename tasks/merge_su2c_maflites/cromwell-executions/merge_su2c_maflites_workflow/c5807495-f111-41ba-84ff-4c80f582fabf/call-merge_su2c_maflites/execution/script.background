@@ -1,0 +1,3 @@
+#!/bin/bash
+'/bin/bash' '/opt/vcfs2maf/tasks/merge_su2c_maflites/cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/script.submit' > /opt/vcfs2maf/tasks/merge_su2c_maflites/cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/stdout 2> /opt/vcfs2maf/tasks/merge_su2c_maflites/cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/stderr < /dev/null || echo -1 > /opt/vcfs2maf/tasks/merge_su2c_maflites/cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/rc &
+echo $!

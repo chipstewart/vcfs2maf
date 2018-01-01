@@ -1,0 +1,9 @@
+{
+  "merge_su2c_maflites_workflow.merge_su2c_maflites.STRELKA_MAFLITE": "gs://fc-099b74a5-b2e1-4f8c-8720-2ab7123fe631/d98e8416-e827-4ed5-b0fc-34bfa3b3cf6b/strelka_maflite_workflow/334aacf4-2e5a-4618-b5ee-2d46929474a8/call-strelka_maflite/SU2CLC-MGH-1048_1.Strelka_maflite.tsv",
+  "merge_su2c_maflites_workflow.merge_su2c_maflites.PRODUCTION_MAF": "gs://fc-099b74a5-b2e1-4f8c-8720-2ab7123fe631/c1f2cec0-ca7d-4a65-9920-23aa2d70207e/FilterWorkflow/e18d7d1a-1b42-4055-a248-63663f907e56/call-maf_merge_task/SU2CLC-MGH-1048_1.intersection.maf",
+  "merge_su2c_maflites_workflow.merge_su2c_maflites.M2_MAFLITE": "gs://fc-099b74a5-b2e1-4f8c-8720-2ab7123fe631/76cdf643-181a-4b5b-8035-0cc102c69593/gatk4_m2_maflite_workflow/7cea0a1a-f08e-4052-88ec-8c211532b96a/call-gatk4_m2_maflite/SU2CLC-MGH-1048_1.m2.pass.maflite.tsv",
+  "merge_su2c_maflites_workflow.merge_su2c_maflites.ID": "SU2CLC-MGH-1048_1",
+  "merge_su2c_maflites_workflow.merge_su2c_maflites.SVABA_MAFLITE": "gs://fc-099b74a5-b2e1-4f8c-8720-2ab7123fe631/3763b2bc-6e42-45d0-b737-48c3845c4eb3/svaba_maflite_workflow/fc196318-00e2-45f3-ace5-33ab096401f9/call-svaba_maflite/SU2CLC-MGH-1048_1.SvABA_maflite.tsv",
+  "merge_su2c_maflites_workflow.merge_su2c_maflites.NORMAL_BARCODE": "RP-1066_SU2CLC-MGH-1048-BL-01",
+  "merge_su2c_maflites_workflow.merge_su2c_maflites.TUMOR_BARCODE": "RP-1066_SU2CLC-MGH-1048-TM-01"
+}

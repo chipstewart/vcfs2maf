@@ -1,0 +1,10 @@
+/opt/src/merge_su2c_maflites.py:158: FutureWarning: from_csv is deprecated. Please use read_csv(...) instead. Note that some of the default arguments are different, so please refer to the documentation for from_csv when changing your function calls
+  df_M2 = DataFrame.from_csv(input_tsv, sep="\t", index_col=None)
+/opt/src/merge_su2c_maflites.py:234: FutureWarning: from_csv is deprecated. Please use read_csv(...) instead. Note that some of the default arguments are different, so please refer to the documentation for from_csv when changing your function calls
+  df_maf_lite_svaba = DataFrame.from_csv(input_tsv, sep="\t", index_col=None)
+/opt/src/merge_su2c_maflites.py:351: FutureWarning: from_csv is deprecated. Please use read_csv(...) instead. Note that some of the default arguments are different, so please refer to the documentation for from_csv when changing your function calls
+  df_maf_lite_strelka = DataFrame.from_csv(input_tsv, sep="\t", index_col=None)
+/opt/src/merge_su2c_maflites.py:372: FutureWarning: from_csv is deprecated. Please use read_csv(...) instead. Note that some of the default arguments are different, so please refer to the documentation for from_csv when changing your function calls
+  df_maf_production = DataFrame.from_csv(input_maf, sep="\t", index_col=None)
+/opt/src/merge_su2c_maflites.py:502: DtypeWarning: Columns (13,14,38,87,88,94,96,107,108,111,115,124,135,148,165,166,168,169,170,171,172,173,174,176,177,178,180,181,183,184,185,189,190,191,200,202,303,313,327,328,339,410,486) have mixed types. Specify dtype option on import or set low_memory=False.
+  sys.exit(main())

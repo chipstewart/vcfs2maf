@@ -1,0 +1,7 @@
+#!/bin/bash
+docker run \
+  --rm -i \
+   \
+  -v /opt/vcfs2maf/tasks/merge_su2c_maflites/cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites:/cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites \
+  docker.io/chipstewart/merge_su2c_maflites:1 \
+  /bin/bash /cromwell-executions/merge_su2c_maflites_workflow/c5807495-f111-41ba-84ff-4c80f582fabf/call-merge_su2c_maflites/execution/script
