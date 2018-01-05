@@ -102,6 +102,9 @@ def M2_fill_in_multi_allele_var(row):
     index_of_max_af = alt_tumor_af_float.index(max(alt_tumor_af_float))
     allele = list_alleles[index_of_max_af]
     delete_row = 0
+    if len(allele)<1:
+        delete_row=1
+
     # print(val_multi,index_of_max_af,allele)
     return val_multi, index_of_max_af, allele, delete_row
 
@@ -155,9 +158,12 @@ def M2(input_tsv):
                            'delete_row']
     # delete_row is used as a marker and will be taken out before saving to CSV
 
-    df_M2 = DataFrame.from_csv(input_tsv, sep="\t", index_col=None)
+    #df_M2 = Dataframe.from_csv(input_tsv, sep="\t", index_col=None)
+    df_M2 = pd.read_csv(input_tsv, sep="\t", index_col=None,low_memory=False)
     df_M2 = df_M2[df_M2.TUMOR_AD_ALT != 0]
     df_maf_lite_M2 = pd.DataFrame(index=None, columns=columns_maf_lite_M2)
+    if len(df_M2.TUMOR_AD_ALT)<1:
+        return df_maf_lite_M2
 
     # START: MUST HAVE IN MAFLITE
     df_maf_lite_M2['chr'] = df_M2['chr']
@@ -231,7 +237,7 @@ def M2(input_tsv):
 
 def SvABA(input_tsv):
     # "SU2CLC-MGH-1048_1.SvABA.INDEL.tsv"
-    df_maf_lite_svaba = DataFrame.from_csv(input_tsv, sep="\t", index_col=None)
+    df_maf_lite_svaba = pd.read_csv(input_tsv, sep="\t", index_col=None,low_memory=False)
     df_maf_lite_svaba.rename(columns={'REPSEQ': 'svaba_REPSEQ',
                                       'NM': 'svaba_NM',
                                       'MAPQ': 'svaba_MAPQ',
@@ -264,7 +270,7 @@ def SvABA(input_tsv):
 
 def SvABA0(input_tsv):
     # "SU2CLC-MGH-1048_1.SvABA.INDEL.tsv"
-    df_svaba = DataFrame.from_csv(input_tsv, sep="\t", index_col=None)
+    df_svaba = pd.read_csv(input_tsv, sep="\t", index_col=None,low_memory=False)
 
     # create a MAFLITE for Svaba
     # Chip: do we need a different headers for Svaba? or the same like M2
@@ -348,7 +354,7 @@ def SvABA0(input_tsv):
 
 def strelka(input_tsv):
     # df_maf_lite_strelka = DataFrame.from_csv("SU2CLC-MGH-1048_1.Strelka_maflite.tsv", sep="\t",index_col=None)
-    df_maf_lite_strelka = DataFrame.from_csv(input_tsv, sep="\t", index_col=None)
+    df_maf_lite_strelka = pd.read_csv(input_tsv, sep="\t", index_col=None,low_memory=False)
     # add rename
     df_maf_lite_strelka.rename(columns={'n_ref_count': 'strelka_n_ref_count',
                                         'NORMAL_DP': 'strelka_NORMAL_DP',
@@ -369,7 +375,7 @@ def strelka(input_tsv):
     return df_maf_lite_strelka
 
 def Production(input_maf):
-    df_maf_production = DataFrame.from_csv(input_maf, sep="\t", index_col=None)
+    df_maf_production = pd.read_csv(input_maf, sep="\t", index_col=None,low_memory=False)
     df_maf_production.head(2)
 
     # columns_maf_lite_svaba = ['chr','start','end','svaba_variant_type','ref_allele','alt_allele','IN_PON']
@@ -388,7 +394,8 @@ def Production(input_maf):
     df_maf_lite_production['Production_t_alt_count'] = df_maf_production['t_alt_count']
     df_maf_lite_production['Production_t_ref_count'] = df_maf_production['t_ref_count']
     # END: MUST HAVE IN MAFLITE
-    df_maf_lite_production['Production_fstar_tumor_lod'] = df_maf_production['fstar_tumor_lod']
+    if 'fstar_tumor_lod' in df_maf_production.columns:
+        df_maf_lite_production['Production_fstar_tumor_lod'] = df_maf_production['fstar_tumor_lod']
     df_maf_lite_production['Production'] = 1
     df_maf_lite_production.head(2)
     return df_maf_lite_production
@@ -500,4 +507,3 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
-

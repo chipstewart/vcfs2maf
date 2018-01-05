@@ -33,7 +33,7 @@ run('echo python /opt/src/merge_su2c_maflites.py  -i ${ID}  -t ${TUMOR_BARCODE} 
 run('python /opt/src/merge_su2c_maflites.py  -i ${ID}  -t ${TUMOR_BARCODE} -n ${NORMAL_BARCODE} -P ${PRODUCTION_MAF}   -2 ${M2_MAFLITE} -s ${STRELKA_MAFLITE} -S ${SVABA_MAFLITE} ')
 
 
-run('tar cvfz ${ID}.merge.maflite.tar.gz stderr stdout *.tsv')
+run('tar cvfz ${ID}.merge.maflite.tar.gz *.tsv')
 
 #########################
 # end task-specific calls

@@ -1,11 +1,13 @@
- #!/usr/local/bin/julia
+#!/usr/local/bin/julia
 #ARGS
 # ARGS=["THCA-EM-A2CN-TP","THCA-EM-A2CN-NB","THCA-EM-A2CN-TP-NB.SvABA.INDEL.tsv","THCA-EM-A2CN-TP-NB.maflite.tsv"]
 # ARGS=["THCA-EM-THCA-BJ-A191-TP","THCA-BJ-A191-NB","THCA-BJ-A191-TP-NB.SvABA.INDEL.tsv","THCA-BJ-A191-TP-NB.maflite.tsv"]
 # ARGS=["THCA-DJ-A13W-TP","THCA-DJ-A13W-NB","THCA-DJ-A13W-TP-NB.SvABA.INDEL.tsv","THCA-DJ-A13W-TP-NB.SvABA_maflite.tsv"]
 # ARGS=["RP-1066_SU2CLC-MGH-1048-TM-01","RP-1066.SU2CLC-MGH-1048-BL-01","xxx/RP-1066.SU2CLC-MGH-1048-TM-01.bam", "xxx/RP-1066.SU2CLC-MGH-1048-BL-01.bam", "SU2CLC-MGH-1048_1.SvABA.INDEL.tsv","SU2CLC-MGH-1048_1.SvABA_maflite.tsv","2"]
+# ARGS=["RP-1066_SU2LC-MSK-1118_T1" "RP-1066_SU2LC-MSK-1118_N1"  "/opt/vcfs2maf/tasks/svaba_maflite/localized_inputs/svaba_maflite_workflow.svaba_maflite.tumor_bam/RP-1066.SU2LC-MSK-1118_T1.bam" "/opt/vcfs2maf/tasks/svaba_maflite/localized_inputs/svaba_maflite_workflow.svaba_maflite.normal_bam/RP-1066.SU2LC-MSK-1118_N1.bam" "/opt/test/SU2LC-MSK-1118_1.SvABA.INDEL.tsv" "SU2LC-MSK-1118_1.SvABA.maflite.tsv" "2"]
 
 using DataFrames
+emptymaffields=split("chr    start   ref_allele  alt_allele  REPSEQ  NM  MAPQ    DBSNP   LOD SPAN    normal_CR   normal_DP   normal_LO   n_alt_count normal_SR   tumor_CR    tumor_DP    tumor_LO    t_alt_count tumor_SR    end n_ref_count t_ref_count build   tumor_barcode   normal_barcode  judgement")
 
 isString(x::Number)=false
 isString(x::DataArrays.NAtype)=false
@@ -57,6 +59,14 @@ for c in names(df)
 end  
 
 df=df[df[:normal_AD].<=max_normal_alt_count,:]
+
+n=length(df[:normal_AD])
+if (n<1)
+    open(maflite, "w") do f
+        writedlm(f, reshape(emptymaffields, 1, length(emptymaffields)), '\t')
+    end
+    quit()
+end
 
 for c in names(df)
     #println(c)
@@ -172,40 +182,47 @@ end
 
 
 maf=df
-for c in names(maf)
-    #println(c)
-    if ~isString(maf[1,c])
-        maf[c] = map(x -> string(x),maf[c])
-    end
-end
-
-
-for c in names(maf)
-    println(c)
-    k=isna(maf[c])
-    if mean(k)==1.0
-        delete!(maf, c)
-        continue
-    end
-    k=find(map(x->x=="NA",maf[c]))
-    maf[k,c] = ""
-    k=find(map(x->x=="NaN",maf[c]))
-    maf[k,c] = ""
-    k=find(map(x->uppercase(x)=="TRUE",maf[c]))
-    maf[k,c] = "1"
-    k=find(map(x->uppercase(x)=="FALSE",maf[c]))
-    maf[k,c] = "0"
-end
-
-n=length(maf[:chr])
-
 # add build column
 maf[:build]=fill("37",size(maf,1))
 maf[:tumor_barcode]=fill(tumor_id,size(maf,1))
 maf[:normal_barcode]=fill(normal_id,size(maf,1))
 maf[:judgement]=fill("KEEP",size(maf,1))
 
-open(maflite, "w") do f
-    writedlm(f, reshape(names(maf), 1, length(names(maf))), '\t')
-    writedlm(f, convert(Array,maf), '\t')
+n=length(maf[:chr])
+if (n<1)
+    open(maflite, "w") do f
+        writedlm(f, reshape(names(maf), 1, length(names(maf))), '\t')
+    end
+else
+    for c in names(maf)
+        #println(c)
+        if ~isString(maf[1,c])
+            maf[c] = map(x -> string(x),maf[c])
+        end
+    end
+
+
+    for c in names(maf)
+        println(c)
+        k=isna(maf[c])
+        if mean(k)==1.0
+            delete!(maf, c)
+            continue
+        end
+        k=find(map(x->x=="NA",maf[c]))
+        maf[k,c] = ""
+        k=find(map(x->x=="NaN",maf[c]))
+        maf[k,c] = ""
+        k=find(map(x->uppercase(x)=="TRUE",maf[c]))
+        maf[k,c] = "1"
+        k=find(map(x->uppercase(x)=="FALSE",maf[c]))
+        maf[k,c] = "0"
+    end
+
+    n=length(maf[:chr])
+
+    open(maflite, "w") do f
+        writedlm(f, reshape(names(maf), 1, length(names(maf))), '\t')
+        writedlm(f, convert(Array,maf), '\t')
+    end
 end

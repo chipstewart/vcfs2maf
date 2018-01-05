@@ -9,6 +9,7 @@
 # ARGS=["REBC-AF50-TP", "REBC-AF50-NT",  "/opt/test/REBC-AF50-TP-NT.StrelkaSNV.tsv", "/opt/test/REBC-AF50-TP-NT.StrelkaINDEL.tsv", "/opt/test/REBC-AF50-TP-NT.strelka.maflite.tsv"]
 
 using DataFrames
+empty_fields=split("chr   start   ref_allele  alt_allele  NORMAL_DP   TUMOR_DP    n_ref_count n_alt_count t_ref_count t_alt_count QS  end NORMAL_ACGT_TIR_TOR TUMOR_ACGT_TIR_TOR  build   tumor_barcode   normal_barcode  judgement")
 
 file1a="vcf_1.tsv"
 file2a="vcf_2.tsv"
@@ -70,7 +71,7 @@ if size(df)[1]>0
     if !isa(a[1],Int)
         a=map(x -> replace(x,r"[X]", "23"), a)
         a=map(x -> replace(x,r"[Y]", "24"), a)
-        #a=map(x -> replace(x,r"[MT]", "25"), a)
+        a=map(x -> replace(x,r"[MT]", "25"), a)
         a=map(x -> parse(Int32,x), a)
     end
     df[:a] = a
@@ -236,7 +237,7 @@ if size(df)[1]>0
     if !isa(a[1],Int)
         a=map(x -> replace(x,r"[X]", "23"), a)
         a=map(x -> replace(x,r"[Y]", "24"), a)
-        #a=map(x -> replace(x,r"[MT]", "25"), a)
+        a=map(x -> replace(x,r"[MT]", "25"), a)
         a=map(x -> parse(Int32,x), a)
     end
     df[:a] = a
@@ -308,10 +309,19 @@ df2=df
 
 df=[df1;df2]
 
+n=length(df[:CHRO])
+if (n<1)
+    open(maflite, "w") do f
+        writedlm(f, reshape(empty_fields, 1, length(empty_fields)), '\t')
+    end
+    quit()
+end
+
 a= df[:CHRO]
 if !isa(a[1],Int)
     a=map(x -> replace(x,r"[X]", "23"), a)
     a=map(x -> replace(x,r"[Y]", "24"), a)
+    a=map(x -> replace(x,r"[MT]", "25"), a)
     a=map(x -> parse(Int32,x), a)
 end
 df[:a] = a

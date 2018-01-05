@@ -213,7 +213,7 @@ if __name__ == '__main__':
 
         p1=int(position)
         p2=p1
-        overap=[]
+        overlap=[]
         if chrom in IntervalList.tree.keys():
             overlap = find(p1, p2 , IntervalList.tree[chrom])
         
