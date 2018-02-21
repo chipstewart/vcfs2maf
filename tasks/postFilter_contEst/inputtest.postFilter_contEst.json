@@ -1,0 +1,8 @@
+{
+  "consensus_maf_workflow.consensus_maf.pair_id": "REBC-A90K-TP-NT-BI",
+  "consensus_maf_workflow.consensus_maf.maf_file": "/opt/test/REBC-A90K-TP-NB-BI.filter.intersection.maf",
+  "consensus_maf_workflow.consensus_maf.NALGORITHM": "2",
+  "consensus_maf_workflow.consensus_maf.LONGINDEL": "50",
+  "consensus_maf_workflow.consensus_maf.output_disk_gb": "20"
+}
+
