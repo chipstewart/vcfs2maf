@@ -43,7 +43,7 @@ run('/opt/src/algutil/monitor_stop.py')
     }
 
     runtime {
-        docker : "docker.io/chipstewart/postFilter_contEst:1"
+        docker : "docker.io/chipstewart/postfilter_contest:1"
         memory: "${ram_gb}GB"
         cpu: "${cpu_cores}"
         disks: "local-disk ${output_disk_gb} HDD"
