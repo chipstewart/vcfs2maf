@@ -1,13 +1,13 @@
 FROM ubuntu:16.04
 
-RUN apt-get update && apt-get install -y python sudo dstat wget zlib1g zlib1g-dev
+RUN apt-get update && apt-get install -y python sudo dstat wget zlib1g zlib1g-dev make gcc cmake
 
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends ca-certificates \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV JULIA_PATH /usr/local/julia
-ENV JULIA_VERSION 0.5.0
+ENV JULIA_VERSION 0.5.1
 
 RUN mkdir $JULIA_PATH \
 	&& apt-get update && apt-get install -y curl \
@@ -27,12 +27,12 @@ ENV PATH $JULIA_PATH/bin:$PATH
 
 RUN julia -e 'Pkg.add("DataFrames")'
 RUN julia -e 'Pkg.build("DataFrames")'
+RUN julia -e 'Pkg.add("Rmath")'
+RUN julia -e 'Pkg.build("Rmath")'
 RUN julia -e 'Pkg.add("StatsFuns")'
 RUN julia -e 'Pkg.build("StatsFuns")'
 RUN julia -e 'Pkg.add("Distributions")'
 RUN julia -e 'Pkg.build("Distributions")'
-RUN julia -e 'Pkg.add("Rmath")'
-RUN julia -e 'Pkg.build("Rmath")'
 #RUN julia -e 'Pkg.add("Libz")'
 #RUN julia -e 'Pkg.add("GZip")'
 RUN julia -e 'Pkg.update()'
