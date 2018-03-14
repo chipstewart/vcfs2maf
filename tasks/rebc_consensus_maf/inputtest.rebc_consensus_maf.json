@@ -1,0 +1,8 @@
+{
+  "rebc_consensus_maf_workflow.rebc_consensus_maf.pair_id": "REBC-AF8C-TP-NT",
+  "rebc_consensus_maf_workflow.rebc_consensus_maf.maf_file": "/opt/test/REBC-AF8C-TP-NT.postFilter_contEst.all.maf",
+  "rebc_consensus_maf_workflow.rebc_consensus_maf.NALGORITHM": "2",
+  "rebc_consensus_maf_workflow.rebc_consensus_maf.ALGORITHM_VOTING_SCHEME": "M1:1;M2:1;Strelka1+Strelka2:1;Snowman+SvABA:1",
+  "rebc_consensus_maf_workflow.rebc_consensus_maf.output_disk_gb": "20"
+}
+

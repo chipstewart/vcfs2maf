@@ -1,0 +1,7 @@
+{
+  "rebc_consensus_maf_workflow.rebc_consensus_maf.ALGORITHM_VOTING_SCHEME": "String",
+  "rebc_consensus_maf_workflow.rebc_consensus_maf.NALGORITHM": "Int",
+  "rebc_consensus_maf_workflow.rebc_consensus_maf.pair_id": "String",
+  "rebc_consensus_maf_workflow.rebc_consensus_maf.output_disk_gb": "String",
+  "rebc_consensus_maf_workflow.rebc_consensus_maf.maf_file": "File"
+}
