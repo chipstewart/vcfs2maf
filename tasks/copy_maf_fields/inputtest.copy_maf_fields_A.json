@@ -1,0 +1,7 @@
+{
+  "copy_maf_fields_workflow.copy_maf_fields.output_disk_gb": "10",
+  "copy_maf_fields_workflow.copy_maf_fields.Copy_Fields": "contig:Chromosome*position:Start_position",
+  "copy_maf_fields_workflow.copy_maf_fields.pair_id": "REBC-AC8O-TP-NB",
+  "copy_maf_fields_workflow.copy_maf_fields.extension": ".call_stats.tsv",
+  "copy_maf_fields_workflow.copy_maf_fields.InputMAF": "gs://fc-9c84e685-79f8-4d84-9e52-640943257a9b/a6c26085-6f57-45c5-8229-478ef10116d1/Filter_call_stats/a896fffe-77e7-4dcb-b8b8-98a5f66fef68/call-filter_failure_reasons_call_stats/REBC-AC8O-TP-NB.filter.call_stats.txt"
+}
