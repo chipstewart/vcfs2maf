@@ -34,7 +34,9 @@ n=length(t_alt_count)
 p=fill(0.0,n)
 pass=fill(true,n)
 for i = 1:n
-    d = Beta(t_alt_count[i]+1, t_ref_count[i]+1)
+    alt = max(0,t_alt_count[i])
+    ref = max(0,t_ref_count[i])
+    d = Beta(alt+1, ref+1)
     p[i] = cdf(d, CONTEST)
     pass[i]=p[i]<PTHRESHOLD
 end
