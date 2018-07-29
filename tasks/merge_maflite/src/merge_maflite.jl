@@ -1,7 +1,8 @@
 #!/usr/local/bin/julia
 # ARGS=["REBC-AC8L-TP","REBC-AC8L-NT","sample.mutect.maflite.txt","REBC-AC8L-TP-NT.m2_maflite.tsv","REBC-AC8L-TP-NT.Strelka_maflite.tsv","REBC-AC8L-TP-NT.SvABA_maflite.tsv","REBC-AC8L-TP-NT.snowman_maflite.tsv","M1","M2","STRELKA","SVABA","Snowman",REBC-AC8L-TP-NT.merged_maflite.tsv"]
 # ARGS=["REBC-AC8R-TP","REBC-AC8R-NB","REBC-AC8R-TP-NB.m1_maflite.tsv","REBC-AC8R-TP-NB.m2_maflite.tsv","REBC-AC8R-TP-NB.Strelka_maflite.tsv","REBC-AC8R-TP-NB.SvABA_maflite.tsv","REBC-AC8R-TP-NB.snowman_maflite.tsv","M1","M2","STRELKA","SVABA","Snowman","REBC-AC8R-TP-NB.merged_maflite.tsv"]
-# ARGS=["REBC-AC8R-TP","REBC-AC8R-NB","REBC-AC8R-TP-NB.m1_maflite.tsv","REBC-AC8R-TP-NB.m2_maflite.tsv","REBC-AC8R-TP-NB.Strelka_maflite.tsv","REBC-AC8R-TP-NB.SvABA_maflite.tsv","REBC-AC8R-TP-NB.snowman_maflite.tsv","REBC-AC8R-TP-NB.Strelka_maflite.tsv","M1","M2","STRELKA","SVABA","Snowman","Strelka2","REBC-AC8R-TP-NB.merged_maflite.tsv"]
+# ARGS=["REBC-AF7Y-TTP1-A-1-1-D-A649-36","SC208303","REBC-AF7Y-TP-NB.m1_maflite.tsv","REBC-AF7Y-TP-NB.m2_maflite.tsv","REBC-AF7Y-TP-NB.Strelka_maflite.tsv","REBC-AF7Y-TP-NB.SvABA_maflite.tsv","REBC-AF7Y-TP-NB.snowman_maflite.tsv","REBC-AF7Y-TP-NB.Strelka2_maflite.tsv","M1","M2","Strelka1","SVABA","Snowman","Strelka2","REBC-AF7Y-TP-NB.merged_maflite.tsv"]
+
 using DataFrames
 tumor_id=ARGS[1]
 normal_id=ARGS[2]
