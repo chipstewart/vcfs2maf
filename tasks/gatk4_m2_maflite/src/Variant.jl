@@ -1,7 +1,10 @@
+# module Variant
+
 export Variant, getChrom, getPos, getId, getRef, getAlt, getQual, getFilter, getInfo, getFormat
 
 #Stores data for each variant
-type Variant
+#type Variant
+mutable struct  Variant
     CHROM::AbstractString
     POS::Int64
     ID::Array{AbstractString,1}
@@ -24,4 +27,6 @@ getQual(v::Variant) = v.QUAL
 getFilter(v::Variant) = v.FILTER
 getInfo(v::Variant) = v.INFO
 getFormat(v::Variant) = v.FORMAT
+
+#end
 

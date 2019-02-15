@@ -3,7 +3,8 @@ import Base.eof, Base.close, Base.reset
 import GZip
 
 #Main class for VCFiterator
-type VCFIterator
+#type VCFIterator
+mutable struct VCFIterator
     version::AbstractString
     filename::AbstractString
     samples::Array{AbstractString, 1}
@@ -17,7 +18,8 @@ type VCFIterator
 end
 
 #Stores INFO and FORMAT section properties
-type InfoField
+#type InfoField
+mutable struct InfoField
     Number::AbstractString 
     Type::AbstractString
     Description::AbstractString

@@ -1,38 +1,39 @@
 #!/usr/local/bin/julia
 # export JULIA_LOAD_PATH="/path/to/module/storage/folder"
 #include("/Users/stewart/Projects/jlVCF/src/jlVCF.jl")
+# ARGS=["/Users/stewart/Downloads/753_pair.MuTect2.call_stats.vcf","/Users/stewart/PycharmProjects/vcf2txt/out/test.tsv"]
 
-using jlVCF
+include("jlVCF.jl")
+include("VCFIterator.jl")
+include("Variant.jl")
 
 narg = 0
-f=STDOUT
+f=stdout
 max_events=2^31
 vcf_file1=ARGS[1]
 
 
 narg=length(ARGS)
-#println(narg)
 if (narg>1)
 	a=ARGS[2]
-	if  (narg>1) 
-		if isnull(tryparse(Int32,a))
-	     	println("vcf:\t",ARGS[1])
-	     	println("tsv:\t",a)
-	     	f = open(a,"w")
-	    else
-	      max_events=parse(Int32,a)
-	    end
+	#if isnull(tryparse(Int32,a))
+	if tryparse(Int32,a)==nothing
+		println("vcf:\t",ARGS[1])
+		println("tsv:\t",a)
+		f = open(a,"w")
+	else
+	  max_events=parse(Int32,a)
 	end
 end
 
 delim="\t"
 c=fill("", 500)
-num=Array{AbstractString}(500)
+num=Array{AbstractString,500}
 if (max_events<1)
 	delim="\n"
-	c=Array{AbstractString}(500)
+	c=Array{AbstractString,500}
 	for i in 1:500
-	  c[i]=dec(i)".\t"
+	  c[i]=string(i,".\t")
 	end
 end
 #test loading
@@ -45,23 +46,23 @@ print(f,c[4],"REF",delim)
 print(f,c[5],"ALT",delim)
 print(f,c[6],"QUAL",delim)
 print(f,c[8],"FILTER",delim)
-n=8
+global n1=8
 for x in keys(vc.infoTypes)
-    n=n+1
-	print(f,c[n],x,delim)
+    global n1+=1
+	print(f,c[n1],x,delim)
 end
 
 NS=length(vc.samples)
 for s in vc.samples
 	for x in keys(vc.formatTypes)    
 		if vc.formatTypes[x].Number=="R"
-		    n=n+1
-	  		print(f,c[n],s,"_",x,"_REF",delim)
-		    n=n+1
-	  		print(f,c[n],s,"_",x,"_ALT",delim)
+		    global n1+=1
+	  		print(f,c[n1],s,"_",x,"_REF",delim)
+		    global n1+=1
+	  		print(f,c[n1],s,"_",x,"_ALT",delim)
 		else
-		    n=n+1
-	  		print(f,c[n],s,"_",x,delim)
+		    global n1+=1
+	  		print(f,c[n1],s,"_",x,delim)
 		end	
 	end
 end
@@ -79,7 +80,7 @@ while !eof(vc)
     if sizeof(v)<2
     	continue
     end
-    count = count + 1
+    global count += 1
     if count>max_events
 	  break
 	end
