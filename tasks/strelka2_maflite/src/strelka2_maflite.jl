@@ -36,7 +36,9 @@ if (typeof(df[:ALT])==typeof(DataArray(fill(true,2))))
     df[:ALT]=fill("T",size(df[:ALT]))
 end
 
-
+df[:VCF_REF]=df[:REF]
+df[:VCF_ALT]=df[:ALT]
+df[:VCF_POS]=df[:POS]
 
 # trim ALT allele when longer than 1 character
 klong = find(map(x-> length(x)>1, df[:ALT]))
@@ -210,6 +212,9 @@ if size(df)[1]>0
         df[:ALT]=fill("T",size(df[:ALT]))
     end
 
+    df[:VCF_REF]=df[:REF]
+    df[:VCF_ALT]=df[:ALT]
+    df[:VCF_POS]=df[:POS]
         
     for c in names(df)
         #println(c)
@@ -436,7 +441,7 @@ for i = 1:n
 	maf[:TUMOR_ACGT_TIR_TOR][i]=string(maf[:TUMOR_AU][i],';',df[:TUMOR_CU][i],';',maf[:TUMOR_GU][i],';',df[:TUMOR_TU][i],';',df[:TUMOR_TIR][i],';',df[:TUMOR_TOR][i])
 end
 
-MAFLITE_FIELDS=[:chr,:start, :ref_allele, :alt_allele,:NORMAL_DP, :TUMOR_DP,:n_ref_count,:n_alt_count,:t_ref_count,:t_alt_count,:QS,:end,:NORMAL_ACGT_TIR_TOR,:TUMOR_ACGT_TIR_TOR ]
+MAFLITE_FIELDS=[:chr,:start, :ref_allele, :alt_allele,:NORMAL_DP, :TUMOR_DP,:n_ref_count,:n_alt_count,:t_ref_count,:t_alt_count,:QS,:end,:NORMAL_ACGT_TIR_TOR,:TUMOR_ACGT_TIR_TOR,:VCF_REF,:VCF_ALT,:VCF_POS ]
 FIELDS=names(maf)
 nf=length(FIELDS)
 for i = 1:nf
