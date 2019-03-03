@@ -34,6 +34,9 @@ delete!(df, [:FILTER,:QUAL,:ID,:SCTG])
 #sampleN_NALT,:sampleN_NALT_SR,:sampleN_NREF,:sampleN_NALT_RP,:sampleN_READ_ID,:sampleT_NALT_SR,:sampleT_NREF,:sampleT_NALT_RP,:sampleT_NALT,:sampleT_READ_ID,:x])
 # print(df)
 
+df[:VCF_REF]=df[:REF]
+df[:VCF_ALT]=df[:ALT]
+df[:VCF_POS]=df[:POS]
 
 for c in names(df)
     println(c)
