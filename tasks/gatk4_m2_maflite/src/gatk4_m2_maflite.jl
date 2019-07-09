@@ -1,8 +1,9 @@
 #!/usr/local/bin/julia
 # ARGS=["REBC-AC8L-TP","REBC-AC8L-NT","tmp1.tsv","REBC-AC8L-TP-NT.M2_maflite.tsv"]
 # ARGS=["SU2CLC-MGH-1047-TM-01","SU2CLC-MGH-1047-BL-01","tmp3.tsv","RP-1066_SU2CLC-MGH-1047"]
+# ARGS=["REBC-AF8C-NT1-A-1-1-D-A649-36","REBC-AF8C-TTP1-A-1-1-D-A649-36","tmp3.tsv","REBC-AF8C-NT-TP"]
 
-using DataFrames
+using DataFrames, CSV, Statistics, DelimitedFiles
 tumor_id=ARGS[1]
 normal_id=ARGS[2]
 file1=ARGS[3]
@@ -10,10 +11,12 @@ pair_id=ARGS[4]
 file1a=pair_id*".raw.tsv"
 
 isString(x::Number)=false
-isString(x::DataArrays.NAtype)=false
+#isString(x::Array{>:Missing}.NAtype)=false
 isString(x::AbstractString)=true
 
-df = readtable(file1)
+#df = readtable(file1)
+df = CSV.read(file1; delim='\t')
+
 
 
 
@@ -26,33 +29,25 @@ FIELDX=[:x,:QUAL,:ID,:NORMAL_FT,:NORMAL_MMQ,:NORMAL_PID, :NORMAL_MBQ, :NORMAL_GQ
  :NORMAL_SA_MAP_AF, :NORMAL_MPOS, :NORMAL_PL, :NORMAL_OBAM, :NORMAL_OBQ, :NORMAL_ALT_F2R1, :NORMAL_SA_POST_PROB, :NORMAL_REF_F2R1,
  :NORMAL_GT, :NORMAL_MCL, :NORMAL_MFRL, :NORMAL_OBP, :NORMAL_OBAMRC, :NORMAL_PGT, :NORMAL_REF_F1R2,  :NORMAL_ALT_F1R2,
  :TUMOR_FT, :TUMOR_PID,  :TUMOR_GQ, :TUMOR_OBF, :TUMOR_OBQRC, :TUMOR_SA_MAP_AF, :TUMOR_PL, :TUMOR_OBAM,
- :TUMOR_OBQ, :TUMOR_SA_POST_PROB,:TUMOR_GT,:TUMOR_OBP, :TUMOR_OBAMRCM, :TUMOR_PGT]
+ :TUMOR_OBQ, :TUMOR_SA_POST_PROB,:TUMOR_GT,:TUMOR_OBP, :TUMOR_OBAMRCM, :TUMOR_PGT, :TUMOR_SB, :OCM, :MMQ, :MBQ, :SEQQ,:STRQ, :MPOS, :RPA,:GERMQ, 
+ :MFRL, :CONTQ, :ECNT,:NALOD, :STRANDQ, :TUMOR_PS, :NORMAL_PS, :NORMAL_F2R1_REF, :NORMAL_F2R1_ALT, :NORMAL_F1R2_REF, :NORMAL_F1R2_ALT]
 
 for i=1:length(FIELDX)
     if (FIELDX[i] in FIELDS)
-        delete!(df, FIELDX[i])
+        deletecols!(df, FIELDX[i])
     end
 end
-#delete!(df, [:FILTER,:QUAL, :NORMAL_PID,:x,:TUMOR_GT,:TUMOR_PL,:TUMOR_GQ,:TUMOR_DP,:TUMOR_PGT,:NORMAL_FOXOG,:NORMAL_QSS,:NORMAL_ALT_F2R1,:NORMAL_ALT_F1R2,:NORMAL_REF_F2R1,:NORMAL_REF_F1R2,:NORMAL_GT,:NORMAL_PGT,:NORMAL_GQ,:NORMAL_PL,:NORMAL_DP])
-#if ( :TUMOR_FOXOG in names(df) )  # FOXOG messed up by VariantAnnotator
-#    delete!(df, [:TUMOR_FOXOG])
-#end
-# print(df)
+
 
 
 for c in names(df)
     println(c)
-    k=isna(df[c])
+    k=map(x->ismissing(x),df[c])
     if mean(k)==1.0
-        delete!(df, c)
+        deletecols!(df, c)
         continue
     end
-    # if isa(df[c],DataArray{Float64,1})  & (mean(k)>0)
-    #     v=df[c]
-    #     v=map(x -> replace(x,NA,NaN), v)
-    #     df[c]=v
-    # end
-    if isa(df[c],DataArray{String,1}) 
+    if isa(df[c],Array{Union{Missing, String},1}) 
         df[k,c] = ""
     end
 end
@@ -60,51 +55,54 @@ end
 head(df)
 a= df[:CHRO]
 if !isa(a[1],Int)
-    a=map(x -> replace(x,r"[X]", "23"), a)
-    a=map(x -> replace(x,r"[Y]", "24"), a)
-    a=map(x -> replace(x,r"[MT]", "25"), a)
-    a=map(x -> replace(x,r"[M]", "25"), a)
+    a=replace(a,"X"=>"23","Y"=>"24","MT"=>"25","M"=>"25")
     a=map(x -> parse(Int32,x), a)
 end
 df[:a] = a
 # print(df)
-sort!(df, cols = [:a, :POS])
-delete!(df, [:a])
+sort!(df, [:a, :POS])
+deletecols!(df, [:a])
 
 println("")
 println(file1a)
 println("")
 
-for c in [:TUMOR_ALT_F1R2,:TUMOR_ALT_F2R1,:TUMOR_REF_F1R2,:TUMOR_REF_F2R1,:TUMOR_FOXOG]
+#for c in [:TUMOR_ALT_F1R2,:TUMOR_ALT_F2R1,:TUMOR_REF_F1R2,:TUMOR_REF_F2R1,:TUMOR_FOXOG]
+for c in [:TUMOR_F1R2_ALT,:TUMOR_F2R1_ALT,:TUMOR_F1R2_REF,:TUMOR_F2R1_REF]
     if ~isString(df[1,c])
         df[c] = map(x -> string(x),df[c])
     end
-    k=find(map(x->x=="NA",df[c]))
+    k=findall(map(x->x=="NA",df[c]))
     df[k,c] = ""
 end
 
 
 open(file1a, "w") do f
     writedlm(f, reshape(names(df), 1, length(names(df))), '\t')
-    writedlm(f, convert(Array,df), '\t')
+    writedlm(f, convert(Matrix,df), '\t')
 end
 
 a=df[:ALT]
 r=df[:REF]
 n=length(a)
 ar=fill("",n)
+INDEL=fill(0,n)
+SNV=fill(0,n)
 for i in 1:n
     #println(i)
     ar[i]=string(a[i],":",r[i])
+    INDEL[i]=length(a[i])!=length(r[i])
+    SNV[i]=length(a[i])==length(r[i])
 end
 
-l1=map(x -> length(x), ar)
-df[:INDEL]=map(x -> x>3,l1)
+#l1=map(x -> length(x), ar)
+#df[:INDEL]=map(x -> x>3,l1)
+df[:INDEL]=INDEL.>0
 df[:Variant_Type]=fill("SNV",n)
 df[df[:INDEL],:Variant_Type]="INDEL"
 dfindel=df[df[:INDEL],:]
-dfsnv=df[~df[:INDEL],:]
-#delete!(dfsnv, [:INDEL])
+dfsnv=df[SNV.>0,:]
+#deletecols!(dfsnv, [:INDEL])
 #delete!(dfindel, [:INDEL])
 #delete!(df, [:INDEL])
 df2=df
@@ -125,29 +123,31 @@ df2[:ALT]=alt
 
 
 
-delete!(df, [:INDEL, :Variant_Type,:ALT0])
+#delete!(df, [:INDEL, :Variant_Type,:ALT0])
 
 
 
-# label M1 with M1 flag
+# label M2 with M2 flag
 a= df[:CHRO]
 if !isa(a[1],Int)
-    a=map(x -> replace(x,r"[X]", "23"), a)
-    a=map(x -> replace(x,r"[Y]", "24"), a)
-    a=map(x -> replace(x,r"[MT]", "25"), a)
-    a=map(x -> replace(x,r"[M]", "25"), a)
+    #a=map(x -> replace(x,r"[X]", "23"), a)
+    #a=map(x -> replace(x,r"[Y]", "24"), a)
+    #a=map(x -> replace(x,r"[MT]", "25"), a)
+    #a=map(x -> replace(x,r"[M]", "25"), a)
+    a=replace(a,"X"=>"23","Y"=>"24","MT"=>"25","M"=>"25")  
     a=map(x -> parse(Int32,x), a)
 end
 df[:a] = a
 #print(df)
-sort!(df, cols = [:a, :POS])
-delete!(df, [:a])
+sort!(df, [:a, :POS])
+deletecols!(df, [:a])
 
 
 
 for c in names(df)
      println(c)
-    k=isna(df[c])
+    #k=ismissing(df[c])
+    k=map(x->ismissing(x),df[c])
     if mean(k)==1.0
         delete!(df, c)
         continue
@@ -165,16 +165,16 @@ end
 df[:end]=df[:POS]
 
 # start for indels is POS+1
-kdel = map(x-> length(x)>1, df[:REF])
+kdel = map(x-> length(x)>1, df[:REF]).*df[:INDEL]
 p=df[:POS]
 p=p+kdel
 df[:POS]=p
-k = find(kdel)
+k = findall(kdel)
 ref=df[k,:REF]
 ref=map(x->x[2:end],ref)
 alt=df[k,:ALT]
 alt=map(x->x[2:end],alt)
-k1 = find(map(x-> length(x)<1, alt))
+k1 = findall(map(x-> length(x)<1, alt))
 alt[k1]=map(x-> "-", alt[k1])
 df[k,:REF]=ref
 df[k,:ALT]=alt
@@ -186,21 +186,25 @@ df[k,:end]=df[k,:POS]+ddel
 
 
 
-kins = map(x-> length(x)>1, df[:ALT])
-# p=df[:POS]
-# p=p+kins
-# df[:POS]=p
-# df[find(kins),:POS]
-k = find(kins)
+kins = map(x-> length(x)>1, df[:ALT]).*df[:INDEL]
+k = findall(kins)
 ref=df[k,:REF]
 ref=map(x->x[2:end],ref)
-k1 = find(map(x-> length(x)<1, ref))
+k1 = findall(map(x-> length(x)<1, ref))
 ref[k1]=map(x-> "-", ref[k1])
 alt=df[k,:ALT]
 alt=map(x->x[2:end],alt)
 df[k,:REF]=ref
 df[k,:ALT]=alt
-df[k,:end]=df[k,:POS]+1
+df[k,:end]=df[k,:POS].+1
+
+
+
+kmnp = map(x-> length(x)>1, df[:ALT]).*map(x->!x,df[:INDEL])
+k = findall(kmnp)
+ref=df[k,:REF]
+dref = map(x-> length(x), ref)
+df[k,:end]=df[k,:POS]+dref-.1
 
 
 
@@ -211,7 +215,7 @@ df[:normal_barcode]=fill(normal_id,size(df,1))
 df[:judgement]=fill("KEEP",size(df,1))
 
 
-# M1 counts
+# allele counts
 df[:n_alt_count]=df[:NORMAL_AD_ALT]
 df[:n_ref_count]=df[:NORMAL_AD_REF]
 df[:t_lod_fstar]=df[:TLOD]
