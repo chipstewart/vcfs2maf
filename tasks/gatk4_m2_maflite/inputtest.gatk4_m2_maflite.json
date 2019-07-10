@@ -1,6 +1,7 @@
 {
-  "gatk4_m2_maflite_workflow.gatk4_m2_maflite.M2_vcf_file": "gs://fc-099b74a5-b2e1-4f8c-8720-2ab7123fe631/b97e2364-4051-46a4-9fe6-3889839e1017/Mutect2/8e8a94b8-4e3c-4f8a-a7db-01f84694dcc2/call-Filter/RP-1066_SU2CLC-MGH-1047-TM-01-vs-RP-1066_SU2CLC-MGH-1047-BL-01-filtered.vcf",
+  "gatk4_m2_maflite_workflow.gatk4_m2_maflite.M2_vcf_file": "gs://fc-secure-cf31561d-e7c6-4acb-8570-b5cf7a09a718/af44bbc9-e5b5-4e5f-91a4-a8923c0edf60/Mutect2/acfb803f-a3bc-4e0f-85cb-f527fce05832/call-Filter/REBC-AF8C-NT1-A-1-1-D-A649-36-filtered.vcf",
   "gatk4_m2_maflite_workflow.gatk4_m2_maflite.output_disk_gb": "20",
+  "gatk4_m2_maflite_workflow.gatk4_m2_maflite.build_id": "37",
   "gatk4_m2_maflite_workflow.gatk4_m2_maflite.tumor_id": "SU2CLC-MGH-1047-TM-01",
   "gatk4_m2_maflite_workflow.gatk4_m2_maflite.pair_id": "RP-1066_SU2CLC-MGH-1047",
   "gatk4_m2_maflite_workflow.gatk4_m2_maflite.normal_id": "SU2CLC-MGH-1047-BL-01"
