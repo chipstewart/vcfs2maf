@@ -2,7 +2,8 @@ TID=$1
 NID=$2
 PID=$3
 VCF1=$4
-DETIN_FILT=$5
+BUILD=$5
+DETIN_FILT=$6
 export JULIA_LOAD_PATH="/opt/src"
 
 julia /opt/src/vcf2txt.jl $VCF1  tmp1.tsv
