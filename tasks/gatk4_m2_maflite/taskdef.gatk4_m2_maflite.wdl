@@ -5,6 +5,8 @@ task gatk4_m2_maflite {
     String tumor_id
     String normal_id
     File M2_vcf_file
+    String build_id
+    String? detin_m2_filters=select_first([detin_m2_filters, "contamination;weak_evidence;slippage;clustered_events;multiallelic;base_qual;map_qual"]),
     String output_disk_gb
     String boot_disk_gb = "10"
     String ram_gb = "8"
@@ -24,7 +26,7 @@ run('/opt/src/algutil/monitor_start.py')
 
 run('julia --version')
 
-run('/bin/bash /opt/src/gatk4_m2_maflite.sh \"${tumor_id}\" \"${normal_id}\" \"${pair_id}\" \"${M2_vcf_file}\"')
+run('/bin/bash /opt/src/gatk4_m2_maflite.sh \"${tumor_id}\" \"${normal_id}\" \"${pair_id}\" \"${M2_vcf_file}\" \"${build_id}\" \"${detin_m2_filters}\"')
 
 run('tar cvfz m2_maflite.tar.gz tmp1.tsv ${pair_id}.raw.tsv ${pair_id}.m2.all.maflite.tsv ${pair_id}.m2.pass.maflite.tsv')
 
@@ -41,6 +43,7 @@ run('/opt/src/algutil/monitor_stop.py')
         File m2_pass_maflite="${pair_id}.m2.pass.maflite.tsv"
         File m2_all_maflite="${pair_id}.m2.all.maflite.tsv"
         File m2_maflite_tarball="m2_maflite.tar.gz"
+        File m2_detin_filter_maflite="${pair_id}.m2.deTiN.maflite.tsv"
     }
 
     runtime {
