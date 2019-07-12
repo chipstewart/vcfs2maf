@@ -27,8 +27,9 @@ ENV PATH $JULIA_PATH/bin:$PATH
 
 RUN julia -e 'Pkg.add("DataFrames")'
 RUN julia -e 'Pkg.build("DataFrames")'
-#RUN julia -e 'Pkg.add("Libz")'
-#RUN julia -e 'Pkg.add("GZip")'
+RUN julia -e 'Pkg.add("CSV")'
+RUN julia -e 'Pkg.add("Statistics")'
+RUN julia -e 'Pkg.add("DelimitedFiles")'
 RUN julia -e 'Pkg.update()'
 
 #copy contents of tasks/<taskname>/build/src on the build host into /opt/src on the docker
