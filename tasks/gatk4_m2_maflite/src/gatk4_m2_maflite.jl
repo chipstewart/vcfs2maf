@@ -16,6 +16,10 @@ isString(x::Number)=false
 #isString(x::Array{>:Missing}.NAtype)=false
 isString(x::AbstractString)=true
 
+println("")
+println(ARGS)
+println("")
+
 #df = readtable(file1)
 df = CSV.read(file1; delim='\t')
 
