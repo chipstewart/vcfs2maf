@@ -11,7 +11,7 @@ sed "s/${TID}/TUMOR/g" tmp1.tsv > tmp2.tsv
 sed "s/${NID}/NORMAL/g" tmp2.tsv > tmp3.tsv
 
 
-julia /opt/src/gatk4_m2_maflite.jl $TID $NID tmp3.tsv $PID
+julia /opt/src/gatk4_m2_maflite.jl $TID $NID tmp3.tsv $PID $BUILD
 
 
 filts=$(echo $DETIN_FILT | tr ";" "\n")
