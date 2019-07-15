@@ -70,6 +70,15 @@ RUN set -eux; \
 # smoke test
 	julia --version
 
+
+RUN julia -e 'using Pkg'
+RUN julia -e 'using Pkg;Pkg.update();Pkg.add("DataFrames")'
+RUN julia -e 'using Pkg;Pkg.build("DataFrames")'
+RUN julia -e 'using Pkg;Pkg.add("CSV")'
+RUN julia -e 'using Pkg;Pkg.add("Statistics")'
+RUN julia -e 'using Pkg;Pkg.add("DelimitedFiles")'
+RUN julia -e 'using Pkg;Pkg.update()'
+
 #CMD ["julia"]
 #copy contents of tasks/<taskname>/build/src on the build host into /opt/src on the docker
 COPY src/ /opt/src/
