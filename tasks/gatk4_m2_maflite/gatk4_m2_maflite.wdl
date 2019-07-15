@@ -5,7 +5,8 @@ task gatk4_m2_maflite_task_1 {
     String normal_id
     File M2_vcf_file
     String build_id
-    String? detin_m2_filters=select_first([detin_m2_filters, "contamination;weak_evidence;slippage;clustered_events;multiallelic;base_qual;map_qual"]),
+    String? detin_m2_filters
+    String detin_m2_filters1=select_first([detin_m2_filters, "contamination;weak_evidence;slippage;clustered_events;multiallelic;base_qual;map_qual"])
     String output_disk_gb
     String boot_disk_gb = "10"
     String ram_gb = "8"
@@ -25,7 +26,7 @@ run('/opt/src/algutil/monitor_start.py')
 
 run('julia --version')
 
-run('/bin/bash /opt/src/gatk4_m2_maflite.sh \"${tumor_id}\" \"${normal_id}\" \"${pair_id}\" \"${M2_vcf_file}\" \"${build_id}\" \"${detin_m2_filters}\"')
+run('/bin/bash /opt/src/gatk4_m2_maflite.sh \"${tumor_id}\" \"${normal_id}\" \"${pair_id}\" \"${M2_vcf_file}\" \"${build_id}\" \"${detin_m2_filters1}\"')
 
 run('tar cvfz m2_maflite.tar.gz tmp1.tsv ${pair_id}.raw.tsv ${pair_id}.m2.all.maflite.tsv ${pair_id}.m2.pass.maflite.tsv')
 
@@ -46,7 +47,7 @@ run('/opt/src/algutil/monitor_stop.py')
     }
 
     runtime {
-        docker : "docker.io/chipstewart/gatk2_m2_maflite:1"
+        docker : "docker.io/chipstewart/gatk4_m2_maflite_task_1:1"
         memory: "${ram_gb}GB"
         cpu: "${cpu_cores}"
         disks: "local-disk ${output_disk_gb} HDD"
@@ -65,7 +66,7 @@ run('/opt/src/algutil/monitor_stop.py')
 workflow gatk4_m2_maflite {
 
     call gatk4_m2_maflite_task_1 {
-        input: #**Define call inputs for gatk4_m2_maflite_task_1 here**
+    #    input: #**Define call inputs for gatk4_m2_maflite_task_1 here**
     }
 
     output {
