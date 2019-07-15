@@ -11,31 +11,18 @@ task gatk4_m2_maflite_task_1 {
     String boot_disk_gb = "10"
     String ram_gb = "8"
     String cpu_cores = "2"
+
     command {
-python_cmd="
-import subprocess
-def run(cmd):
-    subprocess.check_call(cmd,shell=True)
 
-run('ln -sT `pwd` /opt/execution')
-run('ln -sT `pwd`/../inputs /opt/inputs')
-run('/opt/src/algutil/monitor_start.py')
+    set -euo pipefail
 
-# start task-specific calls
-##########################
+    julia --version
 
-run('julia --version')
+    /bin/bash /opt/src/gatk4_m2_maflite.sh ${tumor_id} ${normal_id} ${pair_id} ${M2_vcf_file} ${build_id} ${detin_m2_filters1}
 
-run('/bin/bash /opt/src/gatk4_m2_maflite.sh \"${tumor_id}\" \"${normal_id}\" \"${pair_id}\" \"${M2_vcf_file}\" \"${build_id}\" \"${detin_m2_filters1}\"')
+    ls -lath
 
-run('tar cvfz m2_maflite.tar.gz tmp1.tsv ${pair_id}.raw.tsv ${pair_id}.m2.all.maflite.tsv ${pair_id}.m2.pass.maflite.tsv')
-
-#########################
-# end task-specific calls
-run('/opt/src/algutil/monitor_stop.py')
-"
-        echo "$python_cmd"
-        python -c "$python_cmd"
+    tar cvfz m2_maflite.tar.gz tmp1.tsv ${pair_id}.raw.tsv ${pair_id}.m2.all.maflite.tsv ${pair_id}.m2.pass.maflite.tsv ${pair_id}.m2.deTiN.maflite.tsv
 
     }
 
