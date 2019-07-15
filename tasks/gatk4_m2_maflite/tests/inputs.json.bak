@@ -1,0 +1,12 @@
+{
+  "gatk4_m2_maflite.gatk4_m2_maflite_task_1.M2_vcf_file": "/opt/test/REBC-AF8C-NT1-A-1-1-D-A649-36-filtered.vcf",
+  "gatk4_m2_maflite.gatk4_m2_maflite_task_1.boot_disk_gb": "",
+  "gatk4_m2_maflite.gatk4_m2_maflite_task_1.build_id": "37",
+  "gatk4_m2_maflite.gatk4_m2_maflite_task_1.cpu_cores": "",
+  "gatk4_m2_maflite.gatk4_m2_maflite_task_1.detin_m2_filters": "",
+  "gatk4_m2_maflite.gatk4_m2_maflite_task_1.normal_id": "REBC-AF8C-TTP1-A-1-1-D-A649-36",
+  "gatk4_m2_maflite.gatk4_m2_maflite_task_1.output_disk_gb": "100",
+  "gatk4_m2_maflite.gatk4_m2_maflite_task_1.pair_id": "REBC-AF8C-NT-TP",
+  "gatk4_m2_maflite.gatk4_m2_maflite_task_1.ram_gb": "",
+  "gatk4_m2_maflite.gatk4_m2_maflite_task_1.tumor_id": "REBC-AF8C-NT1-A-1-1-D-A649-36"
+}
