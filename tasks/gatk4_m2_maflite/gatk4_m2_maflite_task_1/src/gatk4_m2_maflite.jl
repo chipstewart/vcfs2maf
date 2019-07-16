@@ -13,15 +13,15 @@ build_id=ARGS[5]
 file1a=pair_id*".raw.tsv"
 
 isString(x::Number)=false
-#isString(x::Array{>:Missing}.NAtype)=false
+isString(x::Missing)=false
 isString(x::AbstractString)=true
 
+println("")
+println(ARGS)
+println("")
+
 #df = readtable(file1)
-df = CSV.read(file1; delim='\t')
-
-
-
-
+df=CSV.read(file1; copycols=true, delim='\t') 
 
 # size(df)
 # describe(df)
@@ -54,7 +54,7 @@ for c in names(df)
     end
 end
 #rename!(df, [:normal_tumor_alt_count, :normal_tumor_ref_count], [:t_alt_count, :t_ref_count])
-head(df)
+first(df,3)
 a= df[:CHRO]
 if !isa(a[1],Int)
     a=replace(a,"X"=>"23","Y"=>"24","MT"=>"25","M"=>"25")
@@ -236,7 +236,12 @@ df[:n_ref_count]=df[:NORMAL_AD_REF]
 df[:tumor_f]=df[:TUMOR_AF]
 df[:t_alt_count]=df[:TUMOR_AD_ALT]
 df[:t_ref_count]=df[:TUMOR_AD_REF]
-rename!(df, [:CHRO,:POS, :REF, :ALT], [:chr, :start, :ref_allele,:alt_allele])#from = [:DB, :HCNT, :MAX_ED,:RPA,:STR, :RU, :NLOD,:TUMOR_ALT_F1R2,:MIN_ED,:ECNT, :TLOD, :TUMOR_PID,:TUMOR_AF,:TUMOR_FOXOG, :TUMOR_QSS, :TUMOR_ALT_F2R1,:TUMOR_AD_REF,:TUMOR_AD_ALT, :TUMOR_REF_F2R1, :TUMOR_REF_F1R2,:NORMAL_AF,:NORMAL_AD_REF,:NORMAL_AD_ALT]
+rename!(df, :CHRO=>:chr)
+rename!(df, :POS=>:start)
+rename!(df, :REF=>:ref_allele)
+rename!(df, :ALT=>:alt_allele)
+#from = [:DB, :HCNT, :MAX_ED,:RPA,:STR, :RU, :NLOD,:TUMOR_ALT_F1R2,:MIN_ED,:ECNT, :TLOD, :TUMOR_PID,:TUMOR_AF,:TUMOR_FOXOG, :TUMOR_QSS, :TUMOR_ALT_F2R1,:TUMOR_AD_REF,:TUMOR_AD_ALT, :TUMOR_REF_F2R1, :TUMOR_REF_F1R2,:NORMAL_AF,:NORMAL_AD_REF,:NORMAL_AD_ALT]
+#rename!(df, [:CHRO,:POS, :REF, :ALT], [:chr, :start, :ref_allele,:alt_allele])#from = [:DB, :HCNT, :MAX_ED,:RPA,:STR, :RU, :NLOD,:TUMOR_ALT_F1R2,:MIN_ED,:ECNT, :TLOD, :TUMOR_PID,:TUMOR_AF,:TUMOR_FOXOG, :TUMOR_QSS, :TUMOR_ALT_F2R1,:TUMOR_AD_REF,:TUMOR_AD_ALT, :TUMOR_REF_F2R1, :TUMOR_REF_F1R2,:NORMAL_AF,:NORMAL_AD_REF,:NORMAL_AD_ALT]
 #from = ["DB","HCNT","MAX_ED","RPA","STR","RU","NLOD","TUMOR_ALT_F1R2","MIN_ED","ECNT","TLOD","TUMOR_PID","TUMOR_AF","TUMOR_FOXOG","TUMOR_QSS","TUMOR_ALT_F2R1","TUMOR_AD_REF","TUMOR_AD_ALT","TUMOR_REF_F2R1","TUMOR_REF_F1R2","NORMAL_AF","NORMAL_AD_REF","NORMAL_AD_ALT"]
 #println(from)
 
@@ -268,16 +273,18 @@ end
 
 for c in names(maf)
     println(c)
-    k=map(x->ismissing(x),df[c]) 
+    k=map(x->ismissing(x),maf[c]) 
     if mean(k)==1.0
-        delete!(maf, c)
+        deletecols!(maf, c)
         continue
+    else
+       maf[k,c]=""
     end
     k=findall(map(x->x=="NA",maf[c]))
     maf[k,c] = ""
-    k=findall(map(x->uppercase(x)=="TRUE",maf[c]))
+    k=findall(map(x->x=="TRUE",maf[c]))
     maf[k,c] = "1"
-    k=findall(map(x->uppercase(x)=="FALSE",maf[c]))
+    k=findall(map(x->x=="FALSE",maf[c]))
     maf[k,c] = "0"
 end
 
@@ -287,9 +294,9 @@ open(maflite_all, "w") do f
     writedlm(f, convert(Matrix,maf), '\t')
 end
 
-kpass = find(map(x-> uppercase(x)=="PASS", maf[:FILTER]))
+kpass = findall(map(x-> x=="PASS", maf[:FILTER]))
 maf=maf[kpass,:]
-delete!(maf,[:FILTER])
+deletecols!(maf,:FILTER)
 
 
 maflite_pass=pair_id*".m2.pass.maflite.tsv"
