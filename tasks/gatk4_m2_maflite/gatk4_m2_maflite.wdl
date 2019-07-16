@@ -6,16 +6,21 @@ task gatk4_m2_maflite_task_1 {
     File M2_vcf_file
     String build_id
     String? detin_m2_filters
-    String detin_m2_filters1=select_first([detin_m2_filters, "contamination;weak_evidence;slippage;clustered_events;multiallelic;base_qual;map_qual"])
+    String detin_m2_filters1=select_first([detin_m2_filters, "contamination,weak_evidence,slippage,clustered_events,multiallelic,base_qual,map_qual,haplotype,haplotype,haplotype,low_allele_frac,normal_artifact,n_ratio,orientation,position,strand_bias"])
     String output_disk_gb
     String boot_disk_gb = "10"
     String ram_gb = "8"
     String cpu_cores = "2"
+    String? preemptible
+    String preemptible1=select_first([preemptible, "2"])
+  
 
     command {
 
     set -euo pipefail
 
+    pwd
+    which julia
     julia --version
 
     /bin/bash /opt/src/gatk4_m2_maflite.sh ${tumor_id} ${normal_id} ${pair_id} ${M2_vcf_file} ${build_id} ${detin_m2_filters1}
@@ -39,7 +44,7 @@ task gatk4_m2_maflite_task_1 {
         cpu: "${cpu_cores}"
         disks: "local-disk ${output_disk_gb} HDD"
         bootDiskSizeGb: "${boot_disk_gb}"
-        preemptible: 0
+        preemptible: "${preemptible1}"
     }
 
 
