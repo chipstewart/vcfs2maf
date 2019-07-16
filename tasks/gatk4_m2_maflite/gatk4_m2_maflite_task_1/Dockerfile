@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 RUN set -eux; \
 	apt-get update; \
@@ -6,6 +6,7 @@ RUN set -eux; \
 		ca-certificates \
 # ERROR: no download agent available; install curl, wget, or fetch
 		curl \
+		zlib1g-dev \
 	; \
 	rm -rf /var/lib/apt/lists/*
 
@@ -71,13 +72,13 @@ RUN set -eux; \
 	julia --version
 
 
-RUN julia -e 'using Pkg'
-RUN julia -e 'using Pkg;Pkg.update();Pkg.add("DataFrames")'
-RUN julia -e 'using Pkg;Pkg.build("DataFrames")'
-RUN julia -e 'using Pkg;Pkg.add("CSV")'
-RUN julia -e 'using Pkg;Pkg.add("Statistics")'
-RUN julia -e 'using Pkg;Pkg.add("DelimitedFiles")'
-RUN julia -e 'using Pkg;Pkg.update()'
+RUN julia -e 'import Pkg;Pkg.update()' 
+RUN julia -e 'import Pkg;Pkg.add("DataFrames");using DataFrames' 
+RUN julia -e 'import Pkg;Pkg.add("CSV");using CSV' 
+RUN julia -e 'import Pkg;Pkg.add("GZip");using GZip' 
+RUN julia -e 'import Pkg;Pkg.add("Statistics");using Statistics' 
+RUN julia -e 'import Pkg;Pkg.add("DelimitedFiles");using DelimitedFiles' 
+RUN julia -e 'import Pkg;Pkg.update()'
 
 #CMD ["julia"]
 #copy contents of tasks/<taskname>/build/src on the build host into /opt/src on the docker
