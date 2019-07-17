@@ -7,13 +7,16 @@ task gatk4_m2_maflite_task_1 {
     String build_id
     String? detin_m2_filters
     String detin_m2_filters1=select_first([detin_m2_filters, "contamination,weak_evidence,slippage,clustered_events,multiallelic,base_qual,map_qual,haplotype,haplotype,haplotype,low_allele_frac,normal_artifact,n_ratio,orientation,position,strand_bias"])
-    String output_disk_gb
+    String? local_disk_gb
     String boot_disk_gb = "10"
-    String ram_gb = "8"
     String cpu_cores = "2"
-    String? preemptible
-    String preemptible1=select_first([preemptible, "2"])
-  
+    Int? num_preemptions
+    Float? ram_gb
+
+    String preemptible=select_first([num_preemptions, 2])
+    String local_disk_gb1=select_first([local_disk_gb, "200"])
+    Float ram_gb1=select_first([ram_gb, 8])
+ 
 
     command {
 
@@ -40,9 +43,9 @@ task gatk4_m2_maflite_task_1 {
 
     runtime {
         docker : "docker.io/chipstewart/gatk4_m2_maflite_task_1:1"
-        memory: "${ram_gb}GB"
+        memory: "${ram_gb1}GB"
         cpu: "${cpu_cores}"
-        disks: "local-disk ${output_disk_gb} HDD"
+        disks: "local-disk ${local_disk_gb1} HDD"
         bootDiskSizeGb: "${boot_disk_gb}"
         preemptible: "${preemptible1}"
     }
