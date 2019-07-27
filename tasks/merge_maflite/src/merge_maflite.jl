@@ -1,7 +1,7 @@
 #!/usr/local/bin/julia
 # ARGS=["REBC-AC8L-TP","REBC-AC8L-NT","sample.mutect.maflite.txt","REBC-AC8L-TP-NT.m2_maflite.tsv","REBC-AC8L-TP-NT.Strelka_maflite.tsv","REBC-AC8L-TP-NT.SvABA_maflite.tsv","REBC-AC8L-TP-NT.snowman_maflite.tsv","M1","M2","STRELKA","SVABA","Snowman",REBC-AC8L-TP-NT.merged_maflite.tsv"]
-# ARGS=["REBC-AC8R-TP","REBC-AC8R-NB","REBC-AC8R-TP-NB.m1_maflite.tsv","REBC-AC8R-TP-NB.m2_maflite.tsv","REBC-AC8R-TP-NB.Strelka_maflite.tsv","REBC-AC8R-TP-NB.SvABA_maflite.tsv","REBC-AC8R-TP-NB.snowman_maflite.tsv","M1","M2","STRELKA","SVABA","Snowman","REBC-AC8R-TP-NB.merged_maflite.tsv"]
-# ARGS=["REBC-AF7Y-TTP1-A-1-1-D-A649-36","SC208303","REBC-AF7Y-TP-NB.m1_maflite.tsv","REBC-AF7Y-TP-NB.m2_maflite.tsv","REBC-AF7Y-TP-NB.Strelka_maflite.tsv","REBC-AF7Y-TP-NB.SvABA_maflite.tsv","REBC-AF7Y-TP-NB.snowman_maflite.tsv","REBC-AF7Y-TP-NB.Strelka2_maflite.tsv","M1","M2","Strelka1","SVABA","Snowman","Strelka2","REBC-AF7Y-TP-NB.merged_maflite.tsv"]
+#ARGS=["REBC-AC9F-NT1-A-1-1-D-A49U-36","REBC-AC9F-TTP1-A-1-1-D-A49U-36","/Users/stewart/Downloads/REBC-AC9F-NT-TP.m1_maflite.tsv","/Users/stewart/Downloads/REBC-AC9F-NT-TP.m2.deTiN.maflite.tsv","/Users/stewart/Downloads/GDAC_FC_NULL","/Users/stewart/Downloads/REBC-AC9F-NT-TP.Strelka2_maflite.tsv","/Users/stewart/Downloads/REBC-AC9F-NT-TP.SvABA_maflite.tsv","/Users/stewart/Downloads/GDAC_FC_NULL","M1","M2","-","Strelka2","SvABA","-","REBC-AC9F-NT-TP.merged.maflite.tsv","37"]
+#ARGS=["REBC-AF65-NT1-A-1-1-D-A649-36","REBC-AF65-TTP1-A-1-1-D-A649-36","/Users/stewart/Downloads/REBC-AF65-NT-TP.m1_maflite.tsv","/Users/stewart/Downloads/REBC-AF65-NT-TP.m2.deTiN.maflite.tsv","/Users/stewart/Downloads/GDAC_FC_NULL","/Users/stewart/Downloads/REBC-AF65-NT-TP.Strelka2_maflite.tsv","/Users/stewart/Downloads/REBC-AF65-NT-TP.SvABA_maflite.tsv","/Users/stewart/Downloads/GDAC_FC_NULL","M1","M2","-","Strelka2","SvABA","-","REBC-AF65-NT-TP.merged.maflite.tsv","37"]
 
 using DataFrames
 tumor_id=ARGS[1]
@@ -19,6 +19,7 @@ lab4=ARGS[12]
 lab5=ARGS[13]
 lab6=ARGS[14]
 merged_maflite=ARGS[15]
+build=ARGS[16]
 
 print(ARGS)
 
@@ -209,7 +210,8 @@ df=df[k,:]
 k=find(map(x -> x!="M",df[:chr]))
 df=df[k,:]
 
-df[:build]=fill("37",size(df,1))
+# build from args 
+df[:build]=fill(build,size(df,1)) 
 df[:tumor_barcode]=fill(tumor_id,size(df,1))
 df[:normal_barcode]=fill(normal_id,size(df,1))
 df[:judgement]=fill("KEEP",size(df,1))
@@ -276,10 +278,20 @@ slabs=map(x -> Symbol(x),labs)
 			
 df[:NALG]=fill(1,size(df[:chr]))
 
+kpre=0
 for i = 1:g
-	
-    k=find(map(x-> x==i,df[:cluster]))
-    #println(k)
+    #k=find(map(x-> x==i,df[:cluster])) # very slow when length(df)>500k - but :cluster is monotonic so it's faster to loop
+	k=Int64[]
+	i1=kpre+1
+	while df[i1,:cluster]==i
+		k=vcat(k,i1)
+		i1=i1+1
+		if (i1>n)
+		   break
+		end
+	end	
+    kpre=k[end]
+    println(i,"/",g,":",k)
     if length(k)>1
     	# if (any(map(x->x=="-",df[k,:ref_allele])) | any(map(x->x=="-",df[k,:tum_allele2]) ) )
 	  		# println(i)
@@ -333,6 +345,10 @@ for i = 1:g
     	end
     	
     end
+    if length(k)<1
+      println(i,"/",g,":",k)
+      error("skipped group in loop over groups")
+    end
 end
 
 
@@ -355,4 +371,3 @@ open(merged_maflite, "w") do f
     writedlm(f, reshape(names(maf), 1, length(names(maf))), '\t')
     writedlm(f, convert(Array,maf), '\t')
 end
-
