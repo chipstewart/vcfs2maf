@@ -15,8 +15,9 @@ LAB3=${12}  # STRELKA
 LAB4=${13}  # Snowman
 LAB5=${14}  # SVABA
 LAB6=${15}  # Strelka2
+BUILD=${16} # reference build 
 export JULIA_LOAD_PATH="/opt/src"
-echo "julia /opt/src/merge_maflite.jl $TID $NID $MAF1 $MAF2 $MAF3 $MAF4 $MAF5 $MAF6 $LAB1 $LAB2 $LAB3 $LAB4 $LAB5 $LAB6 $PID.merged.maflite.tsv"
-julia /opt/src/merge_maflite.jl $TID $NID $MAF1 $MAF2 $MAF3 $MAF4 $MAF5 $MAF6 $LAB1 $LAB2 $LAB3 $LAB4 $LAB5 $LAB6 $PID.merged.maflite.tsv
+echo "julia /opt/src/merge_maflite.jl $TID $NID $MAF1 $MAF2 $MAF3 $MAF4 $MAF5 $MAF6 $LAB1 $LAB2 $LAB3 $LAB4 $LAB5 $LAB6 $PID.merged.maflite.tsv" $BUILD 
+julia /opt/src/merge_maflite.jl $TID $NID $MAF1 $MAF2 $MAF3 $MAF4 $MAF5 $MAF6 $LAB1 $LAB2 $LAB3 $LAB4 $LAB5 $LAB6 $PID.merged.maflite.tsv $BUILD
 
 
