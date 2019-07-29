@@ -14,6 +14,7 @@
   "merge_maflite_workflow.merge_maflite.algorithm4": "SvABA",
   "merge_maflite_workflow.merge_maflite.algorithm5": "Snowman",
   "merge_maflite_workflow.merge_maflite.algorithm6": "Strelka2",
+  "merge_maflite_workflow.merge_maflite.build": "37",
   "merge_maflite_workflow.merge_maflite.output_disk_gb": "20"
 }
 

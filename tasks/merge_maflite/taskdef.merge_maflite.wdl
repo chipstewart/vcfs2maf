@@ -18,11 +18,16 @@ task merge_maflite {
     String algorithm5
     String algorithm6
     #String algorithm6a =  select_first([algorithm6, "-"])
+    String? build 
+    String build1=  select_first([algorithm6, "37"])
 
     String output_disk_gb
     String boot_disk_gb = "10"
     String ram_gb = "8"
     String cpu_cores = "2"
+    String? preemptible 
+    String preemptible1=  select_first([preemptible, "3"])
+
     command {
 python_cmd="
 import subprocess
@@ -38,7 +43,7 @@ run('/opt/src/algutil/monitor_start.py')
 
 run('julia --version')
 
-run('/bin/bash /opt/src/merge_maflite.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\" \"${algorithm1_maflite_file}\"  \"${algorithm2_maflite_file}\" \"${algorithm3_maflite_file}\" \"${algorithm4_maflite_file}\" \"${algorithm5_maflite_file}\"  \"${algorithm6_maflite_file}\" \"${algorithm1}\" \"${algorithm2}\" \"${algorithm3}\" \"${algorithm4}\" \"${algorithm5}\" \"${algorithm6}\" ')
+run('/bin/bash /opt/src/merge_maflite.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\" \"${algorithm1_maflite_file}\"  \"${algorithm2_maflite_file}\" \"${algorithm3_maflite_file}\" \"${algorithm4_maflite_file}\" \"${algorithm5_maflite_file}\"  \"${algorithm6_maflite_file}\" \"${algorithm1}\" \"${algorithm2}\" \"${algorithm3}\" \"${algorithm4}\" \"${algorithm5}\" \"${algorithm6}\" \"${build1}\" ')
 
 run('tar cvfz ${pair_id}.merged.maflite.tar.gz *.tsv *.log')
 
@@ -62,7 +67,7 @@ run('/opt/src/algutil/monitor_stop.py')
         cpu: "${cpu_cores}"
         disks: "local-disk ${output_disk_gb} HDD"
         bootDiskSizeGb: "${boot_disk_gb}"
-        preemptible: 3
+        preemptible: "${preemptible1}"
     }
 
 
