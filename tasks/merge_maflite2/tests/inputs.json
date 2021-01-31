@@ -1,0 +1,21 @@
+{
+  "merge_maflite2.merge_maflite2_task_1.algorithm1": "M1",
+  "merge_maflite2.merge_maflite2_task_1.algorithm1_maflite_file": "/opt/test/REBC-ACBQ-TM-NT.m1_maflite.tsv",
+  "merge_maflite2.merge_maflite2_task_1.algorithm2": "M2",
+  "merge_maflite2.merge_maflite2_task_1.algorithm2_maflite_file": "/opt/test/REBC-ACBQ-TM-NT.m2_maflite.tsv",
+  "merge_maflite2.merge_maflite2_task_1.algorithm3": "Strelka",
+  "merge_maflite2.merge_maflite2_task_1.algorithm3_maflite_file": "/opt/test/REBC-ACBQ-TM-NT.Strelka_maflite.tsv",
+  "merge_maflite2.merge_maflite2_task_1.algorithm4": "Strelka2",
+  "merge_maflite2.merge_maflite2_task_1.algorithm4_maflite_file": "/opt/test/REBC-ACBQ-TM-NT.Strelka2_maflite.tsv",
+  "merge_maflite2.merge_maflite2_task_1.algorithm5": "SvABA",
+  "merge_maflite2.merge_maflite2_task_1.algorithm5_maflite_file": "/opt/test/REBC-ACBQ-TM-NT.SvABA_maflite.tsv",
+  "merge_maflite2.merge_maflite2_task_1.algorithm6": "Snowman",
+  "merge_maflite2.merge_maflite2_task_1.algorithm6_maflite_file": "/opt/test/REBC-ACBQ-TM-NT.snowman_maflite.tsv",
+  "merge_maflite2.merge_maflite2_task_1.boot_disk_gb": "10",
+  "merge_maflite2.merge_maflite2_task_1.cpu_cores": "1",
+  "merge_maflite2.merge_maflite2_task_1.normal_id": "REBC-ACBQ-NT1-A-1-1-D-A49W-36",
+  "merge_maflite2.merge_maflite2_task_1.output_disk_gb": "50",
+  "merge_maflite2.merge_maflite2_task_1.pair_id": "REBC-ACBQ-TM-NT",
+  "merge_maflite2.merge_maflite2_task_1.ram_gb": "8",
+  "merge_maflite2.merge_maflite2_task_1.tumor_id": "REBC-ACBQ-TTM1-A-1-1-D-A76R-36"
+}
