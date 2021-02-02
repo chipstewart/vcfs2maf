@@ -29,9 +29,9 @@ task merge_maflite2_task_1 {
 
         julia --version
 
-        /bin/bash /src/merge_maflite.sh \"${pair_id}\" \"${tumor_id}\" \"${normal_id}\" \"${algorithm1_maflite_file}\"  \"${algorithm2_maflite_file}\" \"${algorithm3_maflite_file}\" \"${algorithm4_maflite_file}\" \"${algorithm5_maflite_file}\"  \"${algorithm6_maflite_file}\" \"${algorithm1}\" \"${algorithm2}\" \"${algorithm3}\" \"${algorithm4}\" \"${algorithm5}\" \"${algorithm6}\" 
+        /bin/bash /src/merge_maflite.sh ${pair_id} ${tumor_id} ${normal_id} ${algorithm1_maflite_file}  ${algorithm2_maflite_file} ${algorithm3_maflite_file} ${algorithm4_maflite_file} ${algorithm5_maflite_file} ${algorithm6_maflite_file} ${algorithm1} ${algorithm2} ${algorithm3} ${algorithm4} ${algorithm5} ${algorithm6}  
 
-        tar cvfz ${pair_id}.merged.maflite.tar.gz *.tsv *.log
+        tar cvfz ${pair_id}.merged.maflite.tar.gz *.tsv 
 
     }
 

@@ -46,7 +46,7 @@ if isfile(file1)&&(lab1!="-")
     end
     for c in names(df1)
         if ~isString(df1[1,c])
-            df1[c] = map(x -> string(x),df1[c])
+            df1[!,c] = map(x -> string(x),df1[!,c])
         end
     end
 
@@ -58,15 +58,17 @@ if isfile(file1)&&(lab1!="-")
         end
     end
     
-    df1[Symbol(lab1)]=fill("1",size(df1[:chr]))
+    df1[!,Symbol(lab1)]=fill("1",size(df1[!,:chr]))
     df=df1
 end
+
+show(df)
 
 if isfile(file2)&&(lab2!="-")
     df2 =  CSV.File(file2,delim ='\t') |> DataFrame
     for c in names(df2)
         if ~isString(df2[1,c])
-            df2[c] = map(x -> string(x),df2[c])
+            df2[!,c] = map(x -> string(x),df2[!,c])
         end
     end
     if Symbol("_end") in names(df2)
@@ -81,11 +83,11 @@ if isfile(file2)&&(lab2!="-")
         end
     end
     
-    df2[Symbol(lab2)]=fill("1",size(df2[:chr]))
+    df2[!,Symbol(lab2)]=fill("1",size(df2[!,:chr]))
     if @isdefined df
-       df[Symbol(lab2)]=fill("0",size(df[:chr]))
+       df[!,Symbol(lab2)]=fill("0",size(df[!,:chr]))
        #df=[df; df2]
-       df=join(df, df2, kind = :outer, on = intersect(names(df), names(df2)))
+       df=outerjoin(df, df2, on = intersect(names(df), names(df2)))
     else
        df=df2
     end
@@ -95,7 +97,7 @@ if isfile(file3)&&(lab3!="-")
     df3 = CSV.File(file3,delim ='\t') |> DataFrame
     for c in names(df3)
         if ~isString(df3[1,c])
-            df3[c] = map(x -> string(x),df3[c])
+            df3[!,c] = map(x -> string(x),df3[!,c])
         end
     end
     if Symbol("_end") in names(df3)
@@ -110,10 +112,10 @@ if isfile(file3)&&(lab3!="-")
         end
     end
     
-    df3[Symbol(lab3)]=fill("1",size(df3[:chr]))
+    df3[!,Symbol(lab3)]=fill("1",size(df3[!,:chr]))
     if @isdefined df 
-       df[Symbol(lab3)]=fill("0",size(df[:chr]))
-       df=join(df, df3, kind = :outer, on = intersect(names(df), names(df3)))   
+       df[!,Symbol(lab3)]=fill("0",size(df[!,:chr]))
+       df=outerjoin(df, df3, on = intersect(names(df), names(df3)))   
     else
        df=df3
     end
@@ -123,7 +125,7 @@ if isfile(file4)&&(lab4!="-")
     df4 = CSV.File(file4,delim ='\t') |> DataFrame
     for c in names(df4)
         if ~isString(df4[1,c])
-            df4[c] = map(x -> string(x),df4[c])
+            df4[!,c] = map(x -> string(x),df4[!,c])
         end
     end
     if Symbol("_end") in names(df4)
@@ -138,21 +140,20 @@ if isfile(file4)&&(lab4!="-")
         end
     end
     
-    df4[Symbol(lab4)]=fill("1",size(df4[:chr]))
+    df4[!,Symbol(lab4)]=fill("1",size(df4[!,:chr]))
     if @isdefined df
-       df[Symbol(lab4)]=fill("0",size(df[:chr]))
-       df=join(df, df4, kind = :outer, on = intersect(names(df), names(df4)))  
+       df[!,Symbol(lab4)]=fill("0",size(df[!,:chr]))
+       df=outerjoin(df, df4, on = intersect(names(df), names(df4)))  
     else
        df=df4
     end
 end
 
-
 if isfile(file5)&&(lab5!="-")
     df5 = CSV.File(file5,delim ='\t') |> DataFrame
     for c in names(df5)
         if ~isString(df5[1,c])
-            df5[c] = map(x -> string(x),df5[c])
+            df5[!,c] = map(x -> string(x),df5[!,c])
         end
     end
     if Symbol("_end") in names(df5)
@@ -167,10 +168,10 @@ if isfile(file5)&&(lab5!="-")
         end
     end
     
-    df5[Symbol(lab5)]=fill("1",size(df5[:chr]))
+    df5[!,Symbol(lab5)]=fill("1",size(df5[!,:chr]))
     if @isdefined df
-       df[Symbol(lab5)]=fill("0",size(df[:chr]))
-       df=join(df, df5, kind = :outer, on = intersect(names(df), names(df5)))  
+       df[!,Symbol(lab5)]=fill("0",size(df[!,:chr]))
+       df=outerjoin(df, df5, on = intersect(names(df), names(df5)))  
     else
        df=df5
     end
@@ -180,7 +181,7 @@ if isfile(file6)&&(lab6!="-")
     df6 = CSV.File(file6,delim ='\t') |> DataFrame
     for c in names(df6)
         if ~isString(df6[1,c])
-            df6[c] = map(x -> string(x),df6[c])
+            df6[!,c] = map(x -> string(x),df6[!,c])
         end
     end
     if Symbol("_end") in names(df6)
@@ -195,72 +196,72 @@ if isfile(file6)&&(lab6!="-")
         end
     end
     
-    df6[Symbol(lab6)]=fill("1",size(df6[:chr]))
+    df6[!,Symbol(lab6)]=fill("1",size(df6[!,:chr]))
     if @isdefined df
-       df[Symbol(lab6)]=fill("0",size(df[:chr]))
-       df=join(df, df6, kind = :outer, on = intersect(names(df), names(df6))) 
+       df[!,Symbol(lab6)]=fill("0",size(df[!,:chr]))
+       df=outerjoin(df, df6, on = intersect(names(df), names(df6))) 
     else
        df=df6
     end
 end
 
+show(df)
+
 # fix fields 
-k=findall(map(x -> x!="MT",df[:chr]))
+k=findall(map(x -> x!="MT",df[!,:chr]))
 df=df[k,:]
-k=findall(map(x -> x!="M",df[:chr]))
+k=findall(map(x -> x!="M",df[!,:chr]))
 df=df[k,:]
 
-df[:build]=fill("37",size(df,1))
-df[:tumor_barcode]=fill(tumor_id,size(df,1))
-df[:normal_barcode]=fill(normal_id,size(df,1))
-df[:judgement]=fill("KEEP",size(df,1))
+df[!,:build]=fill("37",size(df,1))
+df[!,:tumor_barcode]=fill(tumor_id,size(df,1))
+df[!,:normal_barcode]=fill(normal_id,size(df,1))
+df[!,:judgement]=fill("KEEP",size(df,1))
 
-t_alt_count = map(x -> parse(Float64,x),df[:t_alt_count])
-t_ref_count = map(x -> parse(Float64,x),df[:t_ref_count])
-df[:tumor_f]= map(x->@sprintf("%.4f",x),t_alt_count./(t_alt_count+t_ref_count))
+t_alt_count = map(x -> parse(Float64,x),df[!,:t_alt_count])
+t_ref_count = map(x -> parse(Float64,x),df[!,:t_ref_count])
+df[!,:tumor_f]= map(x->@sprintf("%.4f",x),t_alt_count./(t_alt_count+t_ref_count))
 
 # sort 
-a = df[:chr]
-p1 = map(x -> parse(Int64,x), df[:start])
-p2 = map(x -> parse(Int64,x), df[:end])
+a = df[!,:chr]
+p1 = map(x -> parse(Int64,x), df[!,:start])
+p2 = map(x -> parse(Int64,x), df[!,:end])
 if !isa(a[1],Int)
     a=map(x -> replace(x,r"[X]" => "23"), a)
     a=map(x -> replace(x,r"[Y]" => "24"), a)
     a=map(x -> parse(Int64,x), a)
 end
-df[:a] = a
-df[:p1] = p1
-df[:p2] = p2
+df[!,:a] = a
+df[!,:p1] = p1
+df[!,:p2] = p2
 #print(df)
-sort!(df, cols = [:a, :p1])
+sort!(df, [:a, :p1])
 
 # convert NA's to ""
 #df0=deepcopy(df)
-for c in names(df)
-    k=findall(map(x -> ismissing(x),df[c]))
-    print(c,",",length(k),"\n")
-    if length(k)>0
-        df[k,c] = ""
-    end
+for c1 in names(df)
+    c=Symbol(c1)
+    println(c)
     if c in [Symbol(lab1), Symbol(lab2), Symbol(lab3), Symbol(lab4),Symbol(lab5),Symbol(lab6)]
-       k=findall(map(x -> x=="",df[c]))
-       df[k,c] = "0"
+       println(c)
+       replace!(df[!,c], missing => "0")
     end    
+    replace!(df[!,c], missing => "")
 end 
 
 # cluster
-x1=df[:a]*1000000000+df[:p1]
-x2=df[:a]*1000000000+df[:p2]
-kdel = findall(map(x-> x=="-", df[:ref_allele]))
+x1=df[!,:a]*1000000000+df[!,:p1]
+x2=df[!,:a]*1000000000+df[!,:p2]
+kdel = findall(map(x-> x=="-", df[!,:ref_allele]))
 x1[kdel]=x1[kdel].-1
 x2[kdel]=x2[kdel].+1
-kins = findall(map(x-> x=="-", df[:alt_allele]))
+kins = findall(map(x-> x=="-", df[!,:alt_allele]))
 x1[kins]=x1[kins].-1
 x2[kins]=x2[kins].+1
 
-n=length(df[:a])
+n=length(df[!,:a])
 g=1
-df[:cluster]=fill(g,size(df[:chr]))
+df[!,:cluster]=fill(g,size(df[!,:chr]))
 for i = 2:n
     if (x1[i]>x2[i-1])
       global g=g+1
@@ -280,95 +281,62 @@ labs=filter!(x->x≠"-",labs)
 NA=length(labs)
 slabs=map(x -> Symbol(x),labs)
             
-df[:NALG]=fill(1,size(df[:chr]))
+df[!,:NALG]=fill(0,size(df[!,:chr]))
 
-for i = 1:g
-    
-    k=findall(map(x-> x==i,df[:cluster]))
+
+fg=[:chr,:start,:t_alt_count,:t_ref_count,slabs[1],slabs[2],slabs[3],slabs[4],slabs[5],slabs[6],:judgement]
+
+for g1 = 1:g
+    kg=findall(map(x-> x==g1,df[!,:cluster]))
     #println(k)
-    if length(k)>1
-        # if (any(map(x->x=="-",df[k,:ref_allele])) | any(map(x->x=="-",df[k,:tum_allele2]) ) )
-            # println(i)
-            # println(df[k,[:chr,:start,:ref_allele,:tum_allele2,:t_alt_count,:tumor_f,:M1,:M2,:STRELKA,:SVABA]])
-        # end
-        
-        # algorithm pecking order as input lab1-lab4 
-        # highest t_alt_count wins 
-        t_alt_count = map(x->parse(Int32,x),df[k,:t_alt_count])
-        k1=k[1]
-        kx=k[2:end]
-        kk=k[findmax(t_alt_count)[2]]
-        # each algorithm can appear only once
-        #df[k,slabs]
-        for a=1:NA
-           if (sum(map(x -> x=="1",df[k,slabs[a]])))>1
-             
-             #println(i)
-             #println(df[k,[:chr,:start,:ref_allele,:tum_allele2,:t_alt_count,:tumor_f,:M1,:M2,:STRELKA,:SVABA]])
-
-             ka=kx[findall(map(x -> x=="1",df[kx,slabs[a]]))][1]
-             df[ka,:judgement]="ALG_REDUNDANT" 
-
-             # remove ka from k, redefine t_alt_count, k1,kx, kk 
-             filter!(e->e≠ka,k)
-             if length(k)<2
-                continue
-             end
-             t_alt_count = map(x->parse(Int32,x),df[k,:t_alt_count])
-             k1=k[1]
-             kx=k[2:end]
-             kk=k[findmax(t_alt_count)[2]]            
-          end  
-        end
-        if length(k)<2
-            continue
-        end
-        #print(k1,',',kk,"\n")  
-        if (k1≠kk)
-         #df[k1,maflite_symbols]=copy(df[kk,maflite_symbols]) 
-             for m1 in maflite_symbols
-                df[k1,m1]=df[kk,m1]
-             end
-        end
-        df[k1,:NALG]=length(k)
-        df[kx,:judgement]="REDUNDANT" 
-          
-        for lab=labs
-            slab=Symbol(lab)
-            #println(slab)
-            mfields=fields[findall(map(x -> findfirst(x,lab)==1,sfields))]
-            kalg=k[findall(map(x -> x=="1",df[k,slab]))] 
-            if ~isempty(kalg)               
-                df[k1,mfields]=df[kalg,mfields]
-                for m1 in mfields
-                    df[k1,m1]=df[kalg,m1]
-                end
-            end            
-            
-        end
-        
+    if length(kg)<2
+        continue
     end
+    println("g= $g1")
+ 
+    t_alt_count = map(x->parse(Int32,x),df[kg,:t_alt_count])
+    k1=kg[findmax(t_alt_count)[2]]
+    kx=kg[findall(map(x->x≠k1,kg))]
+    for kx1 in kx
+         slab1=findall(map(x -> x=="1",df[kx1,slabs]))[1]
+         println(slab1)
+         df[k1,slab1]="1"
+         df[kx1,:judgement]="ALG_REDUNDANT" 
+
+         pre1=String(slab1) *"_"
+         salg=sfields[findall( x -> occursin(pre1, x), sfields)]
+
+         for salg1 in salg
+             df[k1,Symbol(salg1)]=df[kx1,Symbol(salg1)]
+         end
+    end
+    show(df[kg,fg])
 end
+
+
+df[!,:NALG]=sum(eachcol(parse.(Int64, df[:, slabs])))
+
 
 
 for c in names(df)
     if ~isString(df[1,c])
-        df[c] = map(x -> string(x),df[c])
+        df[!,c] = map(x -> string(x),df[!,c])
     end
 end
 
-k=findall(map(x -> x=="KEEP",df[:judgement]))
+k=findall(map(x -> x=="KEEP",df[!,:judgement]))
 maf=df[k,:]
-deletecols!(maf, [:a,:p1,:p2,:cluster])
+select!(maf, Not([:a,:p1,:p2,:cluster]))
+
 
 open("premerged_maflite.tsv", "w") do f
     writedlm(f, reshape(names(df), 1, length(names(df))), '\t')
-    writedlm(f, convert(Array,df), '\t')
+    writedlm(f, convert(Matrix,df), '\t')
 end
 
 open(merged_maflite, "w") do f
     writedlm(f, reshape(names(maf), 1, length(names(maf))), '\t')
-    writedlm(f, convert(Array,maf), '\t')
+    writedlm(f, convert(Matrix,maf), '\t')
 end
 
 
